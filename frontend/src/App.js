@@ -1,25 +1,72 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {connect, Provider} from "react-redux";
+import store from "./redux/store";
+import {compose} from "redux";
+import Profile from "./components/Profile";
+import Projects from "./components/Projects";
+import Project from "./components/Project";
+import Register from "./components/Register/Register";
+import Login from "./components/Login/Login";
+import Navbar from "./components/Navbar/Navbar";
+import HeaderContainer from "./components/Header/HeaderContainer";
+import LoginLayoutRoute from "./layouts/loginLayout";
+import DashboardLayoutRoute from "./layouts/DashboardLayout";
+import Home from "./components/Home/Home";
+import {setAuthUserData} from "./redux/reducers/authReducer";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+
+    componentDidMount() {
+        if(JSON.parse(localStorage.getItem('user'))) {
+            let user = JSON.parse(localStorage.getItem('user'));
+            if(user.timestamp > Date.now() - 3600000) {
+                this.props.setAuthUserData(user.userId, user.userName, user.token)
+            }
+            else {
+                window.localStorage.removeItem('user');
+                this.props.setAuthUserData(null,null, null)
+            }
+        }
+    }
+
+
+    render() {
+        return <div className="App">
+            <div className='app-wrapper-content'>
+                <Switch>
+                    <DashboardLayoutRoute exact path='/' component={Home}/>
+                    <DashboardLayoutRoute path='/profile'  component={Profile}/>
+                    <DashboardLayoutRoute path='/projects/:projectId'  component={Project}/>
+                    <DashboardLayoutRoute path='/projects'  component={Projects}/>
+                    <LoginLayoutRoute path='/register'  component={Register}/>
+                    <LoginLayoutRoute path='/login' component={Login}/>
+                </Switch>
+            </div>
+        </div>
+    }
+
 }
 
-export default App;
+
+const mapStateToProps = (state) => ({});
+
+let AppContainer = compose(
+    connect(mapStateToProps, {setAuthUserData}))
+(App);
+
+
+const mainApp = () => {
+    console.log()
+    return (
+        <BrowserRouter>
+            <Provider store={store}>
+                <AppContainer/>
+            </Provider>
+        </BrowserRouter>
+    );
+}
+
+export default mainApp;

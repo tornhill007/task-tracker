@@ -1,0 +1,96 @@
+.wrapperPage1 {
+
+    margin: 80px 0 20px 0;
+
+
+}
+
+.wrap {
+    width: 100%;
+
+}
+.wrapperLogin {
+    display: flex;
+    justify-content: center;
+    background-color: #e0e3e5;;
+
+}
+.wrapperInput a {
+    color: #fff;
+}
+
+.wrapperInput a:hover {
+    text-decoration: none;
+}
+
+.container {
+    width: 450px;
+    /*background-color: rgba(22,22,22,0.91);*/
+    background-color: rgb(22, 22, 22, 0.7);
+    margin: 100px auto;
+    text-align: center;
+    box-shadow: 0 -5px 0 black;
+    border-radius: 0 0 10px 10px;
+    padding-bottom: 15px;
+}
+
+.input {
+    border-radius: 4px;
+    padding-left: 40px;
+    margin-bottom: 25px;
+    width: 300px;
+    height: 50px;
+    font-size: 18px;
+
+}
+
+.container img {
+    width: 120px;
+    height: 120px;
+    margin: -60px 0 30px 0;
+    border: 5px solid black;
+    border-radius: 50%;
+    box-shadow: 0 -5px 0 teal;
+}
+
+.submit {
+    padding: 9px 30px;
+    margin: 5px 0 20px 0;
+    font-size: 15px;
+    color: white;
+    /*background-color: #2ca8c6;*/
+    background-color: teal;
+    border: none;
+    cursor: pointer;
+    border-bottom: 3px solid #6ee9fd;
+}
+
+.submit:hover {
+    transition: all 0.5s;
+    background-color: #fff;
+    color: #2c536c;
+}
+
+.icon {
+    font-size: 30px;
+    color: #2c536c;
+}
+
+.iconWrapper {
+    position: absolute;
+    padding: 10px 0 0 65px;
+}
+
+.iconContainer:hover .icon {
+    color: teal;
+    transition: all 0.3s;
+}
+
+.input:hover {
+    box-shadow: 0 0 6px 3px rgba(58, 219, 253, 0.35);
+}
+
+.name {
+    text-align: center;
+    color: black;
+}

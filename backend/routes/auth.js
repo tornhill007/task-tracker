@@ -21,7 +21,9 @@ module.exports = function (app, pool, bcrypt, jwt, keys) {
                    }, keys.jwt, {expiresIn: 60 * 60});
 
                    res.status(200).json({
-                       token: `Bearer ${token}`
+                       token: `Bearer ${token}`,
+                       userName: user.rows[0].username,
+                       userId: user.rows[0].userid
                    })
                 }
                 else {

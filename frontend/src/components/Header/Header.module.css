@@ -1,0 +1,25 @@
+.header {
+    grid-area: header;
+    background-color: darkorange;
+}
+
+/*.header img {*/
+/*    width: 5%;*/
+/*}*/
+
+.loginBlock {
+    float: right;
+}
+
+.loginBlock a {
+    color: white;
+}
+
+.nav {
+    grid-area: nav;
+    background-color: crimson;
+}
+
+.nav a {
+    text-decoration: none;
+}
