@@ -5,7 +5,7 @@ import {connect, Provider} from "react-redux";
 import store from "./redux/store";
 import {compose} from "redux";
 import Profile from "./components/Profile";
-import Projects from "./components/Projects";
+import Projects from "./components/ProjectsContainer";
 import Project from "./components/Project";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";

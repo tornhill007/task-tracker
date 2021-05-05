@@ -1,12 +1,14 @@
 import React from 'react';
-import {withAuthRedirect} from "../hoc/withAuthRedirect";
+import ProjectInfo from "./ProjectInfo";
 
 const Projects = (props) => {
     return <div className="App">
-        Projects
+        {
+            props.projects.map((project, index) => {
+                return <ProjectInfo key={index} projectId={project.projectid} projectName={project.name}/>
+            })
+        }
     </div>
 }
 
-let AuthRedirectComponent = withAuthRedirect(Projects);
-
-export default AuthRedirectComponent;
+export default Projects;

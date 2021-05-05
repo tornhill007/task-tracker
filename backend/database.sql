@@ -11,7 +11,8 @@ CREATE TABLE kanbancolumns
 (
     columnId      SERIAL PRIMARY KEY,
     projectListId NUMERIC,
-    name          VARCHAR(255)
+    name          VARCHAR(255),
+    position NUMERIC
 )
 
 CREATE TABLE registration

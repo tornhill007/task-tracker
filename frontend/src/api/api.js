@@ -1,11 +1,11 @@
 import * as axios from "axios";
 
 const instance = axios.create({
-    withCredentials: true,
+    // withCredentials: true,
     baseURL: 'http://localhost:5000/',
-    // headers: {
-    //     'Authorization': 'Bearer ' + jwtToken
-    // }
+    headers: {
+        'Authorization': JSON.parse(localStorage.getItem('user')).token
+    }
 })
 
 
@@ -20,6 +20,24 @@ export const profileAPI = {
     updateStatus(status) {
         return instance.put(`profile/status`, {
             status: status
+        })
+    }
+};
+
+export const projectsApi = {
+    getAllProjects() {
+        return instance.get(`projects/`);
+    }
+};
+
+export const columnsApi = {
+    getColumns(projectId) {
+        return instance.get(`columns/` + projectId);
+    },
+    updateColumnsPosition(firstId, lastId, firstPosition, lastPosition) {
+        console.log("firstId, lastId, firstPosition, lastPosition", firstId, lastId, firstPosition, lastPosition)
+        return instance.put('colposition/', {
+            firstId, lastId, firstPosition, lastPosition
         })
     }
 };
