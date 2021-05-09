@@ -5,3 +5,10 @@
 .container {
     display: flex;
 }
+
+.map {
+
+    pointer-events: none;
+
+}
+

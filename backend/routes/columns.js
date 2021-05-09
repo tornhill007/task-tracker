@@ -69,11 +69,25 @@ module.exports = function (app, pool) {
 //update position column
     app.put("/colposition", passport.authenticate('jwt', {session: false}), async (req, res) => {
         try {
-            const {firstId, lastId, firstPosition, lastPosition} = req.body;
+            const {newColumns} = req.body;
             // const {name} = req.body;
-            const updateFirstColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [lastPosition, firstId]);
-            const updateLastColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [firstPosition, lastId]);
+            let promises = [];
+
+            for(let i = 0; i < newColumns.length; i++) {
+                const updatedColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [newColumns[i].position, newColumns[i].columnId]);
+            }
+            // newColumns.forEach(async (item, index) => {
+            //   const updatedColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [item.position, item.columnId]);
+            //     // promises.push(updatedColumn);
+            // })
+
+            // const updateFirstColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [lastPosition, firstId]);
+            // const updateLastColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [firstPosition, lastId]);
+            // Promise.all(promises).then(() => {
+
             res.json("Column updated");
+
+
         } catch (err) {
             console.log(err);
         }

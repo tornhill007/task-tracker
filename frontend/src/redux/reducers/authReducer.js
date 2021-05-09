@@ -74,7 +74,7 @@ export const register = (password, userName, repeatPassword) => async (dispatch)
                 dispatch(reset('register'))
                 alert('you have registered')
             } else {
-                alert(2)
+
                 let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
                 alert(message);
 

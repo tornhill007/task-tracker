@@ -1,5 +1,6 @@
-import {authAPI} from "../../api/api";
+import {authAPI, projectsApi} from "../../api/api";
 import {reset} from "redux-form";
+import {getColumns} from "./columnsReducer";
 // import {stopSubmit} from "redux-form"
 
 const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
@@ -26,6 +27,73 @@ export const setProjects = (projects) => ({
     type: SET_ALL_PROJECTS,
     projects
 });
+
+export const createNewProject = (projectName) => async (dispatch) => {
+
+    let response = await projectsApi.createNewProject(projectName);
+    dispatch(getAllProjects());
+    // console.log("response", response);
+    // dispatch(getColumns(projectId));
+    // console.log("response11", response);
+    // setTimeout(() => {
+    //
+    // }, 2000)
+
+};
+
+export const removeProject = (projectId) => async (dispatch) => {
+
+    try {
+        let response = await projectsApi.removeProject(projectId);
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+    dispatch(getAllProjects());
+    // console.log("response", response);
+    // dispatch(getColumns(projectId));
+    // console.log("response11", response);
+    // setTimeout(() => {
+    //
+    // }, 2000)
+
+};
+
+export const getAllProjects = () => async (dispatch) => {
+    try {
+        let response = await projectsApi.getAllProjects();
+        if (response.statusText === 'OK') {
+            console.log(response)
+            dispatch(setProjects(response.data));
+        }
+        else {
+            console.log("ERROR")
+        }
+
+    }
+    catch(err) {
+        console.log(err)
+    }
+};
+
+export const editProject = (id, name) => async (dispatch) => {
+    try {
+        let response = await projectsApi.editProject(id, name);
+        if (response.statusText === 'OK') {
+            console.log(response)
+            dispatch(getAllProjects());
+        }
+        else {
+            console.log("ERROR")
+        }
+
+    }
+    catch(err) {
+        console.log(err)
+    }
+};
+
 
 // export const getAuthUserData = () => async (dispatch) => {
 //     let response = await authAPI.me();

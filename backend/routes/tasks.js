@@ -62,12 +62,16 @@ module.exports = function (app, pool) {
         try {
             const {id} = req.params;
             const {taskName, description, users, markers, columnId} = req.body;
-            if(columnId) {
+            console.log("[req.body]", req.body);
+            if(users) {
+                const updateTaskUsers = await pool.query("UPDATE tasks SET users = $1 WHERE taskId = $2", [users, id]);
+            }
+            else if(columnId) {
                 const updateTask = await pool.query("UPDATE tasks SET columnId = $1 WHERE taskId = $2", [columnId, id]);
             }
-            else {
-                const updateTask = await pool.query("UPDATE tasks SET taskName = $1, description = $2, users = $3, markers = $4 WHERE taskId = $5", [taskName, description, users, markers, id]);
-            }
+            // else if() {
+            //     const updateTask = await pool.query("UPDATE tasks SET taskName = $1, description = $2, users = $3, markers = $4 WHERE taskId = $5", [taskName, description, users, markers, id]);
+            // }
             res.json("Column updated");
         } catch (err) {
             console.log(err);
@@ -75,11 +79,22 @@ module.exports = function (app, pool) {
     })
 
 
-//delete task
+//delete all task from column
     app.delete("/tasks/:projectId/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
         try {
             const {id} = req.params;
             const deleteTask = await pool.query("DELETE FROM tasks WHERE columnId = $1", [id]);
+            res.json("Project deleted");
+        } catch (err) {
+            console.log(err);
+        }
+    })
+
+    //delete task
+    app.delete("/task/:projectId/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
+        try {
+            const {id} = req.params;
+            const deleteTask = await pool.query("DELETE FROM tasks WHERE taskid = $1", [id]);
             res.json("Project deleted");
         } catch (err) {
             console.log(err);

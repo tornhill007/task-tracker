@@ -24,23 +24,72 @@ export const profileAPI = {
     }
 };
 
+export const usersApi = {
+    getAllUsers() {
+        return instance.get(`register/`);
+    },
+}
+
 export const projectsApi = {
+    createNewProject(projectName) {
+        return instance.post(`projects/`, {
+            name: projectName
+        })
+    },
+    editProject(id, name) {
+        return instance.put(`projects/${id}`, {
+            name
+        })
+    },
+    removeProject(projectId) {
+        return instance.delete(`projects/${projectId}`)
+    },
     getAllProjects() {
         return instance.get(`projects/`);
     }
 };
 
 export const columnsApi = {
+
+    removeColumn(id) {
+        return instance.delete(`columns/${id}`)
+    },
+    updateColumn(id, name) {
+        return instance.put(`columns/${id}`, {
+            name
+        })
+    },
+    createNewColumn(name, projectListId, position) {
+        return instance.post(`column/`, {
+            name, projectListId, position
+        })
+    },
     getColumns(projectId) {
         return instance.get(`columns/` + projectId);
     },
-    updateColumnsPosition(firstId, lastId, firstPosition, lastPosition) {
-        console.log("firstId, lastId, firstPosition, lastPosition", firstId, lastId, firstPosition, lastPosition)
+    updateColumnsPosition(newColumns) {
+        console.log("firstId, lastId, firstPosition, lastPosition", newColumns)
         return instance.put('colposition/', {
-            firstId, lastId, firstPosition, lastPosition
+            newColumns
         })
     }
 };
+
+export const tasksApi = {
+    getAllTasks(projectId) {
+        return instance.get(`tasks/` + projectId);
+    },
+    addNewTask(taskName, columnId, projectId) {
+        return instance.post(`task/`, {
+            taskName, columnId, projectId
+        });
+    },
+    addNewParticipant(users, projectId, taskId) {
+        return instance.put(`/tasks/${projectId}/${taskId}`, {
+            users
+        })
+    }
+}
 
 
 export const authAPI = {

@@ -15,6 +15,8 @@ import LoginLayoutRoute from "./layouts/loginLayout";
 import DashboardLayoutRoute from "./layouts/DashboardLayout";
 import Home from "./components/Home/Home";
 import {setAuthUserData} from "./redux/reducers/authReducer";
+import ModalContainer from "./components/Modal/ModalContainer";
+import TaskInfo from "./components/Tasks/TaskInfo/TaskInfo";
 
 
 class App extends React.Component {
@@ -36,9 +38,11 @@ class App extends React.Component {
     render() {
         return <div className="App">
             <div className='app-wrapper-content'>
+                <ModalContainer/>
                 <Switch>
                     <DashboardLayoutRoute exact path='/' component={Home}/>
                     <DashboardLayoutRoute path='/profile'  component={Profile}/>
+                    <DashboardLayoutRoute path='/projects/:projectId/:taskId'  component={TaskInfo}/>
                     <DashboardLayoutRoute path='/projects/:projectId'  component={Project}/>
                     <DashboardLayoutRoute path='/projects'  component={Projects}/>
                     <LoginLayoutRoute path='/register'  component={Register}/>

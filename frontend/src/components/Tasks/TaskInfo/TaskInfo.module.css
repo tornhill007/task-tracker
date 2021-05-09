@@ -1,0 +1,39 @@
+.wrapper {
+    position: absolute;
+    background: gray;
+    height:500px;
+    width:80%;
+    left: 100px;
+    right: 100px;
+    margin: 0 auto;
+    top:150px;
+    z-index: 1000;
+}
+
+.listWrap {
+    height: 350px;
+    background-color: gold;
+    width: 30%;
+    text-align: left;
+    overflow: scroll;
+    position: absolute;
+}
+
+.container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cursor {
+    background-color: #61dafb;
+}
+
+.userWrap {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.userWrap:hover {
+    background-color: #61dafb;
+}

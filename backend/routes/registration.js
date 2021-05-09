@@ -3,8 +3,21 @@
 module.exports = function (app, pool, bcrypt) {
 
 
-//create user
 
+//get all users
+    app.get("/register", async (req, res) => {
+        try {
+            // const {password, userName} = req.body;
+
+            const users = await pool.query("SELECT * FROM registration ");
+            res.json(users.rows);
+            console.log(users.rows);
+
+        } catch (err) {
+            console.log(err.message);
+        }
+    })
+//create user
     app.post("/register", async (req, res) => {
         try {
             const {password, userName} = req.body;

@@ -10,3 +10,7 @@
 .activeLink {
     color: gold;
 }
+
+.map {
+    pointer-events: none;
+}

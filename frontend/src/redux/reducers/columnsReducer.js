@@ -1,4 +1,4 @@
-import {authAPI, columnsApi as columnsAPI} from "../../api/api";
+import {authAPI, columnsApi, columnsApi as columnsAPI, projectsApi, tasksApi as tasksAPI} from "../../api/api";
 import {reset} from "redux-form";
 // import {stopSubmit} from "redux-form"
 import {sortByPosition} from '../../utils/sort'
@@ -6,13 +6,25 @@ import {sortByPosition} from '../../utils/sort'
 const SET_COLUMNS = 'SET_COLUMNS';
 const SET_COLUMN_ORDER = 'SET_COLUMN_ORDER';
 const ON_DRAG_END = 'ON_DRAG_END';
+const OPEN_MODAL = 'OPEN_MODAL';
+const CLOSE_MODAL = 'CLOSE_MODAL';
+const CHANGE_IS_INPUT = 'CHANGE_IS_INPUT';
+const UPDATE_COLUMN = 'UPDATE_COLUMN';
+const SET_ALL_TASKS = 'SET_ALL_TASKS';
+const SET_TASK_INFO = 'SET_TASK_INFO';
+const CLOSE_TASK_INFO = 'CLOSE_TASK_INFO';
 
 let initialState = {
+    isInput: false,
+    isOpen: false,
+    content: null,
+    taskInfo: null,
+    isTaskInfo: false,
     tasks: {
-        'task-1': {id: 'task-1', content: 'Take out the garbage'},
-        'task-2': {id: 'task-2', content: 'qqqqqqqqqqqqqqqqq'},
-        'task-3': {id: 'task-3', content: 'wwwwwwwwwwwwwwwwwwwwwwwwww'},
-        'task-4': {id: 'task-4', content: 'eeeeeeeeeeeeeeeeeee'},
+        // 'task-1': {id: 'task-1', content: 'Take out the garbage'},
+        // 'task-2': {id: 'task-2', content: 'qqqqqqqqqqqqqqqqq'},
+        // 'task-3': {id: 'task-3', content: 'wwwwwwwwwwwwwwwwwwwwwwwwww'},
+        // 'task-4': {id: 'task-4', content: 'eeeeeeeeeeeeeeeeeee'},
     },
     columns: {},
     columnOrder: []
@@ -20,12 +32,69 @@ let initialState = {
 
 const columnsReducer = (state = initialState, action) => {
     switch (action.type) {
+        case OPEN_MODAL:
+            return {
+                ...state,
+                isOpen: true,
+                content: action.content
+            };
+        case CHANGE_IS_INPUT:
+            return {
+                ...state,
+                isInput: !state.isInput
+            };
+            case SET_TASK_INFO:
+                console.log("taskInfo", action.taskInfo)
+            return {
+                ...state,
+                taskInfo: action.taskInfo,
+                isTaskInfo: true
+            };
+                case CLOSE_TASK_INFO:
+            return {
+                ...state,
+                isTaskInfo: false
+            };
+        case CLOSE_MODAL:
+            return {
+                ...state,
+                isOpen: false
+            };
+        case SET_ALL_TASKS:
+
+            let newTasks = {};
+
+            console.log("STATE>COLUMNS", state.columns)
+            let newTasksArr = action.tasks.map((task, index) => {
+                return {
+                    id: `task-${task.taskid}`,
+                    taskid: task.taskid,
+                    content: task.taskname,
+                    columnid: task.columnid,
+                    description: task.description,
+                    users: task.users,
+                    markers: task.markers,
+                    projectid: task.projectid
+                }
+            })
+            newTasksArr.forEach((key,index) => {
+                newTasks[key.id] = key;
+            })
+            console.log("newTasks", newTasks)
+            return {
+                ...state,
+                tasks: newTasks
+            };
         case SET_COLUMNS:
+console.log("[11]", action.tasks);
+console.log("[22]", action.columns);
             let columnsArr = action.columns.map((column, index) => {
+
                 return {
                     id: `column-${column.columnid}`,
                     name: column.name,
-                    taskIds: ['task-1', 'task-2', 'task-3', 'task-4'],
+                    // taskIds: ['task-5', 'task-6', 'task-7', 'task-8', 'task-9'],
+                    taskIds: action.tasks.filter((task, index) => task.columnid == column.columnid).map((item, index) => `task-${item.taskid}`),
                     position: column.position,
                     columnId: column.columnid
                 }
@@ -68,7 +137,7 @@ const columnsReducer = (state = initialState, action) => {
             }
 
 
-            if(type === 'column') {
+            if (type === 'column') {
                 const newColumnOrder = Array.from(state.columnOrder);
                 console.log("newColumnOrder", newColumnOrder)
                 console.log("source.index", source.index)
@@ -133,13 +202,19 @@ const columnsReducer = (state = initialState, action) => {
             return newState;
         default:
             return state;
-    };
+    }
+    ;
 
 };
 
-export const setColumns = (columns) => ({
+export const setColumns = (columns, tasks) => ({
     type: SET_COLUMNS,
-    columns
+    columns, tasks
+})
+
+export const setAllTasks = (tasks) => ({
+    type: SET_ALL_TASKS,
+    tasks
 })
 
 export const onDragEnd = (result) => ({
@@ -152,11 +227,67 @@ export const onDragEnd = (result) => ({
 //     columns
 // })
 
+export const openModal = (content) => ({type: OPEN_MODAL, content});
+export const closeModal = () => ({type: CLOSE_MODAL});
+export const changeIsInput = () => ({type: CHANGE_IS_INPUT});
+export const setTaskInfo = (taskInfo) => ({type: SET_TASK_INFO, taskInfo});
+export const closeTaskInfo = () => ({type: CLOSE_TASK_INFO});
+
+
 export const getColumns = (projectId) => async (dispatch) => {
+    let response1 = await tasksAPI.getAllTasks(projectId);
+    dispatch(setAllTasks(response1.data));
     let response = await columnsAPI.getColumns(projectId);
-    console.log("response11", response);
-    dispatch(setColumns(response.data));
+    console.log("response11", response1);
+    dispatch(setColumns(response.data, response1.data));
+
 };
+
+export const getAllTasks = (projectId) => async (dispatch) => {
+    let response = await tasksAPI.getAllTasks(projectId);
+    console.log("response22222", response);
+    dispatch(setAllTasks(response.data));
+};
+
+export const addNewTask = (taskName, columnId, projectId) => async (dispatch) => {
+    let response = await tasksAPI.addNewTask(taskName, columnId, projectId);
+    dispatch(getColumns(projectId));
+    // console.log("response22222", response);
+    // dispatch(setAllTasks(response.data));
+};
+
+export const onUpdateColumnsPosition = (newColumns, projectId) => async (dispatch) => {
+    console.log("initialState.columns", initialState)
+
+    let response = await columnsApi.updateColumnsPosition(newColumns)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const onUpdateColumn = (id, name, projectId) => async (dispatch) => {
+    // console.log("initialState.columns", initialState)
+
+    let response = await columnsApi.updateColumn(id, name)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const onRemoveColumn = (id, projectId) => async (dispatch) => {
+    // console.log("initialState.columns", initialState)
+
+    let response = await columnsApi.removeColumn(id)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const createNewColumn = (name, projectListId, position) => async (dispatch) => {
+    console.log("initialState.columns", initialState)
+
+    let response = await columnsApi.createNewColumn(name, projectListId, position)
+    console.log("response", response);
+    dispatch(getColumns(projectListId));
+};
+
 
 // export const setProjects = (projects) => ({
 //     type: SET_ALL_PROJECTS,

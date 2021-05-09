@@ -4,8 +4,18 @@ import classes from "./Projects.module.css";
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import Columns from "./Columns/Columns";
 import {connect} from "react-redux";
-import {getColumns, onDragEnd} from "../redux/reducers/columnsReducer";
+import {
+    addNewTask,
+    changeIsInput, getAllTasks,
+    getColumns,
+    onDragEnd, onRemoveColumn, onUpdateColumn,
+    onUpdateColumnsPosition,
+    openModal, setTaskInfo
+} from "../redux/reducers/columnsReducer";
 import {columnsApi} from "../api/api";
+import EditModalContainer from "./Modal/EditModal/EditModalContainer";
+import {getProjectName, getProjects} from "../redux/selectors/projectsSelector";
+import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
 
 
 // const projects = [
@@ -152,54 +162,127 @@ const initialData = {
 // ]
 
 
+
 class Project extends React.Component {
 
+    projectId = this.props.match.params.projectId;
     componentDidMount() {
+
         let projectId = this.props.match.params.projectId;
         console.log("PROJECTID", projectId);
         this.props.getColumns(projectId);
+
+
+    }
+
+    getProjectNameOrId() {
+        console.log("[1]", this.projectId)
+        console.log("[2]", this.props.projects)
+       let result = this.props.projects.filter(item => item.projectid == this.projectId)
+        console.log(result);
+        return result[0];
     }
 
     state = initialData;
 
-    onDragEnd = async result => {
+    editProject = (title, buttonName, id, text) => {
+        this.props.openModal(<EditModalContainer title={title} id={id} text={text} parameters={{buttonName}}/>);
+    };
 
+
+    onDragEnd = async result => {
+        //
+        let projectId = this.props.match.params.projectId;
         const {destination, source, draggableId, type} = result;
+        //
+        // if(type === 'column') {
+        //     const newColumnOrder = Array.from(this.props.columnOrder);
+        //     console.log("POSITION1", newColumnOrder[source.index]);
+        //     console.log("POSITION-START", this.props.columns[newColumnOrder[source.index]].position);
+        //     console.log("POSITION-START", this.props.columns[newColumnOrder[source.index]].columnId);
+        //
+        //     console.log("COLUMN_ID-FINISH", this.props.columns[newColumnOrder[destination.index]].position);
+        //     console.log("COLUMN_ID-FINISH", this.props.columns[newColumnOrder[destination.index]].columnId);
+        //     await columnsApi.updateColumnsPosition(
+        //         this.props.columns[newColumnOrder[source.index]].columnId,
+        //         this.props.columns[newColumnOrder[destination.index]].columnId,
+        //         this.props.columns[newColumnOrder[source.index]].position,
+        //         this.props.columns[newColumnOrder[destination.index]].position
+        //         )
+        //     let projectId = this.props.match.params.projectId;
+        //
+        //     console.log("PROJECTID", projectId);
+        //     this.props.getColumns(projectId);
+        //     console.log("newColumnOrder", newColumnOrder)
+        //     console.log("source.index", source.index)
+        //
+        //
+        //     console.log("destination.index", destination.index)
+        //     // newColumnOrder.splice(source.index, 1);
+        //     // newColumnOrder.splice(destination.index, 0, draggableId);
+        //     //
+        //     // const newState = {
+        //     //     ...state,
+        //     //     columnOrder: newColumnOrder
+        //     // }
+        //     // return newState;
+        // }
+
+
+
 
         if(type === 'column') {
-            const newColumnOrder = Array.from(this.props.columnOrder);
-            console.log("POSITION1", newColumnOrder[source.index]);
-            console.log("POSITION-START", this.props.columns[newColumnOrder[source.index]].position);
-            console.log("POSITION-START", this.props.columns[newColumnOrder[source.index]].columnId);
+            const cloneObjColumns = JSON.parse(JSON.stringify(this.props.columns));
+            // const cloneObjColumnsTmp = JSON.parse(JSON.stringify(this.props.columns));
+            // const cloneColumnOrderTmp = JSON.parse(JSON.stringify(this.props.columnOrder));
+            console.log("cloneObjColumns", cloneObjColumns);
+            // console.log(cloneColumnOrderTmp === this.props.columnOrder);
+            cloneObjColumns[this.props.columnOrder[source.index]].position = this.props.columns[this.props.columnOrder[destination.index]].position
+            if(destination.index > source.index) {
+                for(let i = destination.index; i >= 0; i--) {
+                    if(i === source.index) {
+                        continue;
+                    }
+                    cloneObjColumns[this.props.columnOrder[i]].position = +cloneObjColumns[this.props.columnOrder[i]].position - 1;
+                }
+            }
+            else {
+                for(let i = destination.index; i < source.index; i++) {
+                    cloneObjColumns[this.props.columnOrder[i]].position = +cloneObjColumns[this.props.columnOrder[i]].position + 1;
+                }
+            }
+            console.log("[cloneObjColumns]", cloneObjColumns)
+            const newColumnsTmp = Object.values(cloneObjColumns);
 
-            console.log("COLUMN_ID-FINISH", this.props.columns[newColumnOrder[destination.index]].position);
-            console.log("COLUMN_ID-FINISH", this.props.columns[newColumnOrder[destination.index]].columnId);
-            await columnsApi.updateColumnsPosition(
-                this.props.columns[newColumnOrder[source.index]].columnId,
-                this.props.columns[newColumnOrder[destination.index]].columnId,
-                this.props.columns[newColumnOrder[source.index]].position,
-                this.props.columns[newColumnOrder[destination.index]].position
-                )
-            let projectId = this.props.match.params.projectId;
+            const newColumns = newColumnsTmp.map((column, index) => ({
+                columnId: column.columnId,
+                position: column.position
+            }));
 
-            console.log("PROJECTID", projectId);
-            this.props.getColumns(projectId);
-            console.log("newColumnOrder", newColumnOrder)
-            console.log("source.index", source.index)
+            console.log("[newColumns]", newColumns);
 
-
-            console.log("destination.index", destination.index)
-            // newColumnOrder.splice(source.index, 1);
-            // newColumnOrder.splice(destination.index, 0, draggableId);
-            //
-            // const newState = {
-            //     ...state,
-            //     columnOrder: newColumnOrder
+            // newColumns[source.index].position = newColumns[destination.index].position;
+            // for(let i = destination.index; i >= 0; i--) {
+            //     newColumns[i].position -= 1;
             // }
-            // return newState;
+            console.log("cloneObjColumns", cloneObjColumns);
+            console.log("source.index", source.index)
+            console.log("this.props.columnOrder;", this.props.columnOrder)
+            console.log("destination.index", destination.index)
+            console.log("newColumns", newColumns);
+            // let sortedColumns = newColumns.map((column, index) => {
+            //
+            // })
+
+
+
+            this.props.onDragEnd(result);
+            this.props.onUpdateColumnsPosition(newColumns, projectId);
         }
-        this.props.onDragEnd(result);
-        //
+
+        // this.props.columnOrder;
+
+
         // const {destination, source, draggableId, type} = result;
         //
         // if (!destination) {
@@ -289,28 +372,47 @@ class Project extends React.Component {
     // }
     //
 
+    addNewColumn = (title, buttonName, projectListId, position) => {
+        this.props.openModal(<EditModalContainer title={title} parameters={{projectListId, position, buttonName}}/>);
+    };
+
     render() {
-        console.log(this.state)
-        console.log("columns", this.props.columns);
-        return <DragDropContext onDragEnd={this.onDragEnd}>
+
+console.log("[dsds]",this.projectId);
+        console.log("1111111111111111111", this.props)
+        console.log("this.props.tasks", this.props.tasks);
+        return <div >
+            {this.props.taskInfo && this.props.isTaskInfo ? <TaskInfo/> : ''}
+            <div className={this.props.isTaskInfo ? classes.map : ''}>
+            <div onClick={() => {this.editProject("Edit project", "Save changes",  this.projectId, this.getProjectNameOrId().name)}}>{this.getProjectNameOrId().name}</div>
+            <button onClick={() => {this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)}}>New column</button>
+            <DragDropContext onDragEnd={this.onDragEnd}>
             <Droppable droppableId="all-columns" direction="horizontal" type="column">
                 {(provided) => (
 
 
                     <div className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
                         {this.props.columnOrder.map((columnId, index) => {
+
                             const column = this.props.columns[columnId];
                             const tasks = column.taskIds.map(
-                                taskId => this.props.tasks[taskId],
+                                taskId => {
+                                    console.log("this.props.tasks", this.props.tasks)
+                                    console.log("this.props.columns", this.props.columns)
+                                    console.log("taskId", taskId)
+                                    return this.props.tasks[taskId]
+                                } ,
                             );
-
-                            return <Columns key={column.id} column={column} tasks={tasks} index={index}/>;
+                            console.log("this.props.columns", tasks)
+                            return <Columns taskInfo={this.props.taskInfo} addNewTask={this.props.addNewTask} setTaskInfo={this.props.setTaskInfo} onRemoveColumn={this.props.onRemoveColumn} projectId={this.props.location.aboutProps.projectId} onUpdateColumn={this.props.onUpdateColumn} isInput={this.props.isInput} changeIsInput={this.props.changeIsInput} key={column.id} column={column} tasks={tasks} index={index}/>;
                         })}
                         {provided.placeholder}
                     </div>
                 )}
             </Droppable>
         </DragDropContext>
+            </div>
+        </div>
         {/*<DragDropContext onDragEnd={handleOnDragEnd}>*/
         }
         {/*    <Droppable droppableId="characters">*/
@@ -372,12 +474,16 @@ const mapStateToProps = (state) => ({
     columns: state.columnsPage.columns,
     columnOrder: state.columnsPage.columnOrder,
     tasks: state.columnsPage.tasks,
+    projects: state.projectsPage.projects,
+    isInput: state.columnsPage.isInput,
+    taskInfo: state.columnsPage.taskInfo,
+    isTaskInfo: state.columnsPage.isTaskInfo,
 })
 
 
 let AuthRedirectComponent = withAuthRedirect(Project);
 
-export default connect(mapStateToProps, {getColumns, onDragEnd})(AuthRedirectComponent);
+export default connect(mapStateToProps, {addNewTask, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
 //
 // import React, { useState } from 'react';
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';

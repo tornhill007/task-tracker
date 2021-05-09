@@ -14,7 +14,7 @@ const Header = (props) => {
 
 
     return (
-        <header className={classes.header}>
+        <header className={`${classes.header} ${props.isTaskInfo && classes.map}`}>
             Header
             {props.token ? <div>{props.userName} - <button onClick={() => {
                     onLogout()
@@ -36,6 +36,8 @@ const Header = (props) => {
     );
 };
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    isTaskInfo: state.columnsPage.isTaskInfo
+})
 
 export default connect(mapStateToProps, {setAuthUserData})(Header);
