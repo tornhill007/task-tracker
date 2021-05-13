@@ -3,56 +3,98 @@ import {authAPI} from "../../api/api";
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../common/FormsControl/FormsControl";
 import {required} from "../../utils/validator";
-import classes from "./Register.module.css";
+import classes from "../Login/Login.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLock, faUser} from "@fortawesome/free-solid-svg-icons";
 import {reset} from 'redux-form';
 import {connect} from "react-redux";
 import {register} from "../../redux/reducers/authReducer";
-import {Redirect} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
+
 
 const RegisterForm = (props) => {
     console.log(props)
     return <div className={classes.container}>
-        <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxd34nv00X_fav1iySEezHQCEqRgYDM16tyCM96R2am7AxHknV&s"
-            alt="men"/>
+        <div className={classes.wrap}>
+            <div>
+                <h1 className={classes.title}>
+                    Sign up your account
+                </h1>
+            </div>
         <form onSubmit={props.handleSubmit}>
-            <div className={classes.wrapperInput}>
 
-                <div className={classes.iconContainer}>
-                    <div className={classes.iconWrapper}>
-                        <FontAwesomeIcon icon={faUser} className={classes.icon}/>
-                    </div>
-                    <Field placeholder={"User name"} className={classes.input} name={"userName"} validate={[required]}
+                    <Field placeholder={"User name"}  name={"userName"} validate={[required]}
                            component={Input}/>
-                </div>
 
-                <div className={classes.iconContainer}>
-                    <div className={classes.iconWrapper}>
-                        <FontAwesomeIcon icon={faLock} className={classes.icon}/>
-                    </div>
-                    <Field placeholder={"Password"} className={classes.input} name={"password"} type={"password"}
+                    <Field placeholder={"Password"}  name={"password"} type={"password"}
                            validate={[required]}
                            component={Input}/>
-                </div>
-                <div className={classes.iconContainer}>
-                    <div className={classes.iconWrapper}>
-                        <FontAwesomeIcon icon={faLock} className={classes.icon}/>
-                    </div>
-                    <Field placeholder={"Repeat password"} className={classes.input} name={"repeatPassword"}
+
+                    <Field placeholder={"Repeat password"} name={"repeatPassword"}
                            type={"password"}
                            validate={[required]}
                            component={Input}/>
-                </div>
+
                 {props.error && <div className={classes.formError}>{props.error}</div>}
                 <div>
-                    <button className={classes.submit}>Sign up</button>
+                    <input value="Sign up" type="submit" className={`${classes.padding} ${classes.marginButton}`}/>
                 </div>
+            <div className={classes.topBorderItem}>
+                <NavLink to={"/login"} className={classes.itemText}>
+                    <span>
+                        Do you already have an account? Sign in
+                    </span>
+                </NavLink>
             </div>
+
         </form>
+        </div>
     </div>
 }
+
+
+// const RegisterForm = (props) => {
+//     console.log(props)
+//     return <div className={classes.container}>
+//         <img
+//             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxd34nv00X_fav1iySEezHQCEqRgYDM16tyCM96R2am7AxHknV&s"
+//             alt="men"/>
+//         <form onSubmit={props.handleSubmit}>
+//             <div className={classes.wrapperInput}>
+//
+//                 <div className={classes.iconContainer}>
+//                     <div className={classes.iconWrapper}>
+//                         <FontAwesomeIcon icon={faUser} className={classes.icon}/>
+//                     </div>
+//                     <Field placeholder={"User name"} className={classes.input} name={"userName"} validate={[required]}
+//                            component={Input}/>
+//                 </div>
+//
+//                 <div className={classes.iconContainer}>
+//                     <div className={classes.iconWrapper}>
+//                         <FontAwesomeIcon icon={faLock} className={classes.icon}/>
+//                     </div>
+//                     <Field placeholder={"Password"} className={classes.input} name={"password"} type={"password"}
+//                            validate={[required]}
+//                            component={Input}/>
+//                 </div>
+//                 <div className={classes.iconContainer}>
+//                     <div className={classes.iconWrapper}>
+//                         <FontAwesomeIcon icon={faLock} className={classes.icon}/>
+//                     </div>
+//                     <Field placeholder={"Repeat password"} className={classes.input} name={"repeatPassword"}
+//                            type={"password"}
+//                            validate={[required]}
+//                            component={Input}/>
+//                 </div>
+//                 {props.error && <div className={classes.formError}>{props.error}</div>}
+//                 <div>
+//                     <button className={classes.submit}>Sign up</button>
+//                 </div>
+//             </div>
+//         </form>
+//     </div>
+// }
 
 const RegisterReduxForm = reduxForm({form: 'register'})(RegisterForm)
 
@@ -83,7 +125,18 @@ const Register = (props) => {
     if(props.userData.token) {
         return <Redirect to={"/profile"}/>
     }
-    return <RegisterReduxForm onSubmit={onSubmit}/>
+    return <div className={classes.wrapMain}>
+    <div className={classes.wrapper}>
+        <div className={classes.wrapImg}>
+            <img className={classes.img}
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNUxN5rgp6-XjJAdTAL7SIGuRQ_kUn_Er26bpuHbDktZAeplukGmP7rTUlf7PKAE1TTlA&usqp=CAU"
+                 alt=""/>
+        </div>
+        <div className={classes.wrapTitle}><h1>Kanban Board</h1></div>
+
+    </div>
+    <RegisterReduxForm onSubmit={onSubmit}/>
+    </div>
 }
 
 const mapStateToProps = (state) => ({

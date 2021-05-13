@@ -10,7 +10,7 @@ import {
     getColumns,
     onDragEnd, onRemoveColumn, onUpdateColumn,
     onUpdateColumnsPosition,
-    openModal, setTaskInfo
+    openModal, setTaskInfo, updateTasksPosAndColumnId
 } from "../redux/reducers/columnsReducer";
 import {columnsApi} from "../api/api";
 import EditModalContainer from "./Modal/EditModal/EditModalContainer";
@@ -232,6 +232,9 @@ class Project extends React.Component {
 
 
         if(type === 'column') {
+            if (!destination || source.index === destination.index) {
+                return;
+            }
             const cloneObjColumns = JSON.parse(JSON.stringify(this.props.columns));
             // const cloneObjColumnsTmp = JSON.parse(JSON.stringify(this.props.columns));
             // const cloneColumnOrderTmp = JSON.parse(JSON.stringify(this.props.columnOrder));
@@ -278,6 +281,8 @@ class Project extends React.Component {
 
             this.props.onDragEnd(result);
             this.props.onUpdateColumnsPosition(newColumns, projectId);
+
+            return;
         }
 
         // this.props.columnOrder;
@@ -285,18 +290,20 @@ class Project extends React.Component {
 
         // const {destination, source, draggableId, type} = result;
         //
-        // if (!destination) {
-        //     return;
-        // }
-        //
-        // if (
-        //     destination.droppableId === source.droppableId &&
-        //     destination.index === source.index
-        // ) {
-        //     return;
-        // }
-        //
-        //
+        if (!destination) {
+
+            return;
+        }
+
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+
+            return;
+        }
+
+
         // if(type === 'column') {
         //     const newColumnOrder = Array.from(this.state.columnOrder);
         //     newColumnOrder.splice(source.index, 1);
@@ -309,11 +316,182 @@ class Project extends React.Component {
         //     this.setState(newState);
         //     return;
         // }
+
+
+
+
+        console.log("this.props.columns[source.droppableId]", this.props.columns[source.droppableId])
+        console.log("this.props.columns[destination.droppableId]", this.props.columns[destination.droppableId]);
+
+        const start = this.props.columns[source.droppableId];
+        const finish = this.props.columns[destination.droppableId];
+        console.log("start", start);
+        console.log("finish", finish);
+
+        if (start === finish) {
+            console.log("[000]")
+            const newTaskIds = Array.from(start.taskIds);
+            let returnedTask = newTaskIds.splice(source.index, 1);
+            newTaskIds.splice(destination.index, 0, draggableId);
+
+            console.log("returnedTask", returnedTask);
+            let tmpTasksArr = newTaskIds.map(task => {
+                return this.props.tasks[task];
+            })
+
+
+
+
+            if(destination.index > source.index) {
+                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index-1].position;
+                for(let i = destination.index - 1; i >= 0; i--) {
+                    // if(i === source.index) {
+                    //     continue;
+                    // }
+                    tmpTasksArr[i].position = +tmpTasksArr[i].position - 1;
+                }
+            }
+            else {
+                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index + 1].position;
+                for(let i = destination.index + 1; i <= source.index; i++) {
+                    tmpTasksArr[i].position = +tmpTasksArr[i].position + 1;
+                }
+            }
+
+            console.log("tmpTasksArr", tmpTasksArr);
+            this.props.onDragEnd(result);
+            this.props.updateTasksPosAndColumnId(tmpTasksArr, projectId);
+
+
+            // if(destination.index == tmpTasksArr.length - 1) {
+            //     console.log("AP", tmpTasksArr[destination.index].position, +tmpTasksArr[destination.index].position + 1)
+            //     console.log("destination.index", destination.index)
+            //     console.log("tmp.length - 1", tmpTasksArr.length - 1)
+            //     tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index-1].position + 1;
+            // }
+            // else {
+            //     tmpTasksArr[destination.index].position = tmpTasksArr[destination.index+1].position;
+            //     for(let i = tmpTasksArr.length - 1; i > destination.index; i--) {
+            //         tmpTasksArr[i].position = +tmpTasksArr[i].position + 1;
+            //     }
+            // }
+
+
+            // const newColumn = {
+            //     ...start,
+            //     taskIds: newTaskIds,
+            // };
+            //
+            // const newState = {
+            //     ...this.state,
+            //     columns: {
+            //         ...this.state.columns,
+            //         [newColumn.id]: newColumn,
+            //     },
+            // };
+
+            // this.setState(newState);
+            return;
+        }
+
+
+        // if (start === finish) {
+        //     console.log("[000]")
+        //     const newTaskIds = Array.from(start.taskIds);
+        //     newTaskIds.splice(source.index, 1);
+        //     newTaskIds.splice(destination.index, 0, draggableId);
         //
+        //
+        //     const newColumn = {
+        //         ...start,
+        //         taskIds: newTaskIds,
+        //     };
+        //
+        //     const newState = {
+        //         ...this.state,
+        //         columns: {
+        //             ...this.state.columns,
+        //             [newColumn.id]: newColumn,
+        //         },
+        //     };
+        //
+        //     this.setState(newState);
+        //     return;
+        // }
+
+        console.log("[111]")
+        console.log("this>TASKS", this.props.tasks);
+        // console.log("start.taskIds", start.taskIds);
+        // Moving from one list to another
+        const startTaskIds = Array.from(start.taskIds);
+        // const testArr = Array.from(this.props.tasks);
+        // console.log("testArr", testArr)
+        console.log("source.index", source.index)
+        console.log("destination.index", destination.index)
+        let returnedTask = startTaskIds.splice(source.index, 1);
+
+        console.log("startTaskIds", startTaskIds)
+        const newStart = {
+            ...start,
+            taskIds: startTaskIds,
+        };
+        console.log("newStart", newStart);
+
+        const finishTaskIds = Array.from(finish.taskIds);
+        finishTaskIds.splice(destination.index, 0, draggableId);
+        console.log("returnedTask", returnedTask);
+        let tmpTasksArr = finishTaskIds.map(task => {
+            // console.log("taskT", task)
+            if(task === returnedTask[0]) {
+                // console.log("zzz", task, returnedTask);
+                this.props.tasks[task].columnid = String(finish.columnId);
+            }
+            return this.props.tasks[task];
+        })
+
+        if(destination.index == tmpTasksArr.length - 1) {
+            console.log("AP", tmpTasksArr[destination.index].position, +tmpTasksArr[destination.index].position + 1)
+            console.log("destination.index", destination.index)
+            console.log("tmp.length - 1", tmpTasksArr.length - 1)
+            if(tmpTasksArr.length - 1 == 0) {
+                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index].position + 1;
+            }
+        else {
+                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index-1].position + 1;
+            }
+
+        }
+        else {
+            tmpTasksArr[destination.index].position = tmpTasksArr[destination.index+1].position;
+            for(let i = tmpTasksArr.length - 1; i > destination.index; i--) {
+                tmpTasksArr[i].position = +tmpTasksArr[i].position + 1;
+            }
+        }
+        console.log("tmp", tmpTasksArr)
+        console.log("finishTaskIds", finishTaskIds);
+        this.props.onDragEnd(result);
+        this.props.updateTasksPosAndColumnId(tmpTasksArr, projectId);
+        // const newFinish = {
+        //     ...finish,
+        //     taskIds: finishTaskIds,
+        // };
+        //
+        // const newState = {
+        //     ...this.state,
+        //     columns: {
+        //         ...this.state.columns,
+        //         [newStart.id]: newStart,
+        //         [newFinish.id]: newFinish,
+        //     },
+        // };
+        // this.setState(newState);
+
+
         // const start = this.state.columns[source.droppableId];
         // const finish = this.state.columns[destination.droppableId];
         //
         // if (start === finish) {
+        //     console.log("[000]")
         //     const newTaskIds = Array.from(start.taskIds);
         //     newTaskIds.splice(source.index, 1);
         //     newTaskIds.splice(destination.index, 0, draggableId);
@@ -335,6 +513,7 @@ class Project extends React.Component {
         //     return;
         // }
         //
+        // console.log("[111]")
         // // Moving from one list to another
         // const startTaskIds = Array.from(start.taskIds);
         // startTaskIds.splice(source.index, 1);
@@ -381,8 +560,8 @@ class Project extends React.Component {
 console.log("[dsds]",this.projectId);
         console.log("1111111111111111111", this.props)
         console.log("this.props.tasks", this.props.tasks);
-        return <div >
-            {this.props.taskInfo && this.props.isTaskInfo ? <TaskInfo/> : ''}
+        return <div>
+            {this.props.taskInfo && this.props.isTaskInfo  && this.props.tasks[this.props.taskInfo.id] ? <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
             <div onClick={() => {this.editProject("Edit project", "Save changes",  this.projectId, this.getProjectNameOrId().name)}}>{this.getProjectNameOrId().name}</div>
             <button onClick={() => {this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)}}>New column</button>
@@ -395,7 +574,12 @@ console.log("[dsds]",this.projectId);
                         {this.props.columnOrder.map((columnId, index) => {
 
                             const column = this.props.columns[columnId];
-                            const tasks = column.taskIds.map(
+                            console.log("column.taskIds", column.taskIds)
+                            let res = column.taskIds.filter(task => {
+                                return this.props.tasks[task] === undefined ? false : true;
+                            })
+                            console.log("res", res)
+                            const tasks = res.map(
                                 taskId => {
                                     console.log("this.props.tasks", this.props.tasks)
                                     console.log("this.props.columns", this.props.columns)
@@ -403,8 +587,11 @@ console.log("[dsds]",this.projectId);
                                     return this.props.tasks[taskId]
                                 } ,
                             );
-                            console.log("this.props.columns", tasks)
-                            return <Columns taskInfo={this.props.taskInfo} addNewTask={this.props.addNewTask} setTaskInfo={this.props.setTaskInfo} onRemoveColumn={this.props.onRemoveColumn} projectId={this.props.location.aboutProps.projectId} onUpdateColumn={this.props.onUpdateColumn} isInput={this.props.isInput} changeIsInput={this.props.changeIsInput} key={column.id} column={column} tasks={tasks} index={index}/>;
+                            // let indexUndefined = tasks.indexOf(undefined);
+                            // console.log("indexUndefined", indexUndefined);
+                            // indexUndefined !== -1 && tasks.splice(indexUndefined, 1);
+                            // console.log("this.props.columns", tasks)
+                            return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo} addNewTask={this.props.addNewTask} setTaskInfo={this.props.setTaskInfo} onRemoveColumn={this.props.onRemoveColumn} projectId={this.props.location.aboutProps.projectId} onUpdateColumn={this.props.onUpdateColumn} isInput={this.props.isInput} changeIsInput={this.props.changeIsInput} key={column.id} column={column} tasks={tasks} index={index}/>;
                         })}
                         {provided.placeholder}
                     </div>
@@ -483,7 +670,7 @@ const mapStateToProps = (state) => ({
 
 let AuthRedirectComponent = withAuthRedirect(Project);
 
-export default connect(mapStateToProps, {addNewTask, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
+export default connect(mapStateToProps, {addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
 //
 // import React, { useState } from 'react';
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';

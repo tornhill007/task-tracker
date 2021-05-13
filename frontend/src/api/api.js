@@ -1,28 +1,41 @@
 import * as axios from "axios";
 
 const instance = axios.create({
-    // withCredentials: true,
     baseURL: 'http://localhost:5000/',
-    headers: {
-        'Authorization': JSON.parse(localStorage.getItem('user')).token
-    }
+    // headers: {
+    //     'Authorization': JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).token : ''
+    // }
 })
 
+instance.interceptors.request.use(
+    config => {
+        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).token : '';
 
-export const profileAPI = {
+        if (token) {
+            config.headers.Authorization = token;
+        } else {
+            delete instance.defaults.headers.common.Authorization;
+        }
+        return config;
+    },
 
-    getProfile(userId) {
-        return instance.get(`profile/` + userId)
-    },
-    getStatus(userId) {
-        return instance.get(`profile/status/` + userId)
-    },
-    updateStatus(status) {
-        return instance.put(`profile/status`, {
-            status: status
-        })
-    }
-};
+    error => Promise.reject(error)
+);
+
+// export const profileAPI = {
+//
+//     getProfile(userId) {
+//         return instance.get(`profile/` + userId)
+//     },
+//     getStatus(userId) {
+//         return instance.get(`profile/status/` + userId)
+//     },
+//     updateStatus(status) {
+//         return instance.put(`profile/status`, {
+//             status: status
+//         })
+//     }
+// };
 
 export const usersApi = {
     getAllUsers() {
@@ -69,25 +82,49 @@ export const columnsApi = {
     },
     updateColumnsPosition(newColumns) {
         console.log("firstId, lastId, firstPosition, lastPosition", newColumns)
-        return instance.put('colposition/', {
+        return instance.put('columnposition/', {
             newColumns
         })
     }
 };
 
-export const tasksApi = {
+export const tasksAPI = {
+    updateTaskName(taskName, projectId, taskId) {
+        return instance.put(`/tasks/${projectId}/${taskId}`, {
+            taskName
+        })
+    },
+    updateTasksPosAndColumnId(tasksArr, projectId) {
+        return instance.put(`/tasksposition/${projectId}`, {
+            tasksArr
+        })
+    },
+    updateTaskDescription(description, projectId, taskId) {
+        return instance.put(`/tasks/${projectId}/${taskId}`, {
+            description
+        })
+    },
     getAllTasks(projectId) {
+
         return instance.get(`tasks/` + projectId);
     },
-    addNewTask(taskName, columnId, projectId) {
+    addNewTask(taskName, columnId, projectId, position) {
         return instance.post(`task/`, {
-            taskName, columnId, projectId
+            taskName, columnId, projectId, position
         });
     },
     addNewParticipant(users, projectId, taskId) {
         return instance.put(`/tasks/${projectId}/${taskId}`, {
             users
         })
+    },
+    addNewMarker(markers, projectId, taskId) {
+        return instance.put(`/tasks/${projectId}/${taskId}`, {
+            markers
+        })
+    },
+    removeTask(id, projectId) {
+        return instance.delete(`/task/${projectId}/${id}`)
     }
 }
 

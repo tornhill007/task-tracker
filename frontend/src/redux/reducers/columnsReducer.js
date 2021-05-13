@@ -1,4 +1,8 @@
-import {authAPI, columnsApi, columnsApi as columnsAPI, projectsApi, tasksApi as tasksAPI} from "../../api/api";
+import {
+    authAPI,
+    columnsApi,
+    projectsApi, tasksAPI,
+} from "../../api/api";
 import {reset} from "redux-form";
 // import {stopSubmit} from "redux-form"
 import {sortByPosition} from '../../utils/sort'
@@ -61,7 +65,6 @@ const columnsReducer = (state = initialState, action) => {
                 isOpen: false
             };
         case SET_ALL_TASKS:
-
             let newTasks = {};
 
             console.log("STATE>COLUMNS", state.columns)
@@ -74,7 +77,8 @@ const columnsReducer = (state = initialState, action) => {
                     description: task.description,
                     users: task.users,
                     markers: task.markers,
-                    projectid: task.projectid
+                    projectid: task.projectid,
+                    position: task.position
                 }
             })
             newTasksArr.forEach((key,index) => {
@@ -89,16 +93,24 @@ const columnsReducer = (state = initialState, action) => {
 console.log("[11]", action.tasks);
 console.log("[22]", action.columns);
             let columnsArr = action.columns.map((column, index) => {
-
+                let taskSort = action.tasks.filter((task, index) => task.columnid == column.columnid);
+                console.log("taskSort", taskSort);
+                sortByPosition(taskSort);
                 return {
                     id: `column-${column.columnid}`,
                     name: column.name,
                     // taskIds: ['task-5', 'task-6', 'task-7', 'task-8', 'task-9'],
-                    taskIds: action.tasks.filter((task, index) => task.columnid == column.columnid).map((item, index) => `task-${item.taskid}`),
+                    taskIds: taskSort.map((item, index) => `task-${item.taskid}`),
                     position: column.position,
                     columnId: column.columnid
                 }
             })
+            // let tasksId = action.tasks.filter((task, index) => task.columnid == column.columnid);
+            //
+            // sortByPosition(tasksId);
+            //
+            // tasksId.map((item, index) => `task-${item.taskid}`)
+            // console.log("SORTBYTASK", tasksId)
             let columnsObj = {};
             let columnsOrder = [];
             columnsArr.forEach(key => {
@@ -152,8 +164,8 @@ console.log("[22]", action.columns);
                 return newState;
             }
 
-            const start = this.state.columns[source.droppableId];
-            const finish = this.state.columns[destination.droppableId];
+            const start = state.columns[source.droppableId];
+            const finish = state.columns[destination.droppableId];
 
             if (start === finish) {
                 const newTaskIds = Array.from(start.taskIds);
@@ -235,22 +247,31 @@ export const closeTaskInfo = () => ({type: CLOSE_TASK_INFO});
 
 
 export const getColumns = (projectId) => async (dispatch) => {
+    // alert(2)
+console.log('222222222222222222')
     let response1 = await tasksAPI.getAllTasks(projectId);
+    let response = await columnsApi.getColumns(projectId);
+    console.log("[333333333333333333333333333]", response1)
+
     dispatch(setAllTasks(response1.data));
-    let response = await columnsAPI.getColumns(projectId);
-    console.log("response11", response1);
+
     dispatch(setColumns(response.data, response1.data));
+    console.log("response11", response1);
+
 
 };
 
 export const getAllTasks = (projectId) => async (dispatch) => {
+    // alert(2)
     let response = await tasksAPI.getAllTasks(projectId);
+
     console.log("response22222", response);
     dispatch(setAllTasks(response.data));
 };
 
-export const addNewTask = (taskName, columnId, projectId) => async (dispatch) => {
-    let response = await tasksAPI.addNewTask(taskName, columnId, projectId);
+export const addNewTask = (taskName, columnId, projectId, position) => async (dispatch) => {
+
+    let response = await tasksAPI.addNewTask(taskName, columnId, projectId, position);
     dispatch(getColumns(projectId));
     // console.log("response22222", response);
     // dispatch(setAllTasks(response.data));
@@ -281,11 +302,44 @@ export const onRemoveColumn = (id, projectId) => async (dispatch) => {
 };
 
 export const createNewColumn = (name, projectListId, position) => async (dispatch) => {
-    console.log("initialState.columns", initialState)
-
     let response = await columnsApi.createNewColumn(name, projectListId, position)
     console.log("response", response);
     dispatch(getColumns(projectListId));
+};
+
+export const updateTaskName = (taskName, projectId, taskId) => async (dispatch) => {
+    console.log("UPDATETASKNAME", taskName, projectId, taskId);
+    let response = await tasksAPI.updateTaskName(taskName, projectId, taskId)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const updateDescription = (taskDescription, projectId, taskId) => async (dispatch) => {
+    console.log("UPDATETASKNAME", taskDescription, projectId, taskId);
+    let response = await tasksAPI.updateTaskDescription(taskDescription, projectId, taskId)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const addNewMarker = (markers, projectId, taskId) => async (dispatch) => {
+    console.log("UPDATETASKNAME", markers, projectId, taskId);
+    let response = await tasksAPI.addNewMarker(markers, projectId, taskId)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const updateTasksPosAndColumnId = (tasksArr, projectId) => async (dispatch) => {
+    console.log("UPDATE_TASKS_POSITION", tasksArr, projectId);
+    let response = await tasksAPI.updateTasksPosAndColumnId(tasksArr, projectId)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
+};
+
+export const removeTask = (taskId, projectId) => async (dispatch) => {
+    // console.log("UPDATE_TASKS_POSITION", tasksArr, projectId);
+    let response = await tasksAPI.removeTask(taskId, projectId)
+    console.log("response", response);
+    dispatch(getColumns(projectId));
 };
 
 

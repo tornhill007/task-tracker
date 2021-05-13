@@ -2,8 +2,7 @@ import {
     authAPI,
     columnsApi,
     columnsApi as columnsAPI,
-    projectsApi, tasksApi,
-    tasksApi as tasksAPI,
+    projectsApi, tasksAPI,
     usersApi
 } from "../../api/api";
 import {reset} from "redux-form";
@@ -14,10 +13,12 @@ import {getColumns} from "./columnsReducer";
 
 const SET_ALL_USERS = 'SET_ALL_USERS';
 const SET_IS_OPEN_USERS_LIST = 'SET_IS_OPEN_USERS_LIST';
+const SET_IS_OPEN_MARKERS_LIST = 'SET_IS_OPEN_MARKERS_LIST';
 
 let initialState = {
     users: [],
     isOpenUsersList: false,
+    isOpenMarkersList: false,
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -34,6 +35,12 @@ const usersReducer = (state = initialState, action) => {
                 isOpenUsersList: !state.isOpenUsersList
             };
 
+            case SET_IS_OPEN_MARKERS_LIST:
+            return {
+                ...state,
+                isOpenMarkersList: !state.isOpenMarkersList
+            };
+
         default:
             return state;
     }
@@ -47,6 +54,10 @@ export const setAllUsers = (users) => ({
 
 export const setIsOpenUserList = () => ({
     type: SET_IS_OPEN_USERS_LIST,
+})
+
+export const setIsOpenMarkersList = () => ({
+    type: SET_IS_OPEN_MARKERS_LIST,
 })
 
 export const getAllUsers = () => async (dispatch) => {
@@ -66,7 +77,7 @@ export const getAllUsers = () => async (dispatch) => {
 
 export const addNewParticipant = (participants, projectId, taskId) => async (dispatch) => {
     try {
-        let response = await tasksApi.addNewParticipant(participants, projectId, taskId);
+        let response = await tasksAPI.addNewParticipant(participants, projectId, taskId);
         if (response.statusText === 'OK') {
             console.log("[RESPONSE]", response)
             dispatch(getColumns(projectId));

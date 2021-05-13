@@ -7,16 +7,30 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
+const tasks = require('./routes/tasks');
+const columns = require('./routes/columns');
+const projects = require('./routes/projects');
+const auth = require('./routes/auth');
+const registration = require('./routes/registration');
+
+const sequelize = require('./config/database')
+
+//Test DB
+
+sequelize.authenticate().then(() => {
+    console.log("Database connected...")
+}).catch((err) => {
+    console.log("Error:" + err);
+})
 
 app.use(cors());
+// app.use(auth);
 app.use(express.json());
-
-//ROUTES
-require("./routes/columns")(app, pool);
-require("./routes/projects")(app, pool);
-require("./routes/registration")(app, pool, bcrypt);
-require("./routes/auth")(app, pool, bcrypt, jwt, keys);
-require("./routes/tasks")(app, pool);
+app.use(tasks);
+app.use(columns);
+app.use(projects);
+app.use(auth);
+app.use(registration);
 
 
 app.use(passport.initialize());

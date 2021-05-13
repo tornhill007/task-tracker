@@ -4,7 +4,9 @@ DATABASE taskTracker;
 CREATE TABLE projectsList
 (
     projectId SERIAL PRIMARY KEY,
-    name      VARCHAR(255)
+        name      VARCHAR(255),
+        createdAt DATE,
+        updatedAt DATE
 )
 
 CREATE TABLE kanbancolumns
@@ -30,7 +32,8 @@ CREATE TABLE tasks
     users VARCHAR(255)[],
     markers VARCHAR(255)[],
     columnId NUMERIC,
-    projectId NUMERIC
+    projectId NUMERIC,
+    position NUMERIC
 )
 
 

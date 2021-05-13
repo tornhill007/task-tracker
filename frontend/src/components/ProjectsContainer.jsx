@@ -6,6 +6,7 @@ import {projectsApi} from "../api/api";
 import {getAllProjects, removeProject, setProjects} from "../redux/reducers/projectsReducer";
 import {openModal} from "../redux/reducers/columnsReducer";
 import {getAllUsers} from "../redux/reducers/usersReducer";
+import {withAuthRedirect} from "../hoc/withAuthRedirect";
 class ProjectsContainer extends React.Component {
 
     getProjects = async () => {
@@ -39,7 +40,9 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, {getAllUsers, setProjects, openModal, getAllProjects, removeProject})(ProjectsContainer);
+let AuthRedirectComponentProjects = withAuthRedirect(ProjectsContainer);
+
+export default connect(mapStateToProps, {getAllUsers, setProjects, openModal, getAllProjects, removeProject})(AuthRedirectComponentProjects);
 
 
 

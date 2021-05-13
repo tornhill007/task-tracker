@@ -78,8 +78,9 @@ export default class Column extends React.Component {
         })
     }
 
-    onAddNewTask(columnId, projectId) {
-        this.props.addNewTask(this.state.textNewTask, columnId, projectId);
+    onAddNewTask(columnId, projectId, position) {
+        console.log("[POS]", position);
+        this.props.addNewTask(this.state.textNewTask, columnId, projectId, position);
         this.setState({
             isTaskInput: !this.state.isTaskInput
         })
@@ -93,6 +94,19 @@ export default class Column extends React.Component {
         // })
     }
 
+    onCalculateIndex(allTasks) {
+        console.log("qqq", allTasks)
+
+        // console.log("this.props.column.taskIds", this.props.column.taskIds)
+        // console.log("this.props.column.taskIds[this.props.column.taskIds.length-1]", this.props.column.taskIds[this.props.column.taskIds.length-1])
+        // console.log("allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1", +allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1)
+        if(this.props.column.taskIds.length === 0 ) {
+            return 1
+        }
+        else return +allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1
+        // +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1
+    }
+
     // onEditColumn() {
     //     // this.setState({
     //     //     isInput: !this.state.isInput
@@ -101,8 +115,10 @@ export default class Column extends React.Component {
     // }
 
     render() {
-        console.log("STATE", this.props)
-        console.log("this.props.tasks111", this.props.tasks)
+        console.log("qthis.props.tasksqq", this.props.tasks)
+        console.log("qthis.props.tasksqqAll", this.props.allTasks)
+        // console.log("STATE", +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1)
+        // console.log("this.props.tasks111", this.props.column.taskIds[this.props.column.taskIds.length-1])
         return (
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided) => (
@@ -137,7 +153,7 @@ export default class Column extends React.Component {
 
                         </Droppable>
                         {this.state.isTaskInput ? <input onBlur={() => {
-                            this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId) : this.onOpenInput()
+                            this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()
                         }} autoFocus={true} placeholder={"Please, enter header"} onChange={this.changeTaskText}
                                                          value={this.state.textNewTask}/> : ''}
                         <button onClick={() => {

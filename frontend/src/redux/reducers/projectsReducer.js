@@ -63,6 +63,7 @@ export const removeProject = (projectId) => async (dispatch) => {
 export const getAllProjects = () => async (dispatch) => {
     try {
         let response = await projectsApi.getAllProjects();
+        console.log("response[PROJECT]", response)
         if (response.statusText === 'OK') {
             console.log(response)
             dispatch(setProjects(response.data));

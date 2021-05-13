@@ -1,11 +1,17 @@
 import React from 'react';
 import {withAuthRedirect} from "../hoc/withAuthRedirect";
+import {connect} from "react-redux";
 
 const Profile = (props) => {
     return <div className="App">
-        Profile
+        <div>My Profile</div>
+        <div>{props.userName}</div>
     </div>
 }
 let AuthRedirectComponent = withAuthRedirect(Profile);
 
-export default AuthRedirectComponent;
+const mapStateToProps = (state) => ({
+    userName: state.auth.userName
+})
+
+export default connect(mapStateToProps, {})(AuthRedirectComponent);

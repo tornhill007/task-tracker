@@ -1,66 +1,59 @@
 const passport = require('passport')
+const express = require("express");
+const router = express.Router();
+const pool = require('../db')
 
+const Projects = require('../models/Projects');
+const catchWrap = require("../common/wrapper")
+
+router.use('/projects', passport.authenticate('jwt', {session: false}))
 //################projects list
 
 //get all projects
-module.exports = function (app, pool) {
-    app.get("/projects", passport.authenticate('jwt', {session: false}), async (req, res) => {
-        try {
-            const allProjects = await pool.query("SELECT * FROM projectsList");
-            res.json(allProjects.rows);
-        } catch (err) {
-            console.log(err);
-        }
-    })
+
+// router.get("/projects", catchWrap(async (req, res) => {
+//             const allProjects = await pool.query("SELECT * FROM projectsList");
+//             res.json(allProjects.rows);
+//     }))
+
+router.get("/projects", catchWrap(async (req, res) => {
+    const allProjects = await Projects.findAll()
+    res.json(allProjects);
+}))
 
 //create project
 
-    app.post("/projects", passport.authenticate('jwt', {session: false}), async (req, res) => {
-        try {
+router.post("/projects", catchWrap(async (req, res) => {
             const {name} = req.body;
             const newProject = await pool.query("INSERT INTO projectsList (name) VALUES($1) RETURNING *", [name]);
-
             res.json(newProject.rows[0]);
-        } catch (err) {
-            console.log(err.message);
-        }
-    })
+    }))
 
 //get project
 
-    app.get("/projects/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
-        try {
+router.get("/projects/:id", catchWrap(async (req, res) => {
             const {id} = req.params;
             const project = await pool.query("SELECT * FROM projectsList WHERE projectid = $1", [id]);
             res.json(project.rows[0]);
-        } catch (err) {
-            console.log(err);
-        }
-    })
+    }))
 
 //update project
 
-    app.put("/projects/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
-        try {
+router.put("/projects/:id", catchWrap(async (req, res) => {
             const {id} = req.params;
             const {name} = req.body;
             const updateProject = await pool.query("UPDATE projectsList SET name = $1 WHERE projectId = $2", [name, id]);
             res.json("Project updated");
-        } catch (err) {
-            console.log(err);
-        }
-    })
+    }))
 
 
 //delete project
-    app.delete("/projects/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
-        try {
+router.delete("/projects/:id", catchWrap(async (req, res) => {
             const {id} = req.params;
-            const deleteProject = await pool.query("DELETE FROM projectsList WHERE projectId = $1", [id]);
+            const deletedProject = await pool.query("DELETE FROM projectsList WHERE projectId = $1", [id]);
+            const deletedColumns = await pool.query("DELETE FROM kanbancolumns WHERE projectListId = $1", [id]);
+            const deletedTasks = await pool.query("DELETE FROM tasks WHERE projectId = $1", [id]);
             res.json("Project deleted");
-        } catch (err) {
-            console.log(err);
-        }
-    })
+    }))
 
-}
+module.exports = router;
