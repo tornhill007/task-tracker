@@ -28,7 +28,7 @@ class EditModal extends React.Component {
     createProject() {
         const {text} = this.state;
         // const text1 = this.newRef.current.value;
-        this.props.createNewProject(text);
+        this.props.createNewProject(text, this.props.userId);
         this.close();
     }
 

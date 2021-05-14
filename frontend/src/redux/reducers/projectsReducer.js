@@ -28,9 +28,9 @@ export const setProjects = (projects) => ({
     projects
 });
 
-export const createNewProject = (projectName) => async (dispatch) => {
+export const createNewProject = (projectName, userId) => async (dispatch) => {
 
-    let response = await projectsApi.createNewProject(projectName);
+    let response = await projectsApi.createNewProject(projectName, userId);
     dispatch(getAllProjects());
     // console.log("response", response);
     // dispatch(getColumns(projectId));

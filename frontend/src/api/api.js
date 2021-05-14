@@ -44,9 +44,10 @@ export const usersApi = {
 }
 
 export const projectsApi = {
-    createNewProject(projectName) {
+    createNewProject(projectName, userId) {
         return instance.post(`projects/`, {
-            name: projectName
+            name: projectName,
+            userId: userId
         })
     },
     editProject(id, name) {

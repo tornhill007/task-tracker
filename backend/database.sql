@@ -9,6 +9,16 @@ CREATE TABLE projectsList
         updatedAt timestamp with time zone
 )
 
+CREATE TABLE usersProjects
+(
+    id SERIAL PRIMARY KEY,
+    projectId NUMERIC,
+    userId  NUMERIC
+
+)
+
+
+
 CREATE TABLE kanbancolumns
 (
     columnId      SERIAL PRIMARY KEY,

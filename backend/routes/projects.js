@@ -6,6 +6,7 @@ const pool = require('../db')
 const Projects = require('../models/Projects');
 const Columns = require('../models/Columns');
 const Tasks = require('../models/Tasks');
+const UsersProjects = require('../models/UsersProjects');
 const catchWrap = require("../common/wrapper")
 
 router.use('/projects', passport.authenticate('jwt', {session: false}))
@@ -33,9 +34,15 @@ router.get("/projects", catchWrap(async (req, res) => {
 //     }))
 
 router.post("/projects", catchWrap(async (req, res) => {
-    const {name} = req.body;
+    const {name, userId} = req.body;
     const newProject = await Projects.create({
         name
+    })
+// console.log("newProject", newProject.dataValues.projectid);
+// console.log("userId", userId);
+    const userProject = await UsersProjects.create({
+        projectid: newProject.dataValues.projectid,
+        userid: userId
     })
     res.json(newProject);
 }))
