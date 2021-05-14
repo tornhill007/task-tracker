@@ -8,6 +8,8 @@ const Columns = require('../models/Columns');
 const Tasks = require('../models/Tasks');
 const UsersProjects = require('../models/UsersProjects');
 const catchWrap = require("../common/wrapper")
+const sequelize = require('../config/database');
+const {QueryTypes} = require('sequelize');
 
 router.use('/projects', passport.authenticate('jwt', {session: false}))
 //################projects list
@@ -20,8 +22,36 @@ router.use('/projects', passport.authenticate('jwt', {session: false}))
 //     }))
 
 router.get("/projects", catchWrap(async (req, res) => {
-    console.log(5)
-    const allProjects = await Projects.findAll();
+    // let {userId} = req.query;
+    let userId = req.query.userId
+
+    // console.log("userId", userId);
+// let q = 8;
+//     console.log(+userId);
+// console.log(userId === q);
+// console.log(q);
+
+    // const allProjects = await Projects.findAll();
+    const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = ?)", {
+            replacements: [+userId],
+        }
+    );
+    // res.json(results);
+    console.log(results)
+    res.json(results);
+}))
+
+router.delete("/usersprojects/:id", catchWrap(async (req, res) => {
+    let {id} = req.params;
+    // console.log("userId", userId);
+    const allProjects = await UsersProjects.destroy({
+        where: {
+            id
+        }
+    });
+    // const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = 9)");
+
+    // res.json(results);
     res.json(allProjects);
 }))
 
@@ -46,7 +76,6 @@ router.post("/projects", catchWrap(async (req, res) => {
     })
     res.json(newProject);
 }))
-
 
 
 //get project
@@ -87,7 +116,6 @@ router.put("/projects/:id", catchWrap(async (req, res) => {
     });
     res.json("Project updated");
 }))
-
 
 
 //delete project

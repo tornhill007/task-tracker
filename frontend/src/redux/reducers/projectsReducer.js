@@ -60,9 +60,9 @@ export const removeProject = (projectId) => async (dispatch) => {
 
 };
 
-export const getAllProjects = () => async (dispatch) => {
+export const getAllProjects = (userId) => async (dispatch) => {
     try {
-        let response = await projectsApi.getAllProjects();
+        let response = await projectsApi.getAllProjects(userId);
         console.log("response[PROJECT]", response)
         if (response.statusText === 'OK') {
             console.log(response)

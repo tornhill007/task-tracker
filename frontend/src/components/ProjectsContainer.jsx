@@ -10,7 +10,7 @@ import {withAuthRedirect} from "../hoc/withAuthRedirect";
 class ProjectsContainer extends React.Component {
 
     getProjects = async () => {
-       this.props.getAllProjects();
+       this.props.getAllProjects(this.props.userId);
     }
 
     getUsers = () => {
@@ -36,7 +36,8 @@ class ProjectsContainer extends React.Component {
 const mapStateToProps = (state) => {
     return {
         projects: state.projectsPage.projects,
-        users: state.usersPage.users
+        users: state.usersPage.users,
+        userId: state.auth.userId
     }
 };
 

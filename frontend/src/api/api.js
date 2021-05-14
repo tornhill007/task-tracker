@@ -58,8 +58,12 @@ export const projectsApi = {
     removeProject(projectId) {
         return instance.delete(`projects/${projectId}`)
     },
-    getAllProjects() {
-        return instance.get(`projects/`);
+    getAllProjects(userId) {
+        return instance.get(`projects/`, {
+            params: {
+                userId
+            }
+        });
     }
 };
 
