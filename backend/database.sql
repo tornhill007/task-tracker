@@ -5,8 +5,8 @@ CREATE TABLE projectsList
 (
     projectId SERIAL PRIMARY KEY,
         name      VARCHAR(255),
-        createdAt DATE,
-        updatedAt DATE
+        createdAt timestamp with time zone,
+        updatedAt timestamp with time zone
 )
 
 CREATE TABLE kanbancolumns

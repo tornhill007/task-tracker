@@ -13,10 +13,16 @@ const Projects = db.define('projectslist', {
             type: DataTypes.STRING,
             allowNull: false
         },
-
+        createdAt: {
+            field: 'createdat',
+            type: Sequelize.DATE,
+        },
+        updatedAt: {
+            field: 'updatedat',
+            type: Sequelize.DATE,
+        },
     },
     {
-        timestamps: false,
         tableName: 'projectslist'
     })
 
