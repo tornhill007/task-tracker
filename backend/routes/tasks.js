@@ -130,7 +130,7 @@ router.put("/tasks/:projectId/:id", catchWrap(async (req, res) => {
     const {taskName, description, users, markers, columnId} = req.body;
 
     if(taskName) {
-        const updateTaskName = await Tasks.update({taskname: taskname}, {
+        const updateTaskName = await Tasks.update({taskname: taskName}, {
             where: {
                 taskid: id
             }

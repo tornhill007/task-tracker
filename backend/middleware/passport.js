@@ -8,13 +8,21 @@ const options = {
     secretOrKey: keys.jwt
 }
 
+const Registration = require('../models/Registration');
+
 module.exports = passport => {
     passport.use(
         new JwtStrategy(options, async (payload, done) => {
             try {
-                const user = await pool.query("SELECT * FROM registration WHERE userId=$1", [payload.userId]);
-                if(user.rows.length !== 0) {
-                    done(null, user.rows[0])
+
+                // const user = await pool.query("SELECT * FROM registration WHERE userId=$1", [payload.userId]);
+                const user = await Registration.findAll({
+                    where: {
+                        userid: payload.userId
+                    }
+                });
+                if(user.length !== 0) {
+                    done(null, user)
                 }
                 else {
                     done(null, false);
