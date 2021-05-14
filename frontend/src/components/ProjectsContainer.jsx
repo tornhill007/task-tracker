@@ -20,7 +20,7 @@ class ProjectsContainer extends React.Component {
 
     componentDidMount() {
         this.getProjects();
-        this.getUsers();
+        // this.getUsers();
         // this.props.getUsers(this.props.pageSize, this.props.currentPage);
     }
 

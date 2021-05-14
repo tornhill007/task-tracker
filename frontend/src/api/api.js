@@ -34,13 +34,34 @@ instance.interceptors.request.use(
 //         return instance.put(`profile/status`, {
 //             status: status
 //         })
-//     }
+//
 // };
 
 export const usersApi = {
     getAllUsers() {
         return instance.get(`register/`);
     },
+    addToProject(userid, projectid) {
+        console.log("userid, projectid", userid, projectid)
+        return instance.post(`activeusers/`, {
+            userid, projectid
+        });
+    },
+    removeFromProject(userid, projectid) {
+        return instance.delete(`activeusers/`, {
+            params: {
+                userid, projectid
+            }
+        });
+    },
+    getActiveUsers(projectId) {
+        return instance.get(`inproject/`, {
+            params: {
+                projectId
+            }
+        });
+    }
+
 }
 
 export const projectsApi = {

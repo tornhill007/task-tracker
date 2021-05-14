@@ -12,6 +12,7 @@ const columns = require('./routes/columns');
 const projects = require('./routes/projects');
 const auth = require('./routes/auth');
 const registration = require('./routes/registration');
+const usersprojects = require('./routes/usersprojects');
 
 const sequelize = require('./config/database')
 
@@ -31,6 +32,7 @@ app.use(columns);
 app.use(projects);
 app.use(auth);
 app.use(registration);
+app.use(usersprojects);
 
 
 app.use(passport.initialize());

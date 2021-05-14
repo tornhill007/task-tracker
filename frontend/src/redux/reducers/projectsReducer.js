@@ -4,10 +4,11 @@ import {getColumns} from "./columnsReducer";
 // import {stopSubmit} from "redux-form"
 
 const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
+const SET_IS_OPEN_INVITE_LIST = 'SET_IS_OPEN_INVITE_LIST';
 
 let initialState = {
     projects: [],
-
+    IsOpenInviteList: false
 };
 
 const projectsReducer = (state = initialState, action) => {
@@ -16,6 +17,12 @@ const projectsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 projects: action.projects
+            };
+
+            case SET_IS_OPEN_INVITE_LIST:
+            return {
+                ...state,
+                IsOpenInviteList: !state.IsOpenInviteList
             };
         default:
             return state;
@@ -26,6 +33,10 @@ const projectsReducer = (state = initialState, action) => {
 export const setProjects = (projects) => ({
     type: SET_ALL_PROJECTS,
     projects
+});
+
+export const setIsOpenInviteList = () => ({
+    type: SET_IS_OPEN_INVITE_LIST
 });
 
 export const createNewProject = (projectName, userId) => async (dispatch) => {

@@ -127,43 +127,12 @@ router.get("/tasks/:projectId/:id", catchWrap(async (req, res) => {
 
 router.put("/tasks/:projectId/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    const {taskName, description, users, markers, columnId} = req.body;
-
-    if(taskName) {
-        const updateTaskName = await Tasks.update({taskname: taskName}, {
-            where: {
-                taskid: id
-            }
-        });
-    }
-    else if(description || description === '') {
-        const updateTaskDescription= await Tasks.update({description: description}, {
-            where: {
-                taskid: id
-            }
-        });
-    }
-    else if(users) {
-        const updateTaskUsers = await Tasks.update({users: users}, {
-            where: {
-                taskid: id
-            }
-        });
-    }
-    else if(markers) {
-        const updateTaskMarkers = await Tasks.update({markers: markers}, {
-            where: {
-                taskid: id
-            }
-        });
-    }
-    else if(columnId) {
-        const updateTask = await Tasks.update({columnid: columnId}, {
-            where: {
-                taskid: id
-            }
-        });
-    }
+    const {taskName, description, users, markers, columnId} =req.body;
+    const updateTaskName = await Tasks.update({taskName, description, users, markers, columnId} , {
+        where: {
+            taskid: id
+        }
+    });
 
     res.json("Task updated");
 }))

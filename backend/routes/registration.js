@@ -4,7 +4,7 @@ const keys = require("../config/keys");
 const express = require("express");
 const router = express.Router();
 const pool = require('../db');
-
+const sequelize = require('../config/database');
 
 const Registration = require('../models/Registration');
 
@@ -26,6 +26,19 @@ console.log("25")
     const users = await Registration.findAll();
     res.json(users);
     console.log(users);
+}))
+
+router.get("/inproject", catchWrap(async (req, res) => {
+    // let {userId} = req.query;
+    let projectId = req.query.projectId
+    console.log(projectId);
+    // const allProjects = await Projects.findAll();
+    const [results, metadata] = await sequelize.query("SELECT * FROM registration WHERE userid IN (SELECT userid FROM usersprojects WHERE projectid = ?)", {
+            replacements: [projectId],
+        }
+    );
+    console.log(results)
+    res.json(results);
 }))
 
 // //create user

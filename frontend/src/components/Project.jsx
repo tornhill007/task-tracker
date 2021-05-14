@@ -12,10 +12,14 @@ import {
     onUpdateColumnsPosition,
     openModal, setTaskInfo, updateTasksPosAndColumnId
 } from "../redux/reducers/columnsReducer";
-import {columnsApi} from "../api/api";
+import {columnsApi, usersApi} from "../api/api";
 import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import {getProjectName, getProjects} from "../redux/selectors/projectsSelector";
 import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
+import {setIsOpenInviteList} from "../redux/reducers/projectsReducer";
+import {addToProject, getAllUsers, removeFromProject} from "../redux/reducers/usersReducer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 
 // const projects = [
@@ -167,7 +171,9 @@ class Project extends React.Component {
 
     projectId = this.props.match.params.projectId;
     componentDidMount() {
-
+        // let result = usersApi.getActiveUsers(30);
+        // console.log("result", result)
+        this.props.getAllUsers(this.projectId);
         let projectId = this.props.match.params.projectId;
         console.log("PROJECTID", projectId);
         this.props.getColumns(projectId);
@@ -540,31 +546,52 @@ class Project extends React.Component {
         // this.setState(newState);
     };
 
-    // const [characters, updateCharacters] = useState(projects);
-    //
-    // const handleOnDragEnd = (result) => {
-    //     const items = Array.from(characters);
-    //     const [reorderItem] = items.splice(result.source.index, 1);
-    //     items.splice(result.destination.index, 0, reorderItem);
-    //
-    //     updateCharacters(items);
-    // }
-    //
+
+
+    onOpenOrCloseInviteList = () => {
+        this.props.setIsOpenInviteList();
+    }
+
 
     addNewColumn = (title, buttonName, projectListId, position) => {
         this.props.openModal(<EditModalContainer title={title} parameters={{projectListId, position, buttonName}}/>);
     };
 
+    checkActiveUsers = (activeUser) => {
+        let index = this.props.activeUsers.indexOf(activeUser);
+        return index !== -1;
+    }
+
+    onAddToProject = (userId) => {
+        this.props.addToProject(userId, this.projectId);
+    }
+
+    onRemoveFromProject = (userId) => {
+        this.props.removeFromProject(userId, this.projectId);
+    }
+
     render() {
 
 console.log("[dsds]",this.projectId);
         console.log("1111111111111111111", this.props)
+        console.log("ACTIVE_USERS", this.props.activeUsers)
+        console.log("USERS", this.props.users)
         console.log("this.props.tasks", this.props.tasks);
         return <div>
             {this.props.taskInfo && this.props.isTaskInfo  && this.props.tasks[this.props.taskInfo.id] ? <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
             <div onClick={() => {this.editProject("Edit project", "Save changes",  this.projectId, this.getProjectNameOrId().name)}}>{this.getProjectNameOrId().name}</div>
-            <button onClick={() => {this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)}}>New column</button>
+            <div onClick={() => {this.onOpenOrCloseInviteList()}}>Invite</div>
+                <div className={classes.containerBlock}>
+
+                    {this.props.IsOpenInviteList ? <div className={classes.listWrap}><div className={classes.wrapperItem}><div className={classes.itemTitle}><div className={classes.closeItem}>Invite to project</div><div className={classes.cursor} onClick={() => {this.onOpenOrCloseInviteList()}}><FontAwesomeIcon icon={faTimesCircle} /></div></div><div>
+                        </div></div><div className={classes.itemWrap} >
+                        {this.props.users.map(user => <div onClick={() => {!this.checkActiveUsers( user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)}} className={`${classes.itemName} ${this.checkActiveUsers( user.username) && classes.itemColor}`}>{user.username}</div>)}
+                        {/*{this.props.users.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*/}
+                        {/*{this.state.markers.map(marker => <div onClick={() => { !this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? this.onAddNewMarker(marker, this.props.tasks[this.props.taskInfo.id].markers) : this.onRemoveMarker(marker, this.props.tasks[this.props.taskInfo.id].markers)}} className={`${classes.userWrap} ${this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) && classes.cursor}`}><div  >{marker}</div>{this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? <div>OK</div> : ''}</div>)}*/}
+                    </div></div> : ''}
+                </div>
+                <button onClick={() => {this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)}}>New column</button>
             <DragDropContext onDragEnd={this.onDragEnd}>
             <Droppable droppableId="all-columns" direction="horizontal" type="column">
                 {(provided) => (
@@ -600,59 +627,7 @@ console.log("[dsds]",this.projectId);
         </DragDropContext>
             </div>
         </div>
-        {/*<DragDropContext onDragEnd={handleOnDragEnd}>*/
-        }
-        {/*    <Droppable droppableId="characters">*/
-        }
-        {/*        {(provided) => (*/
-        }
-        {/*            <ul className="characters" {...provided.droppableProps} ref={provided.innerRef}>*/
-        }
-        {/*                {characters.map((item, index) => {*/
-        }
-        {/*                    return <Draggable key={item.id} draggableId={String(item.id)} index={index}>*/
-        }
-        {/*                        {(provided) => (*/
-        }
-        {/*                            <li {...provided.draggableProps} {...provided.dragHandleProps}*/
-        }
-        {/*                                ref={provided.innerRef}>*/
-        }
-        {/*                                {1}*/
-        }
-        {/*                                /!*{item.tasks.map((task, index1) => {*!/*/
-        }
-        {/*                                /!*    return <Draggable key={task.id} draggableId={String(task.id)} index={index1}>*!/*/
-        }
-        {/*                                /!*        {(provided1) => (*!/*/
-        }
-        {/*                                /!*            <p {...provided1.draggableProps} {...provided1.dragHandleProps}*!/*/
-        }
-        {/*                                /!*               ref={provided1.innerRef}>{task.name}</p>*!/*/
-        }
-        {/*                                /!*        )}*!/*/
-        }
-        {/*                                */
-        }
-        {/*                            </li>*/
-        }
-        {/*                        )}*/
-        }
 
-        {/*                    </Draggable>*/
-        }
-        {/*                })}*/
-        }
-        {/*                {provided.placeholder}*/
-        }
-        {/*            </ul>*/
-        }
-        {/*        )}*/
-        }
-        {/*    </Droppable>*/
-        }
-        {/*</DragDropContext>*/
-        }
 
     }
 }
@@ -663,95 +638,14 @@ const mapStateToProps = (state) => ({
     tasks: state.columnsPage.tasks,
     projects: state.projectsPage.projects,
     isInput: state.columnsPage.isInput,
+    users: state.usersPage.users,
     taskInfo: state.columnsPage.taskInfo,
     isTaskInfo: state.columnsPage.isTaskInfo,
+    IsOpenInviteList: state.projectsPage.IsOpenInviteList,
+    activeUsers: state.usersPage.activeUsers,
 })
 
 
 let AuthRedirectComponent = withAuthRedirect(Project);
 
-export default connect(mapStateToProps, {addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
-//
-// import React, { useState } from 'react';
-// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-// import '../App.css';
-//
-// const finalSpaceCharacters = [
-//     {
-//         id: 'gary',
-//         name: 'Gary Goodspeed',
-//         thumb: '/images/gary.png'
-//     },
-//     {
-//         id: 'cato',
-//         name: 'Little Cato',
-//         thumb: '/images/cato.png'
-//     },
-//     {
-//         id: 'kvn',
-//         name: 'KVN',
-//         thumb: '/images/kvn.png'
-//     },
-//     {
-//         id: 'mooncake',
-//         name: 'Mooncake',
-//         thumb: '/images/mooncake.png'
-//     },
-//     {
-//         id: 'quinn',
-//         name: 'Quinn Ergon',
-//         thumb: '/images/quinn.png'
-//     }
-// ]
-//
-// function Projects() {
-//     const [characters, updateCharacters] = useState(finalSpaceCharacters);
-//
-//     function handleOnDragEnd(result) {
-//         if (!result.destination) return;
-//
-//         const items = Array.from(characters);
-//         const [reorderedItem] = items.splice(result.source.index, 1);
-//         items.splice(result.destination.index, 0, reorderedItem);
-//
-//         updateCharacters(items);
-//     }
-//
-//     return (
-//         <div className="App">
-//             <header className="App-header">
-//                 <h1>Final Space Characters</h1>
-//                 <DragDropContext onDragEnd={handleOnDragEnd}>
-//                     <Droppable droppableId="characters">
-//                         {(provided) => (
-//                             <ul className="characters" {...provided.droppableProps} ref={provided.innerRef}>
-//                                 {characters.map(({id, name, thumb}, index) => {
-//                                     return (
-//                                         <Draggable key={id} draggableId={id} index={index}>
-//                                             {(provided) => (
-//                                                 <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-//                                                     <div className="characters-thumb">
-//                                                         <img src={thumb} alt={`${name} Thumb`} />
-//                                                     </div>
-//                                                     <p>
-//                                                         { name }
-//                                                     </p>
-//                                                 </li>
-//                                             )}
-//                                         </Draggable>
-//                                     );
-//                                 })}
-//                                 {provided.placeholder}
-//                             </ul>
-//                         )}
-//                     </Droppable>
-//                 </DragDropContext>
-//             </header>
-//             <p>
-//                 Images from <a href="https://final-space.fandom.com/wiki/Final_Space_Wiki">Final Space Wiki</a>
-//             </p>
-//         </div>
-//     );
-// }
-//
-// export default Projects;
+export default connect(mapStateToProps, {addToProject, removeFromProject, getAllUsers, setIsOpenInviteList, addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
