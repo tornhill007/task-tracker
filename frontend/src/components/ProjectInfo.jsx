@@ -1,5 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
+import classes from './Projects.module.css'
 
 const ProjectInfo = (props) => {
 
@@ -8,17 +9,17 @@ const ProjectInfo = (props) => {
     }
 
     return (
-        <>
         <NavLink to={{
             pathname: `/projects/${props.projectId}`,
             aboutProps: {projectId: props.projectId}
-        }}>
+        }} className={classes.wrapperItemProject}>
+        <div>
             <div>
-                <span>{props.projectName}</span>
+                <span className={` ${classes.itemName}`}>{props.projectName}</span>
             </div>
+        </div>
+            {/*<button onClick={() => onRemoveProject(props.projectId, props.userId)}>Remove</button>*/}
         </NavLink>
-            <button onClick={() => onRemoveProject(props.projectId, props.userId)}>Remove</button>
-        </>
     );
 }
 

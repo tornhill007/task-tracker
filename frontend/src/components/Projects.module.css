@@ -61,3 +61,116 @@
 .cursor {
     cursor: pointer;
 }
+
+.wrapIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+/*font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;*/
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    width: 36px;
+    border-radius: 5px;
+    background: linear-gradient(#006644, #00875a);
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+
+
+.titleMargin {
+    margin-left: 5px;
+    color: #172b4d;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.wrapperItemProject {
+    display: flex;
+    /*width: 100%;*/
+    /*padding: 0;*/
+    margin: 0 2% 2% 0;
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 8px;
+
+    /*margin: 0 10px 0 0;*/
+    /*margin: 0 2% 2% 0;*/
+    height: 80px;
+    opacity: 0.95;
+    background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x320/50cc3dcbc521f726b1b44812059acc97/photo-1515847049296-a281d6401047.jpg");
+    background-size: cover;
+    /*background: linear-gradient(#006644, #00875a);*/
+}
+
+.wrapperItemProject:hover {
+    opacity: 1;
+}
+
+.itemCreate {
+    background: rgba(9,30,66,.04);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.itemCreate:hover {
+    background-color: rgba(9,30,66,.08);
+}
+
+/*.containerProjects {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*}*/
+
+.wrapList {
+    display: grid;
+  grid-template: 120px / 15% 15% 15% 15% 15%;
+    grid-gap: 20px;
+    justify-content: center;
+    /*flex-wrap: wrap;*/
+/*margin: 0 3%;*/
+/*    grid-auto-flow: column;*/
+    /*justify-content: center;*/
+/*padding: 0 auto;*/
+
+    /*width: 100%;*/
+    /*flex-direction: row;*/
+
+}
+
+.itemName {
+    color: #fff;
+    line-height: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    word-wrap: break-word;
+}
+
+
+.itemCreateText {
+    color: #172b4d;
+    font-weight: 400;
+
+}
+
+.mainContainer {
+    /*justify-content: center;*/
+    /*display: flex;*/
+    /*width: 100%;*/
+    /*margin: 40px 16px 0;*/
+    /*width: 100%;*/
+
+    /*max-width: 400px;*/
+    /*min-width: 288px;*/
+}
+

@@ -1,15 +1,159 @@
 .header {
-    grid-area: header;
-    background-color: darkorange;
+    display: flex;
+    /*justify-content: flex-end;*/
+    /*grid-area: header;*/
+    /*background-color: darkorange;*/
+    min-height: 40px;
+    max-height: 40px;
+    overflow: hidden;
+    background-color: #026AA7;
+    text-align: center;
+    align-items: center;
+}
+.itemRight {
+    width: 33.3%;
+    display: flex;
+    justify-content: flex-end;
+    /*float: right;*/
+}
+
+.itemLogin {
+   text-decoration: none;
+}
+
+.itemLogin:hover {
+    text-decoration: underline;
+    color: aliceblue;
+}
+
+
+.itemReg {
+    padding: .25rem .5rem;
+    background-color: blue;
+}
+
+.wrapIconName {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 32px;
+    color: #fff;
+    height: 32px;
+    background-color: #00875a;
+    /*border: 1px solid #fff;*/
+}
+
+.wrapIconMain {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 40px;
+    color: #fff;
+
+    height: 40px;
+    background-color: #00875a;
+    /*border: 1px solid #fff;*/
+}
+
+.wrapMenuLogin {
+    /*margin-right: 10px;*/
+    display: flex;
+    margin: 10px 0;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.itemLoginName {
+    font-size: 14px;
+}
+
+.imgItem {
+    margin-right: 10px;
+
+}
+
+.borderWrapTitle {
+    display: flex;
+    font-size: 14px;
+    padding: 10px;
+    justify-content: center;
+    /*padding: 0 100px;*/
+}
+
+.userMenuWrap {
+    position: fixed;
+    /*will-change: top, left;*/
+    top: 41px;
+    /*background-color: #5E6C84;*/
+    background-color: #fff;
+
+    right: 2px;
+    width: 300px;
+
+    padding: 0 15px;
+
+    /*padding: 20px 0;*/
+    /*background-color: #5E6C84;*/
+}
+
+
+.borderItemTitle {
+    font-size: 14px;
+    color: #5E6C84;
+    font-weight: 300;
+    border-bottom: 1px solid rgba(9, 30, 66, 0.13);
+    /*width: 90%;*/
+    padding: 10px 0;
+
+}
+
+.containerIconName {
+    margin-right: 5px;
+    /*border: none;*/
+    /*box-shadow: none;*/
+    /*background-color: transparent;*/
+    /*display: block;*/
+    height: 32px;
+    /*margin-right: 0;*/
+    /*position: relative;*/
+    width: 32px;
+    /*maring: 5px;*/
+    /*outline: 0;*/
+}
+
+.itemLeft {
+    width: 33.3%;
+}
+.itemCenter {
+    width: 33.3%;
 }
 
 /*.header img {*/
 /*    width: 5%;*/
 /*}*/
 
-.loginBlock {
-    float: right;
+/*.loginBlock {*/
+/*    float: right;*/
+/*}*/
+.wrapNavbars {
+    display: flex;
+    justify-content: center;
 }
+.titleWrap {
+    color: darkgray;
+    font-weight: 700;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.titleWrap:hover {
+    color: aliceblue;
+}
+
 
 .loginBlock a {
     color: white;
