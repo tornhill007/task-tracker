@@ -549,7 +549,7 @@ console.log("[dsds]",this.projectId);
         console.log("this.props.taskInfo", this.props.taskInfo);
         console.log("this.props.projects", this.props.projects);
 let res = this.props.projects.find(project => project.projectid == this.projectId);
-if(!res) {
+if(!res && this.props.projects.length !== 0) {
     return <Redirect to={'/projects'}/>
 }
 
