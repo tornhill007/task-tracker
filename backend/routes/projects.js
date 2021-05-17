@@ -129,21 +129,32 @@ router.put("/projects/:id", catchWrap(async (req, res) => {
 
 router.delete("/projects/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    const deletedProject = await Projects.destroy({
+    console.log("id", id)
+
+    const removeUsersProjects = await UsersProjects.destroy( {
+        where: {
+            projectid: id
+        }
+    })
+
+    const deletedTasks = await Tasks.destroy({
         where: {
             projectid: id
         }
     });
+
     const deletedColumns = await Columns.destroy({
         where: {
             projectlistid: id
         }
     });
-    const deletedTasks = await Tasks.destroy({
+
+    const deletedProject = await Projects.destroy({
         where: {
-            projectId: id
+            projectid: id
         }
     });
+
     res.json("Project deleted");
 }))
 

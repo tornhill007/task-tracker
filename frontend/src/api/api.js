@@ -71,6 +71,9 @@ export const projectsApi = {
             userId: userId
         })
     },
+    // leaveProject(userId, projectId) {
+    //   return instance.delete(``)
+    // },
     editProject(id, name) {
         return instance.put(`projects/${id}`, {
             name

@@ -1,6 +1,7 @@
 import {authAPI, projectsApi} from "../../api/api";
 import {reset} from "redux-form";
 import {getColumns} from "./columnsReducer";
+import {getAllUsers} from "./usersReducer";
 // import {stopSubmit} from "redux-form"
 
 const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
@@ -52,7 +53,7 @@ export const createNewProject = (projectName, userId) => async (dispatch) => {
 
 };
 
-export const removeProject = (projectId) => async (dispatch) => {
+export const removeProject = (projectId, userId) => async (dispatch) => {
 
     try {
         let response = await projectsApi.removeProject(projectId);
@@ -60,8 +61,8 @@ export const removeProject = (projectId) => async (dispatch) => {
     catch (err) {
         console.log(err);
     }
-
-    dispatch(getAllProjects());
+    dispatch(getAllUsers(projectId));
+    dispatch(getAllProjects(userId));
     // console.log("response", response);
     // dispatch(getColumns(projectId));
     // console.log("response11", response);
@@ -107,6 +108,23 @@ export const editProject = (id, name, userId) => async (dispatch) => {
         console.log(err)
     }
 };
+
+// export const leaveProject = (userId, projectId) => async (dispatch) => {
+//     try {
+//         let response = await projectsApi.leaveProject(userId, projectId);
+//         if (response.statusText === 'OK') {
+//             console.log(response)
+//             dispatch(getAllProjects(userId));
+//         }
+//         else {
+//             console.log("ERROR")
+//         }
+//
+//     }
+//     catch(err) {
+//         console.log(err)
+//     }
+// };
 
 
 // export const getAuthUserData = () => async (dispatch) => {

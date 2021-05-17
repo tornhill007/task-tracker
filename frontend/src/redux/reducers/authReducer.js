@@ -40,6 +40,7 @@ export const setAuthUserData = (userId, userName, token) => ({
 export const login = (password, userName) => async (dispatch) => {
     try {
         let response = await authAPI.login(password, userName);
+        console.log("response", response)
         console.log(response);
         if (response.statusText === 'OK') {
             dispatch(reset('register'))

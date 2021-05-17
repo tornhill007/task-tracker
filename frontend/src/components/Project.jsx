@@ -17,10 +17,11 @@ import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import {getProjectName, getProjects} from "../redux/selectors/projectsSelector";
 import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
 import {getAllProjects, setIsOpenInviteList} from "../redux/reducers/projectsReducer";
-import {addToProject, getAllUsers, removeFromProject} from "../redux/reducers/usersReducer";
+import {addToProject, getAllUsers, leaveProject, removeFromProject} from "../redux/reducers/usersReducer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import {setAuthUserData} from "../redux/reducers/authReducer";
+import {Redirect} from "react-router-dom";
 
 const initialData = {
     tasks: {
@@ -77,6 +78,16 @@ const initialData = {
 
 class Project extends React.Component {
 
+
+
+    // constructor(props) {
+    //     super(props);
+    //
+    //     this.wrapperRef = React.createRef();
+    //     this.setWrapperRef = this.setWrapperRef.bind(this);
+    //     this.handleClickOutside = this.handleClickOutside.bind(this);
+    // }
+
     getProjects = async (userId, userName, token) => {
         console.log("this.props.userId", this.props.userId)
         this.props.getAllProjects(userId, userName, token);
@@ -89,6 +100,9 @@ class Project extends React.Component {
 
     projectId = this.props.match.params.projectId;
     componentDidMount() {
+
+        document.addEventListener('mousedown', this.handleClickOutside);
+
         if(JSON.parse(localStorage.getItem('user'))) {
 
             let user = JSON.parse(localStorage.getItem('user'));
@@ -118,6 +132,19 @@ class Project extends React.Component {
 
 
     }
+
+    // componentWillUnmount() {
+    //     document.removeEventListener('mousedown', this.handleClickOutside);
+    // }
+    //
+    // /**
+    //  * Alert if clicked on outside of element
+    //  */
+    // handleClickOutside(event) {
+    //     if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+    //         alert('You clicked outside of me!');
+    //     }
+    // }
 
     getProjectNameOrId() {
         console.log("[1]", this.projectId)
@@ -508,6 +535,10 @@ class Project extends React.Component {
         this.props.removeFromProject(userId, this.projectId);
     }
 
+    onLeaveProject = () => {
+        this.props.leaveProject(this.props.userId, this.projectId);
+    }
+
     render() {
 
 console.log("[dsds]",this.projectId);
@@ -517,16 +548,24 @@ console.log("[dsds]",this.projectId);
         console.log("this.props.tasks", this.props.tasks);
         console.log("this.props.taskInfo", this.props.taskInfo);
         console.log("this.props.projects", this.props.projects);
+let res = this.props.projects.find(project => project.projectid == this.projectId);
+if(!res) {
+    return <Redirect to={'/projects'}/>
+}
+
+console.log("res", res)
         return this.props.projects.length !== 0 ? <div>
             {this.props.taskInfo && this.props.isTaskInfo  && this.props.tasks[this.props.taskInfo.id] ? <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
             <div onClick={() => {this.editProject("Edit project", "Save changes",  this.projectId, this.getProjectNameOrId().name)}}>{this.getProjectNameOrId().name}</div>
+            <div onClick={() => {this.onLeaveProject()}}>
+                Leave the project</div>
             <div onClick={() => {this.onOpenOrCloseInviteList()}}>Invite</div>
                 <div className={classes.containerBlock}>
 
                     {this.props.IsOpenInviteList ? <div className={classes.listWrap}><div className={classes.wrapperItem}><div className={classes.itemTitle}><div className={classes.closeItem}>Invite to project</div><div className={classes.cursor} onClick={() => {this.onOpenOrCloseInviteList()}}><FontAwesomeIcon icon={faTimesCircle} /></div></div><div>
                         </div></div><div className={classes.itemWrap} >
-                        {this.props.users.map(user => <div onClick={() => {!this.checkActiveUsers( user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)}} className={`${classes.itemName} ${this.checkActiveUsers( user.username) && classes.itemColor}`}>{user.username}</div>)}
+                        {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user => <div onClick={() => {!this.checkActiveUsers( user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)}} className={`${classes.itemName} ${this.checkActiveUsers( user.username) && classes.itemColor}`}>{user.username}</div>)}
                         {/*{this.props.users.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*/}
                         {/*{this.state.markers.map(marker => <div onClick={() => { !this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? this.onAddNewMarker(marker, this.props.tasks[this.props.taskInfo.id].markers) : this.onRemoveMarker(marker, this.props.tasks[this.props.taskInfo.id].markers)}} className={`${classes.userWrap} ${this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) && classes.cursor}`}><div  >{marker}</div>{this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? <div>OK</div> : ''}</div>)}*/}
                     </div></div> : ''}
@@ -583,9 +622,11 @@ const mapStateToProps = (state) => ({
     isTaskInfo: state.columnsPage.isTaskInfo,
     IsOpenInviteList: state.projectsPage.IsOpenInviteList,
     activeUsers: state.usersPage.activeUsers,
+    userName: state.auth.userName,
+    userId: state.auth.userId,
 })
 
 
 let AuthRedirectComponent = withAuthRedirect(Project);
 
-export default connect(mapStateToProps, {getAllProjects, setAuthUserData, addToProject, removeFromProject, getAllUsers, setIsOpenInviteList, addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
+export default connect(mapStateToProps, {leaveProject, getAllProjects, setAuthUserData, addToProject, removeFromProject, getAllUsers, setIsOpenInviteList, addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);

@@ -8,7 +8,7 @@ import {
 import {reset} from "redux-form";
 // import {stopSubmit} from "redux-form"
 import {sortByPosition} from '../../utils/sort'
-import {setProjects} from "./projectsReducer";
+import {getAllProjects, removeProject, setProjects} from "./projectsReducer";
 import {getColumns} from "./columnsReducer";
 
 const SET_ALL_USERS = 'SET_ALL_USERS';
@@ -133,6 +133,27 @@ export const removeFromProject = (userId, projectId) => async (dispatch) => {
         if (response.statusText === 'OK') {
             console.log("[RESPONSE]", response)
             dispatch(getAllUsers(projectId));
+        } else {
+            console.log("ERROR")
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+};
+
+export const leaveProject = (userId, projectId) => async (dispatch) => {
+    try {
+        let response = await usersApi.removeFromProject(userId, projectId);
+        console.log("[RESPONSE]", response)
+        if (response.statusText === 'OK') {
+
+            if(response.data.length === 0) {
+                dispatch(removeProject(projectId, userId));
+                return;
+            }
+            dispatch(getAllUsers(projectId));
+            dispatch(getAllProjects(userId));
         } else {
             console.log("ERROR")
         }

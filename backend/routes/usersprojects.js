@@ -41,9 +41,37 @@ router.delete("/activeusers", catchWrap(async (req, res) => {
             userid
         }
     })
+console.log("userid", userid);
+    const allUsersProjects = await UsersProjects.findAll({
+        where: {
+            projectid
+        }
+    })
+
+    console.log("allUsersProjects", allUsersProjects);
+
+    res.json(allUsersProjects);
+
+
     console.log(result)
-    res.json(result);
+
 }))
+
+// router.delete("/activeusers/:id", catchWrap(async (req, res) => {
+//     // let {userId} = req.query;
+//     // let {projectid, userid} = req.body;
+//     let {projectid, userid} = req.query;
+//     // console.log(projectId);
+//     // const allProjects = await Projects.findAll();
+//     const result = await UsersProjects.destroy({
+//         where: {
+//             projectid,
+//             userid
+//         }
+//     })
+//     console.log(result)
+//     res.json(result);
+// }))
 
 
 module.exports = router;

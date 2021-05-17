@@ -22,7 +22,17 @@ import TaskInfo from "./components/Tasks/TaskInfo/TaskInfo";
 class App extends React.Component {
 
     componentDidMount() {
+        if(JSON.parse(localStorage.getItem('user'))) {
+            let user = JSON.parse(localStorage.getItem('user'));
+            if(user.timestamp > Date.now() - 3600000) {
+                this.props.setAuthUserData(user.userId, user.userName, user.token)
+            }
+            else {
+                window.localStorage.removeItem('user');
 
+                this.props.setAuthUserData(null,null, null)
+            }
+        }
     }
 
 

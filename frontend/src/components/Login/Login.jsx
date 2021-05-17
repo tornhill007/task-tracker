@@ -10,6 +10,9 @@ import {faUser, faLock} from '@fortawesome/free-solid-svg-icons'
 import {login} from "../../redux/reducers/authReducer";
 
 const LoginForm = (props) => {
+
+
+
     console.log(props)
     return <div className={classes.container}>
 

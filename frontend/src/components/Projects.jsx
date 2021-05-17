@@ -10,10 +10,11 @@ const Projects = (props) => {
     };
 
     return <div className="App">
+
         <button onClick={() => addNewProject("Create New Project", "Create new project")}>New project</button>
         {
             props.projects.map((project, index) => {
-                return <ProjectInfo removeProject={props.removeProject} key={index} projectId={project.projectid} projectName={project.name}/>
+                return <ProjectInfo userId={props.userId} removeProject={props.removeProject} key={index} projectId={project.projectid} projectName={project.name}/>
             })
         }
     </div>

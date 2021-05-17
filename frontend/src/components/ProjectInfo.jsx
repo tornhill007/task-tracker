@@ -3,8 +3,8 @@ import {NavLink} from "react-router-dom";
 
 const ProjectInfo = (props) => {
 
-    const onRemoveProject = (projectId) => {
-       props.removeProject(projectId);
+    const onRemoveProject = (projectId, userId) => {
+       props.removeProject(projectId, userId);
     }
 
     return (
@@ -17,7 +17,7 @@ const ProjectInfo = (props) => {
                 <span>{props.projectName}</span>
             </div>
         </NavLink>
-            <button onClick={() => onRemoveProject(props.projectId)}>Remove</button>
+            <button onClick={() => onRemoveProject(props.projectId, props.userId)}>Remove</button>
         </>
     );
 }

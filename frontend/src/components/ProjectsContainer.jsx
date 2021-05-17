@@ -44,7 +44,7 @@ class ProjectsContainer extends React.Component {
         console.log("projects", this.props.projects)
         console.log("users", this.props.users)
         return (
-            <Projects removeProject={this.props.removeProject} projects={this.props.projects} openModal={this.props.openModal}/>
+            <Projects userId={this.props.userId} removeProject={this.props.removeProject} projects={this.props.projects} openModal={this.props.openModal}/>
         )
     }
 }
