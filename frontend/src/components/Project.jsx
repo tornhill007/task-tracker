@@ -16,104 +16,12 @@ import {columnsApi, usersApi} from "../api/api";
 import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import {getProjectName, getProjects} from "../redux/selectors/projectsSelector";
 import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
-import {setIsOpenInviteList} from "../redux/reducers/projectsReducer";
+import {getAllProjects, setIsOpenInviteList} from "../redux/reducers/projectsReducer";
 import {addToProject, getAllUsers, removeFromProject} from "../redux/reducers/usersReducer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import {setAuthUserData} from "../redux/reducers/authReducer";
 
-
-// const projects = [
-//     {
-//         id: 1,
-//         name: 'Hello',
-//         tasks: [
-//             {
-//                 id: 'a',
-//                 name: 'kek1'
-//             },
-//             {
-//                 id: 'b',
-//                 name: 'kek2'
-//             },
-//             {
-//                 id: 'c',
-//                 name: 'kek3'
-//             },
-//         ]
-//     },
-//     {
-//         id: 2,
-//         name: 'Hello1',
-//         tasks: [
-//             {
-//                 id: 'q',
-//                 name: 'kek4'
-//             },
-//             {
-//                 id: 'w',
-//                 name: 'kek5'
-//             },
-//             {
-//                 id: 'e',
-//                 name: 'kek6'
-//             },
-//         ]
-//     },
-//     {
-//         id: 3,
-//         name: 'Hello2',
-//         tasks: [
-//             {
-//                 id: 'r',
-//                 name: 'kek7'
-//             },
-//             {
-//                 id: 't',
-//                 name: 'kek8'
-//             },
-//             {
-//                 id: 'y',
-//                 name: 'kek9'
-//             },
-//         ]
-//     },
-//     {
-//         id: 4,
-//         name: 'Hello3',
-//         tasks: [
-//             {
-//                 id: 'u',
-//                 name: 'kek10'
-//             },
-//             {
-//                 id: 'i',
-//                 name: 'kek11'
-//             },
-//             {
-//                 id: 'o',
-//                 name: 'kek12'
-//             },
-//         ]
-//     },
-//     {
-//         id: 5,
-//         name: 'Hello4',
-//         tasks: [
-//             {
-//                 id: 'gf',
-//                 name: 'kek13'
-//             },
-//             {
-//                 id: 'cv',
-//                 name: 'kek14'
-//             },
-//             {
-//                 id: 'hg',
-//                 name: 'kek15'
-//             },
-//         ]
-//     },
-// ]
 const initialData = {
     tasks: {
         'task-1': {id: 'task-1', content: 'Take out the garbage'},
@@ -169,8 +77,38 @@ const initialData = {
 
 class Project extends React.Component {
 
+    getProjects = async (userId, userName, token) => {
+        console.log("this.props.userId", this.props.userId)
+        this.props.getAllProjects(userId, userName, token);
+    }
+
+
+    // componentWillMount() {
+    //
+    // }
+
     projectId = this.props.match.params.projectId;
     componentDidMount() {
+        if(JSON.parse(localStorage.getItem('user'))) {
+
+            let user = JSON.parse(localStorage.getItem('user'));
+            if(user.timestamp > Date.now() - 3600000) {
+                console.log(user.userId, user.userName, user.token)
+                this.props.setAuthUserData(user.userId, user.userName, user.token)
+                this.getProjects(user.userId, user.userName, user.token);
+            }
+            else {
+                window.localStorage.removeItem('user');
+
+                this.props.setAuthUserData(null,null, null)
+            }
+        }
+        console.log("this.props.userId", this.props.userId)
+// alert(2)
+            // this.getUsers();
+            // this.props.getUsers(this.props.pageSize, this.props.currentPage);
+
+
         // let result = usersApi.getActiveUsers(30);
         // console.log("result", result)
         this.props.getAllUsers(this.projectId);
@@ -577,7 +515,9 @@ console.log("[dsds]",this.projectId);
         console.log("ACTIVE_USERS", this.props.activeUsers)
         console.log("USERS", this.props.users)
         console.log("this.props.tasks", this.props.tasks);
-        return <div>
+        console.log("this.props.taskInfo", this.props.taskInfo);
+        console.log("this.props.projects", this.props.projects);
+        return this.props.projects.length !== 0 ? <div>
             {this.props.taskInfo && this.props.isTaskInfo  && this.props.tasks[this.props.taskInfo.id] ? <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
             <div onClick={() => {this.editProject("Edit project", "Save changes",  this.projectId, this.getProjectNameOrId().name)}}>{this.getProjectNameOrId().name}</div>
@@ -618,7 +558,7 @@ console.log("[dsds]",this.projectId);
                             // console.log("indexUndefined", indexUndefined);
                             // indexUndefined !== -1 && tasks.splice(indexUndefined, 1);
                             // console.log("this.props.columns", tasks)
-                            return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo} addNewTask={this.props.addNewTask} setTaskInfo={this.props.setTaskInfo} onRemoveColumn={this.props.onRemoveColumn} projectId={this.props.location.aboutProps.projectId} onUpdateColumn={this.props.onUpdateColumn} isInput={this.props.isInput} changeIsInput={this.props.changeIsInput} key={column.id} column={column} tasks={tasks} index={index}/>;
+                            return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo} addNewTask={this.props.addNewTask} setTaskInfo={this.props.setTaskInfo} onRemoveColumn={this.props.onRemoveColumn} projectId={this.props.match.params.projectId} onUpdateColumn={this.props.onUpdateColumn} isInput={this.props.isInput} changeIsInput={this.props.changeIsInput} key={column.id} column={column} tasks={tasks} index={index}/>;
                         })}
                         {provided.placeholder}
                     </div>
@@ -626,7 +566,7 @@ console.log("[dsds]",this.projectId);
             </Droppable>
         </DragDropContext>
             </div>
-        </div>
+        </div> : ''
 
 
     }
@@ -648,4 +588,4 @@ const mapStateToProps = (state) => ({
 
 let AuthRedirectComponent = withAuthRedirect(Project);
 
-export default connect(mapStateToProps, {addToProject, removeFromProject, getAllUsers, setIsOpenInviteList, addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
+export default connect(mapStateToProps, {getAllProjects, setAuthUserData, addToProject, removeFromProject, getAllUsers, setIsOpenInviteList, addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);

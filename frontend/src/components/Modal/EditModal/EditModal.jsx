@@ -38,7 +38,7 @@ class EditModal extends React.Component {
 
         const text1 = this.newRef.current.value;
         console.log("event.target.value", text1);
-        this.props.editProject(id, text1);
+        this.props.editProject(id, text1, this.props.userId);
         this.close();
     }
 

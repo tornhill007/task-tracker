@@ -4,6 +4,7 @@ import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 
 const Projects = (props) => {
 
+
     const addNewProject = (title, buttonName) => {
         props.openModal(<EditModalContainer title={title} parameters={{buttonName}}/>);
     };

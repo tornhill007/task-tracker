@@ -10,6 +10,7 @@ const catchWrap = require("../common/wrapper")
 
 
 router.use('/task', passport.authenticate('jwt', {session: false}))
+router.use('/tasks', passport.authenticate('jwt', {session: false}))
 
 
 //create new task
@@ -127,8 +128,10 @@ router.get("/tasks/:projectId/:id", catchWrap(async (req, res) => {
 
 router.put("/tasks/:projectId/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    const {taskName, description, users, markers, columnId} =req.body;
-    const updateTaskName = await Tasks.update({taskName, description, users, markers, columnId} , {
+    const {taskName, description, users, markers, columnId} = req.body;
+    console.log("taskName", taskName)
+    console.log("id", id)
+    const updateTaskName = await Tasks.update({taskname: taskName, description, users, markers, columnid: columnId} , {
         where: {
             taskid: id
         }

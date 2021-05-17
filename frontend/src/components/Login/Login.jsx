@@ -96,6 +96,7 @@ const Login = (props) => {
     }
 
     if (props.userData.token) {
+        console.log("URL",props);
         return <Redirect to={"/profile"}/>
     }
     return <div className={classes.wrapMain}>

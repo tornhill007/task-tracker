@@ -250,10 +250,11 @@ export const getColumns = (projectId) => async (dispatch) => {
     // alert(2)
 console.log('222222222222222222')
     let response1 = await tasksAPI.getAllTasks(projectId);
+    dispatch(setAllTasks(response1.data));
     let response = await columnsApi.getColumns(projectId);
     console.log("[333333333333333333333333333]", response1)
 
-    dispatch(setAllTasks(response1.data));
+
 
     dispatch(setColumns(response.data, response1.data));
     console.log("response11", response1);
@@ -310,7 +311,7 @@ export const createNewColumn = (name, projectListId, position) => async (dispatc
 export const updateTaskName = (taskName, projectId, taskId) => async (dispatch) => {
     console.log("UPDATETASKNAME", taskName, projectId, taskId);
     let response = await tasksAPI.updateTaskName(taskName, projectId, taskId)
-    console.log("response", response);
+    console.log("responseTASKSNAME", response);
     dispatch(getColumns(projectId));
 };
 

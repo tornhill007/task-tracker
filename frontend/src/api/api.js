@@ -116,6 +116,7 @@ export const columnsApi = {
 
 export const tasksAPI = {
     updateTaskName(taskName, projectId, taskId) {
+        console.log("taskName, projectId, taskId", taskName, projectId, taskId)
         return instance.put(`/tasks/${projectId}/${taskId}`, {
             taskName
         })

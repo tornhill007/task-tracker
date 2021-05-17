@@ -42,7 +42,7 @@ export const setIsOpenInviteList = () => ({
 export const createNewProject = (projectName, userId) => async (dispatch) => {
 
     let response = await projectsApi.createNewProject(projectName, userId);
-    dispatch(getAllProjects());
+    dispatch(getAllProjects(userId));
     // console.log("response", response);
     // dispatch(getColumns(projectId));
     // console.log("response11", response);
@@ -71,9 +71,11 @@ export const removeProject = (projectId) => async (dispatch) => {
 
 };
 
-export const getAllProjects = (userId) => async (dispatch) => {
+export const getAllProjects = (userId, userName, token) => async (dispatch) => {
     try {
+        console.log("userId", userId)
         let response = await projectsApi.getAllProjects(userId);
+
         console.log("response[PROJECT]", response)
         if (response.statusText === 'OK') {
             console.log(response)
@@ -89,12 +91,12 @@ export const getAllProjects = (userId) => async (dispatch) => {
     }
 };
 
-export const editProject = (id, name) => async (dispatch) => {
+export const editProject = (id, name, userId) => async (dispatch) => {
     try {
         let response = await projectsApi.editProject(id, name);
         if (response.statusText === 'OK') {
             console.log(response)
-            dispatch(getAllProjects());
+            dispatch(getAllProjects(userId));
         }
         else {
             console.log("ERROR")

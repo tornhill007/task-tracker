@@ -7,10 +7,12 @@ import {getAllProjects, removeProject, setProjects} from "../redux/reducers/proj
 import {openModal} from "../redux/reducers/columnsReducer";
 import {getAllUsers} from "../redux/reducers/usersReducer";
 import {withAuthRedirect} from "../hoc/withAuthRedirect";
+import {setAuthUserData} from "../redux/reducers/authReducer";
 class ProjectsContainer extends React.Component {
 
-    getProjects = async () => {
-       this.props.getAllProjects(this.props.userId);
+    getProjects = async (userId, userName, token) => {
+        console.log("this.props.userId", this.props.userId)
+       this.props.getAllProjects(userId, userName, token);
     }
 
     getUsers = () => {
@@ -19,7 +21,21 @@ class ProjectsContainer extends React.Component {
 
 
     componentDidMount() {
-        this.getProjects();
+        if(JSON.parse(localStorage.getItem('user'))) {
+            let user = JSON.parse(localStorage.getItem('user'));
+            if(user.timestamp > Date.now() - 3600000) {
+                console.log(user.userId, user.userName, user.token)
+                this.props.setAuthUserData(user.userId, user.userName, user.token)
+                this.getProjects(user.userId, user.userName, user.token);
+            }
+            else {
+                window.localStorage.removeItem('user');
+
+                this.props.setAuthUserData(null,null, null)
+            }
+        }
+        console.log("this.props.userId", this.props.userId)
+
         // this.getUsers();
         // this.props.getUsers(this.props.pageSize, this.props.currentPage);
     }
@@ -43,7 +59,7 @@ const mapStateToProps = (state) => {
 
 let AuthRedirectComponentProjects = withAuthRedirect(ProjectsContainer);
 
-export default connect(mapStateToProps, {getAllUsers, setProjects, openModal, getAllProjects, removeProject})(AuthRedirectComponentProjects);
+export default connect(mapStateToProps, {setAuthUserData, getAllUsers, setProjects, openModal, getAllProjects, removeProject})(AuthRedirectComponentProjects);
 
 
 
