@@ -8,7 +8,7 @@ const options = {
     secretOrKey: keys.jwt
 }
 
-const Registration = require('../models/Registration');
+const Users = require('../models/Users');
 
 module.exports = passport => {
     passport.use(
@@ -16,7 +16,7 @@ module.exports = passport => {
             try {
 
                 // const user = await pool.query("SELECT * FROM registration WHERE userId=$1", [payload.userId]);
-                const user = await Registration.findAll({
+                const user = await Users.findAll({
                     where: {
                         userid: payload.userId
                     }

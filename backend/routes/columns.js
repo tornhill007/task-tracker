@@ -7,66 +7,47 @@ const router = express.Router();
 const pool = require('../db')
 const db = require('../config/database');
 
-const Column = require('../models/Columns');
+const Columns = require('../models/Columns');
 const Tasks = require('../models/Tasks');
+const sequelize = require('../config/database');
 
 const catchWrap = require("../common/wrapper")
 
 // const passport = require('passport')
 
-router.use('/columns', passport.authenticate('jwt', {session: false}))
+router.use('/columns', passport.authenticate('jwt', {session: false}),)
 // router.use('/column', passport.authenticate('jwt', {session: false}))
 
 //create new column
 
-// router.post("/column", catchWrap(async (req, res) => {
-//             const {name} = req.body;
-//             const {projectListId, position} = req.body;
-//             const newColumn = await pool.query("INSERT INTO kanbancolumns (name, projectListId, position) VALUES($1,$2, $3) RETURNING *", [name, projectListId, position]);
-//             res.json(newColumn.rows[0]);
-//
-//     }))
-
-
-router.post("/column", catchWrap(async (req, res) => {
+router.post("/columns", catchWrap(async (req, res) => {
     const {name} = req.body;
     const {projectListId, position} = req.body;
-    const newColumn = await Column.create({
-        projectlistid: projectListId,
+    const newColumn = Columns.build({
+        projectid: projectListId,
         name: name,
         position: position
     })
+
+    await newColumn.save();
     res.json(newColumn);
 }))
 
 
 //get all columns
 
-// router.get("/columns", catchWrap(async (req, res) => {
-//             const allColumns = await pool.query("SELECT * FROM kanbancolumns");
-//             res.json(allColumns.rows);
-//     }))
-
 router.get("/columns", catchWrap(async (req, res) => {
-        let allColumns = await Column.findAll();
-        console.log("OK");
+        let allColumns = await Columns.findAll();
         res.json(allColumns);
         // res.send('COLUMNS')
-
     }
 ))
 
 //get column
 
-// router.get("/column/:id", catchWrap(async (req, res) => {
-//             const {id} = req.params;
-//             const column = await pool.query("SELECT * FROM kanbancolumns WHERE columnid = $1", [id]);
-//             res.json(column.rows[0]);
-//     }))
-
 router.get("/column/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    const column = await Column.findAll({
+    const column = await Columns.findAll({
         where: {
             columnid: id
         }
@@ -76,99 +57,98 @@ router.get("/column/:id", catchWrap(async (req, res) => {
 
 //get columns by projectsId
 
-// router.get("/columns/:id", catchWrap(async (req, res) => {
-//
-//             const {id} = req.params;
-//             const column = await pool.query("SELECT * FROM kanbancolumns WHERE projectListId = $1", [id]);
-//             res.json(column.rows);
-//
-//     }))
-
 router.get("/columns/:id", catchWrap(async (req, res) => {
 
     const {id} = req.params;
-    const columns = await Column.findAll({
+    // console.log(parseInt(id));
+    const tasks = await Tasks.findAll({
         where: {
-            projectlistid: id
+            projectid: id
         }
-    });
-    res.json(columns);
+    })
+    // const [tasks, metadata] = await sequelize.query('SELECT * FROM tasks WHERE projectid = (:id)', {
+    //         replacements: {id}
+    //     }
+    // );
+    const columns = await Columns.findAll({
+        where: {
+            projectid: id
+        }
+    })
+    // const [columns, metadata1] = await sequelize.query('SELECT * FROM kanbancolumns WHERE projectid = (:id)', {
+    //         replacements: {id}
+    //     }
+    // );
+    // const columns = await Column.findAll({
+    //     where: {
+    //         projectlistid: id
+    //     }
+    // });
+    const finishResult = [tasks, columns];
+    res.json(finishResult);
 
 }))
 
-
-//update column
-
-// router.put("/columns/:id", catchWrap(async (req, res) => {
-//             const {id} = req.params;
-//             const {name} = req.body;
-//             const updateColumn = await pool.query("UPDATE kanbancolumns SET name = $1 WHERE columnId = $2", [name, id]);
-//             res.json("Column updated");
-//     }))
-
-router.put("/columns/:id", catchWrap(async (req, res) => {
-    const {id} = req.params;
-    const {name} = req.body;
-    const updateColumn = await Column.update({name: name}, {
-        where: {
-            columnid: id
-        }
-    });
-    res.json("Column updated");
-}))
 //update position column
-// router.put("/columnposition", catchWrap(async (req, res) => {
-//
-//             const {newColumns} = req.body;
-//             // const {name} = req.body;
-//             let promises = [];
-//
-//             for(let i = 0; i < newColumns.length; i++) {
-//                 const updatedColumn = await pool.query("UPDATE kanbancolumns SET position = $1 WHERE columnId = $2", [newColumns[i].position, newColumns[i].columnId]);
-//             }
-//
-//             res.json("Column updated");
-//
-//     }))
 
-router.put("/columnposition", catchWrap(async (req, res) => {
+router.put("/columns/position", catchWrap(async (req, res) => {
 
     const {newColumns} = req.body;
 
     for (let i = 0; i < newColumns.length; i++) {
-        const updatedColumn = Column.update({position: newColumns[i].position}, {
+        const updatedColumn = await Columns.findOne({
             where: {
                 columnid: newColumns[i].columnId
             }
         });
+        updatedColumn.position = newColumns[i].position;
+        await updatedColumn.save();
+        // {position: newColumns[i].position}
     }
 
     res.json("Column updated");
 
 }))
 
-//delete column
-// router.delete("/columns/:id", catchWrap(async (req, res) => {
-//             const {id} = req.params;
-//             const deleteColumn = await pool.query("DELETE FROM kanbancolumns WHERE columnId = $1", [id]);
-//             const deleteTasks = await pool.query("DELETE FROM tasks WHERE columnId = $1", [id]);
-//             res.json("Project deleted");
-//     })
-// )
 
+//update column
+
+router.put("/columns/:id", catchWrap(async (req, res) => {
+    const {id} = req.params;
+    const {name} = req.body;
+    const updateColumn = await Columns.findOne({
+        where: {
+            columnid: id
+        }
+    });
+    updateColumn.name = name;
+    await updateColumn.save();
+    res.json("Column updated");
+}))
+
+
+//delete column
 
 router.delete("/columns/:id", catchWrap(async (req, res) => {
         const {id} = req.params;
-        const deletedColumn = await Column.destroy({
+
+        const deletedTasks = await Tasks.findOne({
             where: {
                 columnid: id
             }
         });
-        const deletedTasks = await Tasks.destroy({
+
+        await deletedTasks.destroy();
+
+        const deletedColumn = await Columns.findOne({
             where: {
                 columnid: id
             }
         });
+
+        await deletedColumn.destroy();
+
+
         res.json("Project deleted");
     })
 )

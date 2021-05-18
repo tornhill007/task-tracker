@@ -22,12 +22,12 @@ CREATE TABLE usersProjects
 CREATE TABLE kanbancolumns
 (
     columnId      SERIAL PRIMARY KEY,
-    projectListId NUMERIC,
+    projectId NUMERIC,
     name          VARCHAR(255),
     position NUMERIC
 )
 
-CREATE TABLE registration
+CREATE TABLE users
 (
     userId   SERIAL PRIMARY KEY,
     userName VARCHAR(255),

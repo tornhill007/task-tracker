@@ -7,71 +7,56 @@ const pool = require('../db');
 const passport = require('passport')
 const sequelize = require('../config/database');
 
-const Registration = require('../models/Registration');
+const {removingProject} = require('../common/removingProject');
+
+const Users = require('../models/Users');
 
 //################registration
 const catchWrap = require("../common/wrapper")
 
 const UsersProjects = require('../models/UsersProjects');
 
-router.use('/activeusers', passport.authenticate('jwt', {session: false}))
+router.use('/users', passport.authenticate('jwt', {session: false}))
 
 
-router.post("/activeusers", catchWrap(async (req, res) => {
-    // let {userId} = req.query;
+router.post("/users/projects/active", catchWrap(async (req, res) => {
+
     let {projectid, userid} = req.body;
-    // console.log(projectId);
-    // const allProjects = await Projects.findAll();
+
     const result = await UsersProjects.create({
         projectid, userid
     })
-    console.log(result)
     res.json(result);
 }))
 
-router.delete("/activeusers", catchWrap(async (req, res) => {
-    // let {userId} = req.query;
-    // let {projectid, userid} = req.body;
+router.delete("/users/projects/active", catchWrap(async (req, res) => {
+
      let {projectid, userid} = req.query;
-    // console.log(projectId);
-    // const allProjects = await Projects.findAll();
-    const result = await UsersProjects.destroy({
+
+    const result = await UsersProjects.findOne({
         where: {
             projectid,
             userid
         }
     })
-console.log("userid", userid);
+
+    await result.destroy();
+
     const allUsersProjects = await UsersProjects.findAll({
         where: {
             projectid
         }
     })
 
-    console.log("allUsersProjects", allUsersProjects);
+    if(allUsersProjects.length === 0) {
+        await removingProject({id: projectid})
+        res.json("Project deleted");
+        return;
+    }
 
-    res.json(allUsersProjects);
-
-
-    console.log(result)
+    res.json("Remove user from project");
 
 }))
-
-// router.delete("/activeusers/:id", catchWrap(async (req, res) => {
-//     // let {userId} = req.query;
-//     // let {projectid, userid} = req.body;
-//     let {projectid, userid} = req.query;
-//     // console.log(projectId);
-//     // const allProjects = await Projects.findAll();
-//     const result = await UsersProjects.destroy({
-//         where: {
-//             projectid,
-//             userid
-//         }
-//     })
-//     console.log(result)
-//     res.json(result);
-// }))
 
 
 module.exports = router;

@@ -6,43 +6,40 @@ const router = express.Router();
 const pool = require('../db');
 const sequelize = require('../config/database');
 
-const Registration = require('../models/Registration');
+const Users = require('../models/Users');
 
 //################registration
 const catchWrap = require("../common/wrapper")
 
 
-router.get("/register", catchWrap(async (req, res) => {
+router.get("/users", catchWrap(async (req, res) => {
     // const {password, userName} = req.body;
-    console.log("25")
-    const users = await Registration.findAll();
+    const users = await Users.findAll();
     res.json(users);
-    console.log(users);
 }))
 
-router.get("/inproject", catchWrap(async (req, res) => {
+router.get("/users/active", catchWrap(async (req, res) => {
     // let {userId} = req.query;
     let projectId = req.query.projectId
-    console.log(projectId);
+    // let projectId = req.params;
     // const allProjects = await Projects.findAll();
-    const [results, metadata] = await sequelize.query("SELECT * FROM registration WHERE userid IN (SELECT userid FROM usersprojects WHERE projectid = ?)", {
-            replacements: [projectId],
+    const [results, metadata] = await sequelize.query("SELECT * FROM users WHERE userid IN (SELECT userid FROM usersprojects WHERE projectid = (:id))", {
+            replacements: {id: projectId},
         }
     );
-    console.log(results)
+
     res.json(results);
 }))
 
 
-router.post("/register", catchWrap(async (req, res) => {
+router.post("/users", catchWrap(async (req, res) => {
     const {password, userName} = req.body;
 
-    const user = await Registration.findAll({
+    const user = await Users.findAll({
         where: {
             username: userName
         }
     });
-    console.log(user);
     if (user.length !== 0) {
         res.status(409).json({
             message: "This login is already taken"
@@ -51,10 +48,11 @@ router.post("/register", catchWrap(async (req, res) => {
     }
 
     const salt = bcrypt.genSaltSync(10);
-    const newUser = await Registration.create({
+    const newUser = await Users.build({
         username: userName,
         password: bcrypt.hashSync(password, salt)
     })
+    await newUser.save();
     res.json(newUser);
 
 

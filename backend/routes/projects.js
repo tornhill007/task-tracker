@@ -11,29 +11,28 @@ const catchWrap = require("../common/wrapper")
 const sequelize = require('../config/database');
 const {QueryTypes} = require('sequelize');
 
+const {removingProject} = require('../common/removingProject')
+
 router.use('/projects', passport.authenticate('jwt', {session: false}))
 //################projects list
 
 //get all projects
 
-// router.get("/projects", catchWrap(async (req, res) => {
-//             const allProjects = await pool.query("SELECT * FROM projectsList");
-//             res.json(allProjects.rows);
-//     }))
-
 router.get("/projects", catchWrap(async (req, res) => {
     // let {userId} = req.query;
     let userId = req.query.userId
 
-    console.log("userId", userId)
-    console.log("req.query", req.query)
-
-    // const allProjects = await Projects.findAll();
+    // const allProjects = await Projects.findAll({
+    //     include: [
+    //         {
+    //             model: UsersProjects,
+    //         },
+    //     ]
+    // });
     const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = ?)", {
             replacements: [+userId],
         }
     );
-    console.log(results)
     res.json(results);
 }))
 
@@ -41,39 +40,31 @@ router.get("/projects", catchWrap(async (req, res) => {
 
 router.delete("/usersprojects/:id", catchWrap(async (req, res) => {
     let {id} = req.params;
-    // console.log("userId", userId);
-    const allProjects = await UsersProjects.destroy({
+    const allProjects = await UsersProjects.findOne({
         where: {
             id
         }
     });
     // const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = 9)");
-
+    await allProjects.destroy();
     // res.json(results);
     res.json(allProjects);
 }))
 
 //create project
 
-// router.post("/projects", catchWrap(async (req, res) => {
-//             const {name} = req.body;
-//             const newProject = await pool.query("INSERT INTO projectsList (name) VALUES($1) RETURNING *", [name]);
-//             res.json(newProject.rows[0]);
-//     }))
-
 router.post("/projects", catchWrap(async (req, res) => {
     const {name, userId} = req.body;
-    console.log("userId", userId);
-    console.log("name", name);
-    const newProject = await Projects.create({
+    const newProject = Projects.build({
         name
     })
-// console.log("newProject", newProject.dataValues.projectid);
-// console.log("userId", userId);
-    const userProject = await UsersProjects.create({
+    await newProject.save();
+
+    const userProject = UsersProjects.build({
         projectid: newProject.dataValues.projectid,
         userid: userId
     })
+    await userProject.save();
     res.json(newProject);
 }))
 
@@ -81,81 +72,40 @@ router.post("/projects", catchWrap(async (req, res) => {
 //get project
 
 // router.get("/projects/:id", catchWrap(async (req, res) => {
-//             const {id} = req.params;
-//             const project = await pool.query("SELECT * FROM projectsList WHERE projectid = $1", [id]);
-//             res.json(project.rows[0]);
-//     }))
-
-router.get("/projects/:id", catchWrap(async (req, res) => {
-    const {id} = req.params;
-    const project = await Projects.findAll({
-        where: {
-            projectid: id
-        }
-    });
-    res.json(project);
-}))
+//     const {id} = req.params;
+//     const project = await Projects.findAll({
+//         where: {
+//             projectid: id
+//         }
+//     });
+//     res.json(project);
+// }))
 
 
 //update project
 
-// router.put("/projects/:id", catchWrap(async (req, res) => {
-//             const {id} = req.params;
-//             const {name} = req.body;
-//             const updateProject = await pool.query("UPDATE projectsList SET name = $1 WHERE projectId = $2", [name, id]);
-//             res.json("Project updated");
-//     }))
-
 router.put("/projects/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
     const {name} = req.body;
-    const updateProject = await Projects.update({name}, {
+    const updateProject = await Projects.findOne({
         where: {
             projectid: id
         }
     });
+    updateProject.name = name;
+    await updateProject.save();
     res.json("Project updated");
 }))
 
 
 //delete project
-// router.delete("/projects/:id", catchWrap(async (req, res) => {
-//             const {id} = req.params;
-//             const deletedProject = await pool.query("DELETE FROM projectsList WHERE projectId = $1", [id]);
-//             const deletedColumns = await pool.query("DELETE FROM kanbancolumns WHERE projectListId = $1", [id]);
-//             const deletedTasks = await pool.query("DELETE FROM tasks WHERE projectId = $1", [id]);
-//             res.json("Project deleted");
-//     }))
 
 router.delete("/projects/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    console.log("id", id)
 
-    const removeUsersProjects = await UsersProjects.destroy( {
-        where: {
-            projectid: id
-        }
-    })
-
-    const deletedTasks = await Tasks.destroy({
-        where: {
-            projectid: id
-        }
-    });
-
-    const deletedColumns = await Columns.destroy({
-        where: {
-            projectlistid: id
-        }
-    });
-
-    const deletedProject = await Projects.destroy({
-        where: {
-            projectid: id
-        }
-    });
-
+    await removingProject({id});
     res.json("Project deleted");
+
 }))
 
 module.exports = router;

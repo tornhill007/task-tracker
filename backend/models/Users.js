@@ -2,7 +2,7 @@ const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 
 
-const Registration = db.define('registration', {
+const Users = db.define('users', {
         userid: {
             type: DataTypes.UUID,
             autoIncrement: true,
@@ -20,7 +20,7 @@ const Registration = db.define('registration', {
     },
     {
         timestamps: false,
-        tableName: 'registration'
+        tableName: 'users'
     })
 
-module.exports = Registration;
+module.exports = Users;

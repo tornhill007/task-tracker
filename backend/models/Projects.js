@@ -1,5 +1,6 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
+const UsersProjects = require('./UsersProjects')
 
 
 const Projects = db.define('projectslist', {
@@ -25,5 +26,12 @@ const Projects = db.define('projectslist', {
     {
         tableName: 'projectslist'
     })
+
+// Projects.hasOne(UsersProjects, {
+//     foreignKey: {
+//         name: 'userid'
+//     }
+// });
+// UsersProjects.belongsTo(Projects);
 
 module.exports = Projects;
