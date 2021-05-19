@@ -32,7 +32,7 @@ app.use(columns);
 app.use(projects);
 app.use(auth);
 app.use(users);
-app.use(usersprojects);
+// app.use(usersprojects);
 
 
 app.use(passport.initialize());

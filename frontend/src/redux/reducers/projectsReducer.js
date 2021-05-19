@@ -56,7 +56,7 @@ export const createNewProject = (projectName, userId) => async (dispatch) => {
 export const removeProject = (projectId, userId) => async (dispatch) => {
 
     try {
-        let response = await projectsApi.removeProject(projectId);
+        let response = await projectsApi.removeProject(projectId, userId);
     }
     catch (err) {
         console.log(err);
@@ -94,7 +94,7 @@ export const getAllProjects = (userId, userName, token) => async (dispatch) => {
 
 export const editProject = (id, name, userId) => async (dispatch) => {
     try {
-        let response = await projectsApi.editProject(id, name);
+        let response = await projectsApi.editProject(id, name, userId);
         if (response.statusText === 'OK') {
             console.log(response)
             dispatch(getAllProjects(userId));

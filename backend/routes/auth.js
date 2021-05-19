@@ -8,12 +8,7 @@ const router = express.Router();
 const pool = require('../db');
 
 
-// const app = express();
-
-// router.use('/login', function() {
-//
-// });
-
+const {wrapWhereUserName} = require('../common/wrapWhere');
 
 const Users = require('../models/Users');
 
@@ -21,14 +16,7 @@ const catchWrap = require("../common/wrapper")
 
 router.post("/login", catchWrap(async (req, res) => {
     const {password, userName} = req.body;
-    const user = await Users.findAll({
-        where: {
-            username: userName
-        }
-    })
-
-    // pool.query("SELECT * FROM registration WHERE userName = $1", [userName]);
-    // console.log("USSER", user[0].dataValues);
+    const user = await Users.findUsersByUserName(userName);
 
     if (user.length === 0) {
         res.status(404).json({

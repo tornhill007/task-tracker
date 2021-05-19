@@ -7,13 +7,30 @@ const Projects = require('../models/Projects');
 const Columns = require('../models/Columns');
 const Tasks = require('../models/Tasks');
 const UsersProjects = require('../models/UsersProjects');
+const Users = require('../models/Users');
 const catchWrap = require("../common/wrapper")
 const sequelize = require('../config/database');
 const {QueryTypes} = require('sequelize');
+const {wrapWhereProjectId, wrapWhereId} = require('../common/wrapWhere')
+const jwt = require("jsonwebtoken");
+const keys = require('../config/keys');
 
 const {removingProject} = require('../common/removingProject')
 
-router.use('/projects', passport.authenticate('jwt', {session: false}))
+
+router.use('/projects', passport.authenticate('jwt', {session: false}), async function (req, res, next) {
+    const user = await Users.findUserByUserId(req.query.userId ? req.query.userId : req.body.userId);
+    let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
+    if(decoded.userId !== user.userid) {
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+        return;
+    }
+    next();
+})
+
+
 //################projects list
 
 //get all projects
@@ -38,32 +55,24 @@ router.get("/projects", catchWrap(async (req, res) => {
 
 
 
-router.delete("/usersprojects/:id", catchWrap(async (req, res) => {
-    let {id} = req.params;
-    const allProjects = await UsersProjects.findOne({
-        where: {
-            id
-        }
-    });
-    // const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = 9)");
-    await allProjects.destroy();
-    // res.json(results);
-    res.json(allProjects);
-}))
+// router.delete("/usersprojects/:id", catchWrap(async (req, res) => {
+//     let {id} = req.params;
+//     const allProjects = await UsersProjects.findOne(wrapWhereId(id));
+//     // const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = 9)");
+//     await allProjects.destroy();
+//     // res.json(results);
+//     res.json(allProjects);
+// }))
 
 //create project
 
 router.post("/projects", catchWrap(async (req, res) => {
     const {name, userId} = req.body;
-    const newProject = Projects.build({
-        name
-    })
+    // const newProject = Projects.buildProjectByName(name)
+    const newProject = Projects.buildProjectByName(name)
     await newProject.save();
 
-    const userProject = UsersProjects.build({
-        projectid: newProject.dataValues.projectid,
-        userid: userId
-    })
+    const userProject = UsersProjects.buildUsersProject(newProject.dataValues.projectid, userId);
     await userProject.save();
     res.json(newProject);
 }))
@@ -87,11 +96,7 @@ router.post("/projects", catchWrap(async (req, res) => {
 router.put("/projects/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
     const {name} = req.body;
-    const updateProject = await Projects.findOne({
-        where: {
-            projectid: id
-        }
-    });
+    const updateProject = await Projects.updateProjectNameByProjectId(id);
     updateProject.name = name;
     await updateProject.save();
     res.json("Project updated");
@@ -107,5 +112,15 @@ router.delete("/projects/:id", catchWrap(async (req, res) => {
     res.json("Project deleted");
 
 }))
+
+// router.delete("/columns", catchWrap(async (req, res) => {
+//     const {id} = req.params;
+// await Columns.destroy({
+//     truncate: true
+// })
+//     // await removingProject({id});
+//     res.json("Project deleted");
+//
+// }))
 
 module.exports = router;

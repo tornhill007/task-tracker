@@ -8,7 +8,7 @@ const ProjectInfo = (props) => {
        props.removeProject(projectId, userId);
     }
 
-    return (
+    return (<>
         <NavLink to={{
             pathname: `/projects/${props.projectId}`,
             aboutProps: {projectId: props.projectId}
@@ -18,8 +18,10 @@ const ProjectInfo = (props) => {
                 <span className={` ${classes.itemName}`}>{props.projectName}</span>
             </div>
         </div>
-            {/*<button onClick={() => onRemoveProject(props.projectId, props.userId)}>Remove</button>*/}
+
         </NavLink>
+            <button onClick={() => onRemoveProject(props.projectId, props.userId)}>Remove</button>
+        </>
     );
 }
 

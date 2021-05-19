@@ -249,16 +249,13 @@ export const closeTaskInfo = () => ({type: CLOSE_TASK_INFO});
 export const getColumns = (projectId) => async (dispatch) => {
     // alert(2)
 console.log('222222222222222222')
-    let response1 = await tasksAPI.getAllTasks(projectId);
-    dispatch(setAllTasks(response1.data));
+    // let response1 = await tasksAPI.getAllTasks(projectId);
+
     let response = await columnsApi.getColumns(projectId);
-    console.log("[333333333333333333333333333]", response1)
-
-
-
-    dispatch(setColumns(response.data, response1.data));
-    console.log("response11", response1);
-
+    console.log("[333333333333333333333333333]", response)
+    dispatch(setAllTasks(response.data.tasks));
+    dispatch(setColumns(response.data.columns, response.data.tasks));
+    // console.log("response11", response1);
 
 };
 

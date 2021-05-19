@@ -23,4 +23,20 @@ const UsersProjects = db.define('usersprojects', {
         tableName: 'usersprojects'
     })
 
+UsersProjects.buildUsersProject = function (projectid, userid) {
+    return this.build({projectid, userid});
+}
+
+UsersProjects.destroyUsersProjectsByProjectId = function (projectid) {
+    return this.destroy({where: { projectid }});
+}
+
+UsersProjects.getUsersProjects = function (projectid, userid) {
+    return this.findOne({where: { projectid, userid }});
+}
+
+UsersProjects.getAllUsersProjectsByProjectId = function (projectid) {
+    return this.findAll({where: { projectid }});
+}
+
 module.exports = UsersProjects;

@@ -1,6 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 const UsersProjects = require('./UsersProjects')
+const Users = require('./Users');
 
 
 const Projects = db.define('projectslist', {
@@ -27,6 +28,24 @@ const Projects = db.define('projectslist', {
         tableName: 'projectslist'
     })
 
+Projects.buildProjectByName = function (name) {
+    return this.build({name});
+}
+
+Projects.updateProjectNameByProjectId = function (id) {
+    return this.findOne({where: {projectid: id}});
+}
+
+Projects.getProjectByProjectId = function (projectid) {
+    return this.findOne({where: {projectid}});
+}
+//
+// Projects.belongsToMany(Users, {through: "usersprojects"});
+// Users.belongsToMany(Projects, {through: "usersprojects"});
+//
+// //
+//
+// db.sync({force: true})
 // Projects.hasOne(UsersProjects, {
 //     foreignKey: {
 //         name: 'userid'

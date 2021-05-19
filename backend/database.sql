@@ -46,4 +46,11 @@ CREATE TABLE tasks
     position NUMERIC
 )
 
+CREATE TABLE usersTask
+(
+    id   SERIAL PRIMARY KEY,
+    userId NUMERIC,
+    taskId NUMERIC
+)
+
 

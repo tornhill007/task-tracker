@@ -39,23 +39,23 @@ instance.interceptors.request.use(
 
 export const usersApi = {
     getAllUsers() {
-        return instance.get(`register/`);
+        return instance.get(`users/`);
     },
     addToProject(userid, projectid) {
         console.log("userid, projectid", userid, projectid)
-        return instance.post(`activeusers/`, {
+        return instance.post(`users/projects/active/`, {
             userid, projectid
         });
     },
     removeFromProject(userid, projectid) {
-        return instance.delete(`activeusers/`, {
+        return instance.delete(`users/projects/active/`, {
             params: {
                 userid, projectid
             }
         });
     },
     getActiveUsers(projectId) {
-        return instance.get(`inproject/`, {
+        return instance.get(`users/active`, {
             params: {
                 projectId
             }
@@ -74,13 +74,17 @@ export const projectsApi = {
     // leaveProject(userId, projectId) {
     //   return instance.delete(``)
     // },
-    editProject(id, name) {
+    editProject(id, name, userId) {
         return instance.put(`projects/${id}`, {
-            name
+            name, userId
         })
     },
-    removeProject(projectId) {
-        return instance.delete(`projects/${projectId}`)
+    removeProject(projectId, userId) {
+        return instance.delete(`projects/${projectId}`, {
+            params: {
+                userId
+            }
+        })
     },
     getAllProjects(userId) {
         return instance.get(`projects/`, {
@@ -102,8 +106,8 @@ export const columnsApi = {
         })
     },
     createNewColumn(name, projectListId, position) {
-        return instance.post(`column/`, {
-            name, projectListId, position
+        return instance.post(`columns/${projectListId}`, {
+            name, position
         })
     },
     getColumns(projectId) {
@@ -111,21 +115,21 @@ export const columnsApi = {
     },
     updateColumnsPosition(newColumns) {
         console.log("firstId, lastId, firstPosition, lastPosition", newColumns)
-        return instance.put('columnposition/', {
+        return instance.put('columns/position', {
             newColumns
         })
     }
 };
 
 export const tasksAPI = {
-    updateTaskName(taskName, projectId, taskId) {
-        console.log("taskName, projectId, taskId", taskName, projectId, taskId)
-        return instance.put(`/tasks/${projectId}/${taskId}`, {
-            taskName
+    updateTaskName(taskname, projectid, taskid) {
+        // console.log("taskName, projectId, taskId", taskname, projectid, taskid)
+        return instance.put(`/tasks/${projectid}/${taskid}`, {
+            taskname
         })
     },
     updateTasksPosAndColumnId(tasksArr, projectId) {
-        return instance.put(`/tasksposition/${projectId}`, {
+        return instance.put(`/tasks/position/${projectId}`, {
             tasksArr
         })
     },
@@ -135,11 +139,10 @@ export const tasksAPI = {
         })
     },
     getAllTasks(projectId) {
-
         return instance.get(`tasks/` + projectId);
     },
     addNewTask(taskName, columnId, projectId, position) {
-        return instance.post(`task/`, {
+        return instance.post(`tasks/`, {
             taskName, columnId, projectId, position
         });
     },
@@ -158,7 +161,6 @@ export const tasksAPI = {
     }
 }
 
-
 export const authAPI = {
     // me() {
     //     return instance.get(`auth/me`)
@@ -170,7 +172,7 @@ export const authAPI = {
         })
     },
     register(password, userName) {
-        return axios.post('http://localhost:5000/register', {
+        return axios.post('http://localhost:5000/users', {
             password,
             userName
         })

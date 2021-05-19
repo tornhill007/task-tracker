@@ -10,35 +10,14 @@ module.exports = {
         const {id} = params;
 
 
-        const removeUsersProjects = await UsersProjects.findOne({
-            where: {
-                projectid: id
-            }
-        })
+        const removeUsersProjects = await UsersProjects.destroyUsersProjectsByProjectId(id)
 
-        await removeUsersProjects.destroy();
+        const deletedTasks = await Tasks.destroyTasksByProjectId(id)
 
-        const deletedTasks = await Tasks.findOne({
-            where: {
-                projectid: id
-            }
-        });
+        const deletedColumns = await Columns.destroyColumnsByProjectId(id);
 
-        await deletedTasks.destroy();
 
-        const deletedColumns = await Columns.findOne({
-            where: {
-                projectid: id
-            }
-        });
-        await deletedColumns.destroy();
-
-        const deletedProject = await Projects.findOne({
-            where: {
-                projectid: id
-            }
-        });
-
+        const deletedProject = await Projects.getProjectByProjectId(id);
         await deletedProject.destroy();
 
 

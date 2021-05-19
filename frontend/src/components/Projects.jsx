@@ -2,9 +2,12 @@ import React from 'react';
 import ProjectInfo from "./ProjectInfo";
 import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import classes from './Projects.module.css'
+import {sortByCreatedDate} from "../utils/sort";
 
 const Projects = (props) => {
 
+    let clonedArray = JSON.parse(JSON.stringify(props.projects))
+    sortByCreatedDate(clonedArray);
 
     const addNewProject = (title, buttonName) => {
         props.openModal(<EditModalContainer title={title} parameters={{buttonName}}/>);
@@ -22,8 +25,9 @@ const Projects = (props) => {
         {/*<button onClick={() => addNewProject("Create New Project", "Create new project")}>New project</button>*/}
 <div className={classes.mainContainer}>
         <div className={classes.wrapList}>
+            {/*{console.log("props.projects", props.projects)}*/}
             {
-                props.projects.map((project, index) => {
+                clonedArray.map((project, index) => {
                     return <ProjectInfo userId={props.userId} removeProject={props.removeProject} key={index}
                                         projectId={project.projectid} projectName={project.name}/>
                 })

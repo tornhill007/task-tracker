@@ -27,8 +27,24 @@ const Column = db.define('kanbancolumns', {
         timestamps: false
     })
 
+Column.getColumnsBuyProjectId = function (id) {
+    return this.findAll({where: {projectid: id}});
+}
+
+Column.buildNewColumn = function (projectid, name, position) {
+    return this.build({
+        projectid,
+        name,
+        position
+    });
+}
+
+Column.getColumnBuyColumnId = function (id) {
+    return this.findOne({where: {columnid: id}});
+}
+
+Column.destroyColumnsByProjectId = function (projectid) {
+    return this.destroy({where: {projectid}});
+}
+
 module.exports = Column;
-// columnId      SERIAL PRIMARY KEY,
-//     projectListId NUMERIC,
-//     name          VARCHAR(255),
-//     position NUMERIC
