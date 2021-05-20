@@ -43,12 +43,12 @@ export const usersApi = {
     },
     addToProject(userid, projectid) {
         console.log("userid, projectid", userid, projectid)
-        return instance.post(`users/projects/active/`, {
+        return instance.post(`users/projects/active`, {
             userid, projectid
         });
     },
     removeFromProject(userid, projectid) {
-        return instance.delete(`users/projects/active/`, {
+        return instance.delete(`users/projects/active`, {
             params: {
                 userid, projectid
             }
@@ -111,7 +111,7 @@ export const columnsApi = {
         })
     },
     getColumns(projectId) {
-        return instance.get(`columns/` + projectId);
+        return instance.get(`columns/${projectId}`);
     },
     updateColumnsPosition(newColumns) {
         console.log("firstId, lastId, firstPosition, lastPosition", newColumns)
@@ -142,8 +142,8 @@ export const tasksAPI = {
         return instance.get(`tasks/` + projectId);
     },
     addNewTask(taskName, columnId, projectId, position) {
-        return instance.post(`tasks/`, {
-            taskName, columnId, projectId, position
+        return instance.post(`tasks/${projectId}`, {
+            taskName, columnId, position
         });
     },
     addNewParticipant(users, projectId, taskId) {
@@ -157,7 +157,7 @@ export const tasksAPI = {
         })
     },
     removeTask(id, projectId) {
-        return instance.delete(`/task/${projectId}/${id}`)
+        return instance.delete(`/tasks/${projectId}/${id}`)
     }
 }
 

@@ -1,5 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
+const Projects = require('./Projects');
+const Users = require('./Users');
 
 
 const UsersProjects = db.define('usersprojects', {
@@ -11,11 +13,19 @@ const UsersProjects = db.define('usersprojects', {
         },
         projectid: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            // references: {
+            //     model: Projects, // 'Movies' would also work
+            //     key: 'id'
+            // }
         },
         userid: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            // references: {
+            //     model: Users, // 'Movies' would also work
+            //     key: 'id'
+            // }
         },
     },
     {
@@ -38,5 +48,9 @@ UsersProjects.getUsersProjects = function (projectid, userid) {
 UsersProjects.getAllUsersProjectsByProjectId = function (projectid) {
     return this.findAll({where: { projectid }});
 }
+
+
+
+
 
 module.exports = UsersProjects;

@@ -17,14 +17,29 @@ const catchWrap = require("../common/wrapper")
 
 const UsersProjects = require('../models/UsersProjects');
 
-router.use('/users', passport.authenticate('jwt', {session: false}))
+
+router.use('/users/projects/active', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
+    let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
+    let projectid = req.method === "POST" ? req.body.projectid : req.query.projectid;
+
+    let user = await UsersProjects.getUsersProjects(projectid, decoded.userId);
+
+    if (!user) {
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+        return;
+    }
+    next();
+
+})
 
 
 router.post("/users/projects/active", catchWrap(async (req, res) => {
 
     let {projectid, userid} = req.body;
 
-    const result = UsersProjects.buildUsersProject( projectid, userid);
+    const result = UsersProjects.buildUsersProject(projectid, userid);
 
     await result.save();
     res.json(result);

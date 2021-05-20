@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import {setAuthUserData} from "../redux/reducers/authReducer";
 import {Redirect} from "react-router-dom";
+import InviteList from "./InviteList";
 
 const initialData = {
     tasks: {
@@ -118,7 +119,8 @@ class Project extends React.Component {
             }
         }
         console.log("this.props.userId", this.props.userId)
-// alert(2)
+
+            // alert(2)
             // this.getUsers();
             // this.props.getUsers(this.props.pageSize, this.props.currentPage);
 
@@ -522,18 +524,7 @@ class Project extends React.Component {
         this.props.openModal(<EditModalContainer title={title} parameters={{projectListId, position, buttonName}}/>);
     };
 
-    checkActiveUsers = (activeUser) => {
-        let index = this.props.activeUsers.indexOf(activeUser);
-        return index !== -1;
-    }
 
-    onAddToProject = (userId) => {
-        this.props.addToProject(userId, this.projectId);
-    }
-
-    onRemoveFromProject = (userId) => {
-        this.props.removeFromProject(userId, this.projectId);
-    }
 
     onLeaveProject = () => {
         this.props.leaveProject(this.props.userId, this.projectId);
@@ -563,12 +554,7 @@ console.log("res", res)
             <div onClick={() => {this.onOpenOrCloseInviteList()}}>Invite</div>
                 <div className={classes.containerBlock}>
 
-                    {this.props.IsOpenInviteList ? <div className={classes.listWrap}><div className={classes.wrapperItem}><div className={classes.itemTitle}><div className={classes.closeItem}>Invite to project</div><div className={classes.cursor} onClick={() => {this.onOpenOrCloseInviteList()}}><FontAwesomeIcon icon={faTimesCircle} /></div></div><div>
-                        </div></div><div className={classes.itemWrap} >
-                        {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user => <div onClick={() => {!this.checkActiveUsers( user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)}} className={`${classes.itemName} ${this.checkActiveUsers( user.username) && classes.itemColor}`}>{user.username}</div>)}
-                        {/*{this.props.users.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*/}
-                        {/*{this.state.markers.map(marker => <div onClick={() => { !this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? this.onAddNewMarker(marker, this.props.tasks[this.props.taskInfo.id].markers) : this.onRemoveMarker(marker, this.props.tasks[this.props.taskInfo.id].markers)}} className={`${classes.userWrap} ${this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) && classes.cursor}`}><div  >{marker}</div>{this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? <div>OK</div> : ''}</div>)}*/}
-                    </div></div> : ''}
+                    {this.props.IsOpenInviteList ? <InviteList projectId={this.projectId} userName={this.props.userName} users={this.props.users} /> : ''}
                 </div>
                 <button onClick={() => {this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)}}>New column</button>
             <DragDropContext onDragEnd={this.onDragEnd}>

@@ -13,6 +13,15 @@ const projects = require('./routes/projects');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const usersprojects = require('./routes/usersprojects');
+const students = require('./routes/testRoutes');
+
+
+
+// const Student = require('./');
+// const usersprojects = require('./routes/usersprojects');
+// const usersprojects = require('./routes/usersprojects');
+
+
 
 const sequelize = require('./config/database')
 
@@ -32,7 +41,8 @@ app.use(columns);
 app.use(projects);
 app.use(auth);
 app.use(users);
-// app.use(usersprojects);
+app.use(usersprojects);
+app.use(students);
 
 
 app.use(passport.initialize());

@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 const Projects = require('./Projects');
-// const UsersProjects = require('./UsersProjects');
+const UsersProjects = require('./UsersProjects');
 
 const Users = db.define('users', {
         userid: {
@@ -39,10 +39,14 @@ Users.buildNewUser = function (username, password) {
     });
 }
 //
+//
+// Users.belongsToMany(Projects, {through: UsersProjects});
+// Projects.belongsToMany(Users, {through: UsersProjects});
 
 
-
-// db.sync({ force: true });
-
+// db.sync({force:true}).then(()=>{
+//
+//     console.log("Tables have been created");
+// }).catch(err=>console.log(err));
 
 module.exports = Users;

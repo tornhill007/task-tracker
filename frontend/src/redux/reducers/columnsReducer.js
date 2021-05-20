@@ -286,7 +286,7 @@ export const onUpdateColumnsPosition = (newColumns, projectId) => async (dispatc
 export const onUpdateColumn = (id, name, projectId) => async (dispatch) => {
     // console.log("initialState.columns", initialState)
 
-    let response = await columnsApi.updateColumn(id, name)
+    let response = await columnsApi.updateColumn(id, name, projectId)
     console.log("response", response);
     dispatch(getColumns(projectId));
 };
@@ -294,7 +294,7 @@ export const onUpdateColumn = (id, name, projectId) => async (dispatch) => {
 export const onRemoveColumn = (id, projectId) => async (dispatch) => {
     // console.log("initialState.columns", initialState)
 
-    let response = await columnsApi.removeColumn(id)
+    let response = await columnsApi.removeColumn(id, projectId)
     console.log("response", response);
     dispatch(getColumns(projectId));
 };

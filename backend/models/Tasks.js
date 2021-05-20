@@ -71,8 +71,8 @@ Tasks.destroyTasksByColumnId = function (columnid) {
     return this.destroy({where: {columnid}});
 }
 
-Tasks.destroyTaskById = function (taskId) {
-    return this.destroy({where: {taskId}});
+Tasks.destroyTaskById = function (taskid) {
+    return this.destroy({where: {taskid}});
 }
 
 Tasks.destroyTasksByProjectId = function (projectid) {

@@ -28,6 +28,9 @@ const Projects = db.define('projectslist', {
         tableName: 'projectslist'
     })
 
+//Projects.belongsToMany(UsersProjects, {through: UsersProjects, as: 'Users', foreignKey: 'id'});
+// Projects.belongsToMany(Users, {through: 'usersprojects'});
+
 Projects.buildProjectByName = function (name) {
     return this.build({name});
 }
@@ -40,8 +43,8 @@ Projects.getProjectByProjectId = function (projectid) {
     return this.findOne({where: {projectid}});
 }
 //
-// Projects.belongsToMany(Users, {through: "usersprojects"});
-// Users.belongsToMany(Projects, {through: "usersprojects"});
+
+
 //
 // //
 //

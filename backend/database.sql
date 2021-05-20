@@ -54,3 +54,34 @@ CREATE TABLE usersTask
 )
 
 
+CREATE TABLE student
+(
+    studentId   SERIAL PRIMARY KEY,
+    studentName VARCHAR(255)
+)
+
+CREATE TABLE university
+(
+    universityId   SERIAL PRIMARY KEY,
+    universityName VARCHAR(255)
+)
+
+CREATE TABLE studentsuniversity
+(
+    id SERIAL PRIMARY KEY,
+    universityId NUMERIC,
+    studentId NUMERIC
+)
+
+
+CREATE TABLE studentsuniversity(
+id SERIAL PRIMARY KEY,
+studentId INTEGER,
+universityId INTEGER,
+REFERENCES student (studentId),
+REFERENCES university (universityId)
+)
+
+
+
+
