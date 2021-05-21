@@ -14,18 +14,10 @@ const UsersProjects = db.define('usersprojects', {
         projectid: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: Projects, // 'Movies' would also work
-            //     key: 'id'
-            // }
         },
         userid: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: Users, // 'Movies' would also work
-            //     key: 'id'
-            // }
         },
     },
     {

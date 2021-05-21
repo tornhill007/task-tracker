@@ -15,6 +15,10 @@ const users = require('./routes/users');
 const usersprojects = require('./routes/usersprojects');
 const students = require('./routes/testRoutes');
 
+//test
+const orders = require('./routes/orders');
+const products = require('./routes/products');
+
 
 
 // const Student = require('./');
@@ -43,6 +47,10 @@ app.use(auth);
 app.use(users);
 app.use(usersprojects);
 app.use(students);
+
+// test
+app.use(orders);
+app.use(products);
 
 
 app.use(passport.initialize());

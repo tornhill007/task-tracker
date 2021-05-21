@@ -40,8 +40,19 @@ Users.buildNewUser = function (username, password) {
 }
 //
 //
-// Users.belongsToMany(Projects, {through: UsersProjects});
-// Projects.belongsToMany(Users, {through: UsersProjects});
+Users.belongsToMany(Projects, {
+    through: UsersProjects,
+    as: 'projects',
+    foreignKey: 'userid',
+    otherKey: 'projectid'
+});
+
+Projects.belongsToMany(Users, {
+    through: UsersProjects,
+    as: 'users',
+    foreignKey: 'projectid',
+    otherKey: 'userid'
+});
 
 
 // db.sync({force:true}).then(()=>{

@@ -82,6 +82,22 @@ REFERENCES student (studentId),
 REFERENCES university (universityId)
 )
 
+CREATE TABLE Orders(
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(255)
+)
 
+CREATE TABLE Products(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255),
+    description VARCHAR(255),
+    price NUMERIC
+)
 
-
+CREATE TABLE ProductOrders(
+    id SERIAL PRIMARY KEY,
+    productId NUMERIC,
+    orderId NUMERIC,
+    price NUMERIC,
+    quantity NUMERIC
+)
