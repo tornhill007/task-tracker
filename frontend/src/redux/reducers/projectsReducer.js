@@ -61,7 +61,7 @@ export const removeProject = (projectId, userId) => async (dispatch) => {
     catch (err) {
         console.log(err);
     }
-    dispatch(getAllUsers(projectId));
+    dispatch(getAllUsers(projectId, true));
     dispatch(getAllProjects(userId));
     // console.log("response", response);
     // dispatch(getColumns(projectId));

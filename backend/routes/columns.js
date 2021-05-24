@@ -10,6 +10,8 @@ const db = require('../config/database');
 const Columns = require('../models/Columns');
 const Tasks = require('../models/Tasks');
 const UsersProjects = require('../models/UsersProjects');
+const Users = require('../models/Users');
+const Projects = require('../models/Projects');
 const sequelize = require('../config/database');
 const jwt = require("jsonwebtoken");
 const keys = require('../config/keys');
@@ -25,11 +27,16 @@ router.use('/columns/:id', passport.authenticate('jwt', {session: false}), async
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
     if (req.method === 'GET' || req.method === 'POST') {
-        user = await UsersProjects.getUsersProjects(req.params.id, decoded.userId);
+
+        // user = await UsersProjects.getUsersProjects(req.params.id, decoded.userId);
+        user = await Users.getUserProject(req.params.id, decoded.userId);
+        // UsersProjects.getUsersProjects(req.params.id, decoded.userId);
 
     } else {
         const column = await Columns.getColumnBuyColumnId(req.params.id);
-        user = await UsersProjects.getUsersProjects(column.projectid, decoded.userId);
+        // user = await UsersProjects.getUsersProjects(column.projectid, decoded.userId);
+        user = await Users.getUserProject(column.projectid, decoded.userId);
+            // UsersProjects.getUsersProjects(column.projectid, decoded.userId);
     }
 
     if (!user) {
@@ -102,13 +109,11 @@ router.put("/columns/position", catchWrap(async (req, res) => {
         const updatedColumn = await Columns.getColumnBuyColumnId(newColumns[i].columnId);
         updatedColumn.position = newColumns[i].position;
         await updatedColumn.save();
-        // {position: newColumns[i].position}
     }
 
     res.json("Column updated");
 
 }))
-
 
 //update column
 
@@ -127,11 +132,8 @@ router.put("/columns/:columnId", catchWrap(async (req, res) => {
 router.delete("/columns/:columnId", catchWrap(async (req, res) => {
         const {columnId} = req.params;
         const deletedTasks = await Tasks.destroyTasksByColumnId(columnId);
-        // findOne(wrapWhereColumnId(id));
-        // await deletedTasks.destroy();
         const deletedColumn = await Columns.getColumnBuyColumnId(columnId);
         await deletedColumn.destroy();
-
 
         res.json("Project deleted");
     })

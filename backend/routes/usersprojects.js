@@ -11,6 +11,7 @@ const {removingProject} = require('../common/removingProject');
 const {wrapWhereProjectId, wrapWhereProjectAndUserIds} = require('../common/wrapWhere');
 
 const Users = require('../models/Users');
+const Projects = require('../models/Projects');
 
 //################registration
 const catchWrap = require("../common/wrapper")
@@ -22,7 +23,8 @@ router.use('/users/projects/active', passport.authenticate('jwt', {session: fals
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let projectid = req.method === "POST" ? req.body.projectid : req.query.projectid;
 
-    let user = await UsersProjects.getUsersProjects(projectid, decoded.userId);
+    // let user = await UsersProjects.getUsersProjects(projectid, decoded.userId);
+    let user = await Users.getUserProject(projectid, decoded.userId)
 
     if (!user) {
         res.status(401).json({
@@ -39,9 +41,20 @@ router.post("/users/projects/active", catchWrap(async (req, res) => {
 
     let {projectid, userid} = req.body;
 
-    const result = UsersProjects.buildUsersProject(projectid, userid);
+    // const result = UsersProjects.buildUsersProject(projectid, userid);
+    //
+    // await result.save();
+    //
 
-    await result.save();
+    const project = await Projects.getProjectByProjectId(projectid);
+    const user = await Users.getUserByUserId(userid);
+
+    // if (!product) {
+    //     return res.status(400);
+    // }
+
+   let result = await project.addUser(user);
+
     res.json(result);
 }))
 
@@ -49,11 +62,19 @@ router.delete("/users/projects/active", catchWrap(async (req, res) => {
 
     let {projectid, userid} = req.query;
 
-    const result = await UsersProjects.getUsersProjects(projectid, userid);
-    await result.destroy();
-    const allUsersProjects = await UsersProjects.getAllUsersProjectsByProjectId(projectid);
+    const project = await Projects.getProjectByProjectId(projectid);
+    const user = await Users.getUserByUserId(userid);
+    await project.removeUser(user);
 
-    if (allUsersProjects.length === 0) {
+
+    // const result = await UsersProjects.getUsersProjects(projectid, userid);
+    // await result.destroy();
+
+    const usersProjects = await Users.getAllUsersProjects(projectid);
+
+    // const allUsersProjects = await UsersProjects.getAllUsersProjectsByProjectId(projectid);
+
+    if (usersProjects.length === 0) {
         await removingProject({id: projectid})
         res.json("Project deleted");
         return;

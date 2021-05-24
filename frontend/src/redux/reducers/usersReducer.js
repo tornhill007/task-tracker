@@ -32,7 +32,7 @@ const usersReducer = (state = initialState, action) => {
                 users: action.users
             };
 
-            case SET_ACTIVE_USERS:
+        case SET_ACTIVE_USERS:
             return {
                 ...state,
                 activeUsers: action.users.map(user => user.username)
@@ -44,7 +44,7 @@ const usersReducer = (state = initialState, action) => {
                 isOpenUsersList: !state.isOpenUsersList
             };
 
-            case SET_IS_OPEN_MARKERS_LIST:
+        case SET_IS_OPEN_MARKERS_LIST:
             return {
                 ...state,
                 isOpenMarkersList: !state.isOpenMarkersList
@@ -74,23 +74,29 @@ export const setIsOpenMarkersList = () => ({
     type: SET_IS_OPEN_MARKERS_LIST,
 })
 
-export const getAllUsers = (projectId) => async (dispatch) => {
+export const getAllUsers = (projectId, isRemoveProject) => async (dispatch) => {
     try {
         let response = await usersApi.getAllUsers();
-        let response1 = await usersApi.getActiveUsers(projectId);
-        console.log("response1", response1)
+
+        if (!isRemoveProject) {
+            let response1 = await usersApi.getActiveUsers(projectId);
+            console.log("response1", response1);
+            if (response1.statusText === 'OK') {
+                console.log("[RESPONSE1]", response1)
+                dispatch(setActiveUsers(response1.data));
+            } else {
+                console.log("ERROR")
+            }
+        }
+
+
         if (response.statusText === 'OK') {
             console.log("[RESPONSE]", response)
             dispatch(setAllUsers(response.data));
         } else {
             console.log("ERROR")
         }
-        if (response1.statusText === 'OK') {
-            console.log("[RESPONSE1]", response1)
-            dispatch(setActiveUsers(response1.data));
-        } else {
-            console.log("ERROR")
-        }
+
 
     } catch (err) {
         console.log(err)
@@ -148,7 +154,7 @@ export const leaveProject = (userId, projectId) => async (dispatch) => {
         console.log("[RESPONSE]", response)
         if (response.statusText === 'OK') {
 
-            if(response.data.length === 0) {
+            if (response.data.length === 0) {
                 dispatch(removeProject(projectId, userId));
                 return;
             }

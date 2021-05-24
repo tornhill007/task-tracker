@@ -7,16 +7,35 @@ const jwt = require("jsonwebtoken");
 const keys = require('../config/keys');
 
 const Tasks = require('../models/Tasks');
+const Users = require('../models/Users');
+const Projects = require('../models/Projects');
 const UsersProjects = require('../models/UsersProjects');
 
 const catchWrap = require("../common/wrapper");
 const {wrapWhereProjectId, wrapWhereColumnId, wrapWhereTaskId} = require('../common/wrapWhere')
 
-router.use('/tasks/:projectId/:id', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
+router.use('/tasks/:projectId', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
 
-    user = await UsersProjects.getUsersProjects(req.params.projectId, decoded.userId);
+    // user = await UsersProjects.getUsersProjects(req.params.projectId, decoded.userId);
+    user = await Users.getUserProject(req.params.projectId, decoded.userId);
+    // findOne({
+    //     where: {
+    //         userid: decoded.userId
+    //     },
+    //     include: [{
+    //         model: Projects,
+    //         as: 'projects',
+    //         required: true,
+    //         where: {
+    //             projectid: req.params.projectId,
+    //         }
+    //     }
+    //     ]
+    // });
+
+
     if (!user) {
         res.status(401).json({
             message: "Unauthorized"
@@ -90,10 +109,10 @@ router.put("/tasks/position/:projectId", catchWrap(async (req, res) => {
 router.put("/tasks/:projectId/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
     const arr = {...req.body};
-    const updateTaskName = await Tasks.getTaskById(id);
+    const updateTask = await Tasks.getTaskById(id);
     for (let i in arr) {
-        updateTaskName[i] = arr[i];
-        await updateTaskName.save();
+        updateTask[i] = arr[i];
+        await updateTask.save();
     }
     res.json("Task updated");
 }))

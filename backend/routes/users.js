@@ -5,15 +5,15 @@ const express = require("express");
 const router = express.Router();
 const pool = require('../db');
 const sequelize = require('../config/database');
-const passport = require('passport')
+const passport = require('passport');
 
 const Users = require('../models/Users');
 const Projects = require('../models/Projects');
 const UsersProjects = require('../models/UsersProjects');
-const {wrapWhereUserName} = require('../common/wrapWhere')
+const {wrapWhereUserName} = require('../common/wrapWhere');
 
 //################registration
-const catchWrap = require("../common/wrapper")
+const catchWrap = require("../common/wrapper");
 
 
 // router.use('/users/active', passport.authenticate('jwt', {session: false}))
@@ -22,7 +22,10 @@ router.use('/users/active', passport.authenticate('jwt', {session: false}), asyn
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
 
-    user = await UsersProjects.getUsersProjects(req.query.projectId, decoded.userId);
+
+    // user = await UsersProjects.getUsersProjects(req.query.projectId, decoded.userId);
+    user = await Users.getUserProject(req.query.projectId, decoded.userId)
+
     if (!user) {
         res.status(401).json({
             message: "Unauthorized"
@@ -31,7 +34,7 @@ router.use('/users/active', passport.authenticate('jwt', {session: false}), asyn
     }
     next();
 
-})
+});
 
 
 router.get("/users", catchWrap(async (req, res) => {
@@ -55,10 +58,12 @@ router.get("/users/active", catchWrap(async (req, res) => {
     // console.log(resq);
     // })
 
-    const [results, metadata] = await sequelize.query("SELECT * FROM users WHERE userid IN (SELECT userid FROM usersprojects WHERE projectid = (:id))", {
-            replacements: {id: projectId},
-        }
-    );
+    const results = await Users.getAllUsersProjects(projectId)
+
+    // const [results, metadata] = await sequelize.query("SELECT * FROM users WHERE userid IN (SELECT userid FROM usersprojects WHERE projectid = (:id))", {
+    //         replacements: {id: projectId},
+    //     }
+    // );
 
     res.json(results);
 }))

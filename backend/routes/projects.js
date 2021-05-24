@@ -46,10 +46,27 @@ router.get("/projects", catchWrap(async (req, res) => {
     //         },
     //     ]
     // });
-    const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = ?)", {
-            replacements: [+userId],
+// getAllProjectsUsers(+userId)
+    const results = await Projects.findAll({
+
+            include: [{
+                model: Users,
+                as: 'users',
+                required: true,
+                where: {
+                    userid: +userId
+                }
+            }
+            ]
         }
     );
+
+
+    // const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = ?)", {
+    //         replacements: [+userId],
+    //     }
+    // );
+
     res.json(results);
 }))
 
@@ -72,8 +89,12 @@ router.post("/projects", catchWrap(async (req, res) => {
     const newProject = Projects.buildProjectByName(name)
     await newProject.save();
 
-    const userProject = UsersProjects.buildUsersProject(newProject.dataValues.projectid, userId);
-    await userProject.save();
+    const user = await Users.getUserByUserId(userId)
+
+    await newProject.addUser(user);
+
+    // const userProject = UsersProjects.buildUsersProject(newProject.dataValues.projectid, userId);
+    // await userProject.save();
     res.json(newProject);
 }))
 

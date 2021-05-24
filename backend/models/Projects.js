@@ -28,6 +28,7 @@ const Projects = db.define('projectslist', {
         tableName: 'projectslist'
     })
 
+
 //Projects.belongsToMany(UsersProjects, {through: UsersProjects, as: 'Users', foreignKey: 'id'});
 // Projects.belongsToMany(Users, {through: 'usersprojects'});
 
@@ -42,7 +43,37 @@ Projects.updateProjectNameByProjectId = function (id) {
 Projects.getProjectByProjectId = function (projectid) {
     return this.findOne({where: {projectid}});
 }
-//
+
+// Projects.getUsersProjects = function (userid) {
+//     return this.findAll({
+//             include: [{
+//                 model: Users,
+//                 as: 'users',
+//                 required: true,
+//                 where: {
+//                     userid
+//                 }
+//             }
+//             ]
+//         }
+//     );
+// }
+
+Projects.getAllProjectsUsers = function (userid) {
+    return this.findAll({
+            include: [{
+                model: Users,
+                as: 'users',
+                required: true,
+                where: {
+                    userid
+                }
+            }
+            ]
+        }
+    );
+}
+
 
 
 //

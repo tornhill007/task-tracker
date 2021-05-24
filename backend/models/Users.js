@@ -38,6 +38,61 @@ Users.buildNewUser = function (username, password) {
         password
     });
 }
+
+Users.getUserByUserId = function (userid) {
+    return this.findOne({
+        where: {
+            userid
+        }
+    });
+}
+
+Users.getUserProject = function (projectid, userid) {
+    return this.findOne({
+        where: {
+            userid: userid
+        },
+        include: [{
+            model: Projects,
+            as: 'projects',
+            required: true,
+            where: {
+                projectid,
+            },
+        }
+        ]
+    });
+}
+
+Users.getAllUsersProjects = function (projectid) {
+    return this.findAll({
+        include: [{
+            model: Projects,
+            as: 'projects',
+            required: true,
+            where: {
+                projectid,
+            },
+        }
+        ]
+    });
+}
+
+// Users.getAllProjectsUsers = function (userid) {
+//     return this.findAll({
+//             include: [{
+//                 model: Users,
+//                 as: 'users',
+//                 required: true,
+//                 where: {
+//                     userid
+//                 }
+//             }
+//             ]
+//         }
+//     );
+// }
+
 //
 //
 Users.belongsToMany(Projects, {
