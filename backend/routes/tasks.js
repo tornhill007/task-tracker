@@ -131,7 +131,22 @@ router.put("/tasks/:projectId/:id", catchWrap(async (req, res) => {
 
 router.delete("/tasks/:projectId/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    const deletedTask = await Tasks.destroyTaskById(id);
+    // const deletedTask = await Tasks.destroyTaskById(id);
+    const deletedTask = await Tasks.getTaskById(id);
+    // const users = await Users.getUsersTasksByTaskId(id);
+    const users = await Users.findAll({
+        include: [{
+            model: Tasks,
+            as: 'newTasks',
+            required: true,
+            where: {
+                taskid: id
+            },
+        }
+        ]
+    });
+    await deletedTask.removeNewUsers(users)
+    await deletedTask.destroy();
     res.json("Task deleted");
 }))
 

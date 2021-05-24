@@ -51,26 +51,6 @@ const Tasks = db.define('tasks', {
 )
 
 
-// Users.belongsToMany(Tasks, {
-//     through: UsersTask,
-//     as: 'NEW_TASKS',
-//     foreignKey: 'userid',
-//     otherKey: 'taskid'
-// });
-// Tasks.belongsToMany(Users, {
-//     through: UsersTask,
-//     as: 'NEW_TASKS',
-//     foreignKey: 'taskid',
-//     otherKey: 'userid'
-// });
-
-
-// Tasks.associate = (models) => {
-//     Tasks.belongsTo(models.users, {foreignKey: 'taskid', as: 'qqq',  otherKey: 'userid'});
-// };
-
-
-
     Users.belongsToMany(Tasks, {
         through: UsersTask,
         as: 'newTasks',
@@ -83,25 +63,6 @@ const Tasks = db.define('tasks', {
         foreignKey: 'taskid',
         otherKey: 'userid'
     });
-
-//
-// await Users.belongsToMany(Tasks, {
-//     through: UsersTask,
-//     as: 'newTasks',
-//     foreignKey: 'userid',
-//     otherKey: 'taskid'
-// });
-// await Tasks.belongsToMany(Users, {
-//     through: UsersTask,
-//     as: 'newUsers',
-//     foreignKey: 'taskid',
-//     otherKey: 'userid'
-// });
-
-
-// Tasks.belongsToMany(Users, {through: "userstask", foreignKey: 'userid', as: 'Users'});
-// Users.belongsToMany(Tasks, {through: "userstask", foreignKey: 'taskid', as: 'Tasks'});
-//
 
 
 Tasks.getTasksBuyProjectId = function (projectid) {
@@ -143,16 +104,12 @@ Tasks.buildNewTask = function (taskname, position, description, users, markers, 
 }
 
 
-
-
-
 // Tasks.associate = (models) => {
 //     Tasks.belongsToMany(models.users, {
 //         through: models.userstask,
 //         foreignKey: "taskid"
 //     });
 // }
-
 
 
 // Users.belongsToMany(Tasks, {

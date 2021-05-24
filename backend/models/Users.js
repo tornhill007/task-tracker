@@ -2,7 +2,7 @@ const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 const Projects = require('./Projects');
 const UsersProjects = require('./UsersProjects');
-const Tasks = require('./UsersProjects');
+const Tasks = require('./Tasks');
 const UsersTasks = require('./UsersTask');
 
 const Users = db.define('users', {
@@ -91,6 +91,20 @@ Users.getAllUsersProjects = function (projectid) {
             required: true,
             where: {
                 projectid,
+            },
+        }
+        ]
+    });
+}
+
+Users.getUsersTasksByTaskId = function (taskid) {
+    return this.findAll({
+        include: [{
+            model: Tasks,
+            as: 'newTasks',
+            required: true,
+            where: {
+                taskid,
             },
         }
         ]
