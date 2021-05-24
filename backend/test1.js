@@ -4,10 +4,12 @@ const Product = require('./models/product');
 const Users = require('./models/Users');
 const Projects = require('./models/Projects');
 const Tasks = require('./models/Tasks');
+const UsersTask = require('./models/UsersTask');
 const ProductOrder = require('./models/productorder');
 
 
 const q = async () => {
+
 
     // Get all orders
     const allOrders = await Tasks.findAll({
@@ -16,18 +18,18 @@ const q = async () => {
             //     id: 1
             // },
             // Make sure to include the products
-            // include: [{
-            //     model: Projects,
-            //     as: 'projects',
-            //     required: true,
-            //     where: {
-            //         projectid: 147
-            //     }
-            // }
-            // ]
+            include: [{
+                model: Users,
+                as: 'newUsers',
+                required: true,
+                // where: {
+                //     projectid: 147
+                // }
+            }
+            ]
         }
     );
-    debugger;
+    // debugger;
     // const allOrders = await Order.findAll({
     //
     //         // where: {

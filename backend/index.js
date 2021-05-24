@@ -14,10 +14,15 @@ const auth = require('./routes/auth');
 const users = require('./routes/users');
 const usersprojects = require('./routes/usersprojects');
 const students = require('./routes/testRoutes');
+const userstasks = require('./routes/userstasks');
 
 //test
 const orders = require('./routes/orders');
 const products = require('./routes/products');
+
+const Users = require('./models/Users');
+const Tasks = require('./models/Tasks');
+const UsersTasks = require('./models/UsersTask');
 
 
 
@@ -47,10 +52,23 @@ app.use(auth);
 app.use(users);
 app.use(usersprojects);
 app.use(students);
+app.use(userstasks);
 
 // test
 app.use(orders);
 app.use(products);
+
+// Users.belongsToMany(Tasks, {
+//     through: UsersTasks,
+//     as: 'USER1',
+//     foreignKey: 'taskid'
+// });
+
+// Tasks.belongsToMany(Users, {
+//     through: UsersTasks,
+//     as: 'TASK1',
+//     foreignKey: 'userid'
+// });
 
 
 app.use(passport.initialize());

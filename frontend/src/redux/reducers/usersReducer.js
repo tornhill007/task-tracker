@@ -15,12 +15,14 @@ const SET_ALL_USERS = 'SET_ALL_USERS';
 const SET_IS_OPEN_USERS_LIST = 'SET_IS_OPEN_USERS_LIST';
 const SET_IS_OPEN_MARKERS_LIST = 'SET_IS_OPEN_MARKERS_LIST';
 const SET_ACTIVE_USERS = 'SET_ACTIVE_USERS';
+const SET_PARTICIPANT_ON_TASK = 'SET_PARTICIPANT_ON_TASK';
 
 let initialState = {
     users: [],
     isOpenUsersList: false,
     isOpenMarkersList: false,
     activeUsers: [],
+    participantOnTask: []
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -50,6 +52,12 @@ const usersReducer = (state = initialState, action) => {
                 isOpenMarkersList: !state.isOpenMarkersList
             };
 
+            case SET_PARTICIPANT_ON_TASK:
+            return {
+                ...state,
+                participantOnTask: action.participant
+            };
+
         default:
             return state;
     }
@@ -72,6 +80,11 @@ export const setIsOpenUserList = () => ({
 
 export const setIsOpenMarkersList = () => ({
     type: SET_IS_OPEN_MARKERS_LIST,
+})
+
+export const setParticipantOnTask = (participant) => ({
+    type: SET_PARTICIPANT_ON_TASK,
+    participant
 })
 
 export const getAllUsers = (projectId, isRemoveProject) => async (dispatch) => {
@@ -103,12 +116,46 @@ export const getAllUsers = (projectId, isRemoveProject) => async (dispatch) => {
     }
 };
 
-export const addNewParticipant = (participants, projectId, taskId) => async (dispatch) => {
+export const addNewParticipant = (projectId, taskId, userId) => async (dispatch) => {
     try {
-        let response = await tasksAPI.addNewParticipant(participants, projectId, taskId);
+        let response = await tasksAPI.addNewParticipant(taskId, userId);
         if (response.statusText === 'OK') {
             console.log("[RESPONSE]", response)
             dispatch(getColumns(projectId));
+            dispatch(getParticipantOnTask(projectId, taskId, userId));
+
+        } else {
+            console.log("ERROR")
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+};
+
+export const getParticipantOnTask = (projectId, taskId, userId) => async (dispatch) => {
+    try {
+        let response = await tasksAPI.getParticipantOnTask(taskId, userId);
+        if (response.statusText === 'OK') {
+            console.log("[RESPONSE23]", response)
+            // dispatch(getColumns(projectId));
+            dispatch(setParticipantOnTask(response.data));
+        } else {
+            console.log("ERROR")
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+};
+
+export const removeParticipant = (projectId, taskId, userId) => async (dispatch) => {
+    try {
+        let response = await tasksAPI.removeParticipant(taskId, userId);
+        if (response.statusText === 'OK') {
+            console.log("[RESPONSE]", response)
+            dispatch(getColumns(projectId));
+            dispatch(getParticipantOnTask(projectId, taskId, userId));
         } else {
             console.log("ERROR")
         }

@@ -2,6 +2,8 @@ const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 const Projects = require('./Projects');
 const UsersProjects = require('./UsersProjects');
+const Tasks = require('./UsersProjects');
+const UsersTasks = require('./UsersTask');
 
 const Users = db.define('users', {
         userid: {
@@ -24,6 +26,9 @@ const Users = db.define('users', {
         tableName: 'users'
     })
 
+
+
+
 Users.findUsersByUserName = function (username) {
     return this.findAll({where: {username}});
 }
@@ -44,6 +49,20 @@ Users.getUserByUserId = function (userid) {
         where: {
             userid
         }
+    });
+}
+
+Users.getUsersTasksByTaskId = function (taskid) {
+    return this.findAll({
+        include: [{
+            model: Tasks,
+            as: 'newTasks',
+            required: true,
+            where: {
+                taskid
+            },
+        }
+        ],
     });
 }
 
@@ -95,6 +114,15 @@ Users.getAllUsersProjects = function (projectid) {
 
 //
 //
+
+// Users.associate = (models) => {
+//     Users.belongsToMany(models.tasks, {
+//         through: models.userstask,
+//         foreignKey: "userid"
+//     });
+// }
+
+
 Users.belongsToMany(Projects, {
     through: UsersProjects,
     as: 'projects',
@@ -108,6 +136,23 @@ Projects.belongsToMany(Users, {
     foreignKey: 'projectid',
     otherKey: 'userid'
 });
+
+
+
+// Users.associate = (models) => {
+//     Users.belongsTo(models.tasks, {foreignKey: 'userid', as: 'afdsfdsf', otherKey: 'taskid'});
+// };
+//
+// Users.belongsToMany(Tasks, {
+//     through: UsersTask,
+//     as: 'taskss',
+//     foreignKey: 'userid',
+//     otherKey: 'taskid'
+// });
+//
+
+
+
 
 
 // db.sync({force:true}).then(()=>{

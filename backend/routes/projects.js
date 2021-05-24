@@ -39,14 +39,6 @@ router.get("/projects", catchWrap(async (req, res) => {
     // let {userId} = req.query;
     let userId = req.query.userId
 
-    // const allProjects = await Projects.findAll({
-    //     include: [
-    //         {
-    //             model: UsersProjects,
-    //         },
-    //     ]
-    // });
-// getAllProjectsUsers(+userId)
     const results = await Projects.findAll({
 
             include: [{
@@ -60,7 +52,6 @@ router.get("/projects", catchWrap(async (req, res) => {
             ]
         }
     );
-
 
     // const [results, metadata] = await sequelize.query("SELECT * FROM projectsList WHERE projectid IN (SELECT projectid FROM usersprojects WHERE userid = ?)", {
     //         replacements: [+userId],

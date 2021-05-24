@@ -9,7 +9,12 @@ import {
     updateTaskName
 } from "../../../redux/reducers/columnsReducer";
 import classes from "./TaskInfo.module.css";
-import {addNewParticipant, setIsOpenMarkersList, setIsOpenUserList} from "../../../redux/reducers/usersReducer";
+import {
+    addNewParticipant, getParticipantOnTask,
+    removeParticipant,
+    setIsOpenMarkersList,
+    setIsOpenUserList
+} from "../../../redux/reducers/usersReducer";
 
 class TaskInfo extends React.Component {
 
@@ -26,6 +31,10 @@ class TaskInfo extends React.Component {
 
         // this.changeText = this.changeText.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.props.getParticipantOnTask(this.props.taskInfo.projectid, this.props.taskInfo.taskid, this.props.userId);
     }
 
     changeText = (event) => {
@@ -64,11 +73,36 @@ class TaskInfo extends React.Component {
         })
     }
 
-    checkUserInList(users, user) {
-        if(users === null) {
+    checkUserInList(user) {
+        // console.log(users, user)
+        // this.props.activeUsers
+        // this.props.participantOnTask
+
+       // let participantOnTask = this.props.participantOnTask.map(participant => participant.userName);
+       //
+       //  if(participantOnTask === null) {
+       //      return false;
+       //  }
+       //  let index = participantOnTask.indexOf(user);
+       //  if(index === -1) {
+       //      return false
+       //  }
+       //  else {
+       //      return true
+       //  }
+    }
+
+    checkParticipantInList(user) {
+        // console.log(users, user)
+        // this.props.activeUsers
+        // this.props.participantOnTask
+
+       let participantOnTask = this.props.participantOnTask.map(participant => participant.username);
+        console.log("8", user, participantOnTask)
+        if(participantOnTask === null) {
             return false;
         }
-        let index = users.indexOf(user);
+        let index = participantOnTask.indexOf(user);
         if(index === -1) {
             return false
         }
@@ -118,7 +152,11 @@ class TaskInfo extends React.Component {
         this.props.addNewParticipant(users, this.props.taskInfo.projectid, this.props.taskInfo.taskid);
     }
 
-    onAddNewParticipant(newUser, users) {
+    removeParticipant(userId) {
+        this.props.removeParticipant(this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId);
+    }
+
+    onAddNewParticipant(newUser, users, userId) {
         console.log("allUsers", users)
         console.log("newUser", newUser)
         if(users) {
@@ -127,7 +165,8 @@ class TaskInfo extends React.Component {
         else {
             users = [newUser];
         }
-        this.props.addNewParticipant(users, this.props.taskInfo.projectid, this.props.taskInfo.taskid);
+        console.log("5", this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId)
+        this.props.addNewParticipant(this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId);
     }
 
     onAddNewMarker(newMarker, markers) {
@@ -162,6 +201,7 @@ class TaskInfo extends React.Component {
     }
 
     render() {
+        console.log("participantOnTask",this.props.participantOnTask)
         console.log("[444]",this.props.taskInfo)
         console.log("[555]",this.props.tasks[this.props.taskInfo.id])
         console.log("[222]",this.props.users)
@@ -191,11 +231,15 @@ class TaskInfo extends React.Component {
 
                 </div>
                 <div>
-                    Participants: {this.props.tasks[this.props.taskInfo.id].users ? this.props.tasks[this.props.taskInfo.id].users.map(item => <div>{item}</div>) : <div>list is empty</div>}
+                    Participants: {this.props.participantOnTask ? this.props.participantOnTask.map(item => <div>{item.username}</div>) : <div>list is empty</div>}
                     <div className={classes.container}>
                     {this.props.isOpenUsersList ? <div className={classes.listWrap}>
-                        {activeUsers.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}
+                        {/*{activeUsers.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*/}
+                        {/*this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid*/}
+                        {/*this.removeParticipant(user.userid)*/}
+                        {activeUsers.map(user => <div onClick={() => { !this.checkParticipantInList(user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid) : this.removeParticipant(user.userid)}} className={`${classes.userWrap} ${this.checkParticipantInList(user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkParticipantInList(user.username) ? <div>OK</div> : ''}</div>)}
                     </div> : ''}
+                        {/*<div onClick={() => {this.removeParticipant()}}>REMOVE</div>*/}
                     </div>
                     {/*{this.props.isOpenUsersList ? <select onBlur={() => {this.onOpenListUsers()}} autoFocus={true} multiple>{this.props.users.map((user, index) => <option key={index}>{user.username}</option>)}</select> : ''}*/}
                     <button onClick={() => {this.onOpenListUsers()}}>{this.props.isOpenUsersList ? 'close list' : "add participants"}</button>
@@ -225,7 +269,9 @@ const mapStateToProps = (state) => ({
     isOpenUsersList: state.usersPage.isOpenUsersList,
     isOpenMarkersList: state.usersPage.isOpenMarkersList,
     activeUsers: state.usersPage.activeUsers,
-    userName: state.auth.userName
+    userName: state.auth.userName,
+    userId: state.auth.userId,
+    participantOnTask: state.usersPage.participantOnTask
 })
 
-export default connect(mapStateToProps, {addNewMarker, removeTask, updateTaskName, updateDescription, closeTaskInfo, addNewParticipant, setIsOpenMarkersList, setIsOpenUserList})(withRouter(TaskInfo));
+export default connect(mapStateToProps, {getParticipantOnTask, removeParticipant, addNewMarker, removeTask, updateTaskName, updateDescription, closeTaskInfo, addNewParticipant, setIsOpenMarkersList, setIsOpenUserList})(withRouter(TaskInfo));

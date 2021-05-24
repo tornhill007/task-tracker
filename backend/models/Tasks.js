@@ -1,6 +1,7 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 const Users = require('./Users');
+const UsersTask = require('./UsersTask');
 
 const Tasks = db.define('tasks', {
         taskid: {
@@ -45,13 +46,63 @@ const Tasks = db.define('tasks', {
         //     }
         // },
         timestamps: false,
-
+        tableName: 'tasks'
     },
 )
+
+
+// Users.belongsToMany(Tasks, {
+//     through: UsersTask,
+//     as: 'NEW_TASKS',
+//     foreignKey: 'userid',
+//     otherKey: 'taskid'
+// });
+// Tasks.belongsToMany(Users, {
+//     through: UsersTask,
+//     as: 'NEW_TASKS',
+//     foreignKey: 'taskid',
+//     otherKey: 'userid'
+// });
+
+
+// Tasks.associate = (models) => {
+//     Tasks.belongsTo(models.users, {foreignKey: 'taskid', as: 'qqq',  otherKey: 'userid'});
+// };
+
+
+
+    Users.belongsToMany(Tasks, {
+        through: UsersTask,
+        as: 'newTasks',
+        foreignKey: 'userid',
+        otherKey: 'taskid'
+    });
+     Tasks.belongsToMany(Users, {
+        through: UsersTask,
+        as: 'newUsers',
+        foreignKey: 'taskid',
+        otherKey: 'userid'
+    });
+
+//
+// await Users.belongsToMany(Tasks, {
+//     through: UsersTask,
+//     as: 'newTasks',
+//     foreignKey: 'userid',
+//     otherKey: 'taskid'
+// });
+// await Tasks.belongsToMany(Users, {
+//     through: UsersTask,
+//     as: 'newUsers',
+//     foreignKey: 'taskid',
+//     otherKey: 'userid'
+// });
+
 
 // Tasks.belongsToMany(Users, {through: "userstask", foreignKey: 'userid', as: 'Users'});
 // Users.belongsToMany(Tasks, {through: "userstask", foreignKey: 'taskid', as: 'Tasks'});
 //
+
 
 Tasks.getTasksBuyProjectId = function (projectid) {
     return this.findAll({
@@ -90,5 +141,26 @@ Tasks.buildNewTask = function (taskname, position, description, users, markers, 
         projectid
     });
 }
+
+
+
+
+
+// Tasks.associate = (models) => {
+//     Tasks.belongsToMany(models.users, {
+//         through: models.userstask,
+//         foreignKey: "taskid"
+//     });
+// }
+
+
+
+// Users.belongsToMany(Tasks, {
+//     through: UsersTask,
+//     as: 'test2',
+//     foreignKey: 'userid',
+//     otherKey: 'taskid'
+// });
+
 
 module.exports = Tasks;

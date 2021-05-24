@@ -128,6 +128,10 @@ export const tasksAPI = {
             taskname
         })
     },
+    getParticipantOnTask(projectid, taskid) {
+        // console.log("taskName, projectId, taskId", taskname, projectid, taskid)
+        return instance.get(`/task/user/${projectid}/${taskid}`)
+    },
     updateTasksPosAndColumnId(tasksArr, projectId) {
         return instance.put(`/tasks/position/${projectId}`, {
             tasksArr
@@ -146,10 +150,16 @@ export const tasksAPI = {
             taskName, columnId, position
         });
     },
-    addNewParticipant(users, projectId, taskId) {
-        return instance.put(`/tasks/${projectId}/${taskId}`, {
-            users
+    addNewParticipant(taskId, userId) {
+        console.log("userId, taskId", userId, taskId);
+        return instance.post(`/task/user`, {
+            userId, taskId
         })
+    },
+
+    removeParticipant(taskId, userId) {
+        console.log("userId, projectId, taskId", userId, taskId);
+        return instance.delete(`/task/user/${taskId}/${userId}`)
     },
     addNewMarker(markers, projectId, taskId) {
         return instance.put(`/tasks/${projectId}/${taskId}`, {
