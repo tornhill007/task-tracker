@@ -1,8 +1,10 @@
 import React from 'react';
 // import styled from 'styled-components';
-import { Draggable } from 'react-beautiful-dnd';
+import {Draggable} from 'react-beautiful-dnd';
 import classes from './Tasks.module.css';
 import {NavLink} from "react-router-dom";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPen, faTimes} from '@fortawesome/free-solid-svg-icons'
 
 // const Container = styled.div`
 //   border: 1px solid lightgrey;
@@ -13,6 +15,11 @@ import {NavLink} from "react-router-dom";
 // `;
 
 export default class Task extends React.Component {
+
+    state = {
+        isActiveTask: false
+    }
+
 
     onSetTaskInfo(taskInfo) {
         this.props.setTaskInfo(taskInfo);
@@ -26,15 +33,40 @@ export default class Task extends React.Component {
 
                 {(provided, snapshot) => (
 
+<>
 
-                            <div onClick={() => {this.onSetTaskInfo(this.props.task)}}  className={classes.container}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  ref={provided.innerRef}
-                                  draggable={snapshot.isDragging}
-                            >
-                                {this.props.task.content}
+
+                    <div onMouseOver={() => {
+                        this.setState({
+                            isActiveTask: true
+                        })
+                    }} onMouseLeave={() => {
+                        this.setState({
+                            isActiveTask: false
+                        })
+                    }} onClick={() => {
+                        this.onSetTaskInfo(this.props.task)
+                    }} className={classes.container}
+                         {...provided.draggableProps}
+                         {...provided.dragHandleProps}
+                         ref={provided.innerRef}
+                         draggable={snapshot.isDragging}
+
+                    >
+                        <FontAwesomeIcon className={`fa-xs` + ` ${classes.icon}`} icon={faPen}/>
+                        <div  className={`${classes.positionIcon}`}>
+
+                            <div className={`${classes.leftItem}`}>{this.props.task.content}
+
                             </div>
+
+                            {/*{this.state.isActiveTask ? <FontAwesomeIcon className={`fa-xs` + ` ${classes.positionIcon} ${classes.icon}`} icon={faPen}/> : ''}*/}
+
+                        </div>
+
+                    </div>
+
+                    </>
 
 
                 )}

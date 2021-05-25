@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 
 const Navbar = (props) => {
     return (
+
         <nav className= { `${classes.nav} ${props.isTaskInfo && classes.map}`  }>
             <div><NavLink to="/profile" activeClassName={classes.activeLink}>My Profile</NavLink></div>
             <div><NavLink to="/projects" activeClassName={classes.activeLink}>My Projects</NavLink></div>

@@ -1,7 +1,82 @@
 .container {
-    border: 1px solid lightgrey;
-    border-radius: 2px;
+    text-align: left;
+/*z-index: -1;*/
+    /*position: absolute;*/
+    border-radius: 3px;
     padding: 8px;
     margin-bottom: 8px;
+    background-color: #fff;
+    word-break: break-all;
+    box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+    /*overflow: hidden;*/
     /*background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};*/
+}
+
+.container:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+
+}
+.itemTitle{
+    font-weight: 600;
+}
+
+.positionIcon {
+    /*float: right;*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*width: 100%;*/
+    /*padding: 8px;*/
+    /*float: right;*/
+    /*position: absolute;*/
+/*    left: 400px;*/
+/*    float: right;*/
+/*    position: fixed;*/
+    /*float: right;*/
+    /*z-index: 10000;*/
+/*bottom: 1000px;*/
+    /*align-items: center;*/
+
+    /*position:relative;*/
+    /*b:10px;*/
+    /*float: right;*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*display: flex;*/
+    /*z-index: 1000;*/
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+    /*z-index: 10000;*/
+    /*float: top;*/
+    /*left:20px;*/
+    /*width:200px;*/
+}
+
+.leftItem {
+    width: 100%;
+}
+.icon {
+    /*position: relative;*/
+    /*z-index: 1000;*/
+    /*left: 100px;*/
+    /*top: 22px;*/
+    /*padding: 2px;*/
+    /*z-index: 999;*/
+    /*top: 24px;*/
+    /*float: right;*/
+    /*padding: 2px 6px 6px 6px;*/
+    /*padding-left: 150px;/*/
+    /*left: 100px;*/
+    /*padding: 10px;*/
+    /*left: 2px;*/
+    /*left: 50%;*/
+    /*margin-left: -150px*/
+}
+/*.test {*/
+/*    padding: 10px;*/
+/*}*/
+
+.icon:hover {
+    background-color: gray;
+
 }

@@ -1,5 +1,13 @@
 .App {
   text-align: center;
+
+}
+
+.Home {
+  background: #eae6ff;
+  height: 100vh;
+  /*padding-top: 75px;*/
+  padding: 75px 300px 0 300px;
 }
 
 .App-logo {

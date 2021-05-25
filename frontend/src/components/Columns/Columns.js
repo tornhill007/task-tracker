@@ -100,10 +100,9 @@ export default class Column extends React.Component {
         // console.log("this.props.column.taskIds", this.props.column.taskIds)
         // console.log("this.props.column.taskIds[this.props.column.taskIds.length-1]", this.props.column.taskIds[this.props.column.taskIds.length-1])
         // console.log("allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1", +allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1)
-        if(this.props.column.taskIds.length === 0 ) {
+        if (this.props.column.taskIds.length === 0) {
             return 1
-        }
-        else return +allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1
+        } else return +allTasks[this.props.column.taskIds[this.props.column.taskIds.length - 1]].position + 1
         // +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1
     }
 
@@ -128,34 +127,47 @@ export default class Column extends React.Component {
                         {this.state.isInput ? <input onChange={this.changeText}
                                                      onBlur={() => this.onUpdateColumn(this.props.column.columnId, this.state.text, this.props.projectId)}
                                                      autoFocus={true} value={this.state.text}/> :
-                            <h3 onClick={() => this.onEditColumn()} {...provided.dragHandleProps}
-                                className={classes.title}>{this.props.column.name}</h3>}
-                        <button onClick={() => {
-                            this.onRemoveColumn(this.props.column.columnId, this.props.projectId)
-                        }}>Del
-                        </button>
+                            <div className={classes.headerWrapper}>
+                                <div onClick={() => this.onEditColumn()} {...provided.dragHandleProps}
+                                     className={classes.title}>
+                                    <div><span>{this.props.column.name}</span></div>
+                                </div>
+                                <div className={classes.itemTitleRigth} {...provided.dragHandleProps}><span>...</span>
+                                </div>
+                            </div>}
+
+                        {/*<button onClick={() => {*/}
+                        {/*    this.onRemoveColumn(this.props.column.columnId, this.props.projectId)*/}
+                        {/*}}>Del*/}
+                        {/*</button>*/}
                         <Droppable droppableId={this.props.column.id} type="task">
                             {(provided, snapshot) => (
                                 <div className={classes.taskList}
                                      ref={provided.innerRef}
                                      {...provided.droppableProps}
                                      isDraggingOver={snapshot.isDraggingOver}
+
                                 >
                                     {
                                         this.props.tasks.length === 0 ? '' : this.props.tasks[0] === undefined ? '' : this.props.tasks.map((task, index) => {
                                             console.log("[task]", task);
-                                            return <Tasks taskInfo={this.props.taskInfo} setTaskInfo={this.props.setTaskInfo} projectId={this.props.projectId} key={task.id} task={task} index={index}/>
+                                            return <Tasks taskInfo={this.props.taskInfo}
+                                                          setTaskInfo={this.props.setTaskInfo}
+                                                          projectId={this.props.projectId} key={task.id} task={task}
+                                                          index={index}/>
                                         })}
                                     {}
                                     {provided.placeholder}
+                                    {this.state.isTaskInput ? <input onBlur={() => {
+                                        this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()
+                                    }} autoFocus={true} placeholder={"Please, enter header"}
+                                                                     onChange={this.changeTaskText}
+                                                                     value={this.state.textNewTask}/> : ''}
                                 </div>
                             )}
 
                         </Droppable>
-                        {this.state.isTaskInput ? <input onBlur={() => {
-                            this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()
-                        }} autoFocus={true} placeholder={"Please, enter header"} onChange={this.changeTaskText}
-                                                         value={this.state.textNewTask}/> : ''}
+
                         <button onClick={() => {
                             this.onOpenInput()
                         }}>add task
