@@ -26,17 +26,15 @@ const {wrapWhereColumnId, wrapWhereProjectId} = require('../common/wrapWhere')
 router.use('/columns/:id', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
+    if(req.params.id === 'position') {
+        next();
+        return;
+    }
     if (req.method === 'GET' || req.method === 'POST') {
-
-        // user = await UsersProjects.getUsersProjects(req.params.id, decoded.userId);
         user = await Users.getUserProject(req.params.id, decoded.userId);
-        // UsersProjects.getUsersProjects(req.params.id, decoded.userId);
-
     } else {
         const column = await Columns.getColumnBuyColumnId(req.params.id);
-        // user = await UsersProjects.getUsersProjects(column.projectid, decoded.userId);
         user = await Users.getUserProject(column.projectid, decoded.userId);
-            // UsersProjects.getUsersProjects(column.projectid, decoded.userId);
     }
 
     if (!user) {
@@ -131,6 +129,26 @@ router.put("/columns/:columnId", catchWrap(async (req, res) => {
 
 router.delete("/columns/:columnId", catchWrap(async (req, res) => {
         const {columnId} = req.params;
+
+        const users = await Users.findAll({
+            include: [{
+                model: Tasks,
+                as: 'newTasks',
+                required: true,
+                where: {
+                    columnid: columnId,
+                },
+            }
+            ]
+        });
+
+        const tasks = await Tasks.getTasksBuyColumnId(columnId);
+
+        for (let key of tasks) {
+            await key.removeNewUsers(users);
+        }
+        // await task.removeNewUsers(users);
+
         const deletedTasks = await Tasks.destroyTasksByColumnId(columnId);
         const deletedColumn = await Columns.getColumnBuyColumnId(columnId);
         await deletedColumn.destroy();

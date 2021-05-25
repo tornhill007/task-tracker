@@ -12,6 +12,7 @@ const {wrapWhereProjectId, wrapWhereProjectAndUserIds} = require('../common/wrap
 
 const Users = require('../models/Users');
 const Projects = require('../models/Projects');
+const Tasks = require('../models/Tasks');
 
 //################registration
 const catchWrap = require("../common/wrapper")
@@ -66,13 +67,10 @@ router.delete("/users/projects/active", catchWrap(async (req, res) => {
     const user = await Users.getUserByUserId(userid);
     await project.removeUser(user);
 
-
-    // const result = await UsersProjects.getUsersProjects(projectid, userid);
-    // await result.destroy();
+    const tasks = await Tasks.getTasksBuyProjectId(projectid);
+    await user.removeNewTasks(tasks);
 
     const usersProjects = await Users.getAllUsersProjects(projectid);
-
-    // const allUsersProjects = await UsersProjects.getAllUsersProjectsByProjectId(projectid);
 
     if (usersProjects.length === 0) {
         await removingProject({id: projectid})

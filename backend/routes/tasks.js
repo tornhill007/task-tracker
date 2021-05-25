@@ -18,6 +18,12 @@ router.use('/tasks/:projectId', passport.authenticate('jwt', {session: false}), 
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
 
+
+    if(req.params.projectId === 'position') {
+        next();
+        return;
+    }
+
     // user = await UsersProjects.getUsersProjects(req.params.projectId, decoded.userId);
     user = await Users.getUserProject(req.params.projectId, decoded.userId);
     // findOne({

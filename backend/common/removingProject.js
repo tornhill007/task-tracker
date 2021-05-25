@@ -16,10 +16,24 @@ module.exports = {
         const users = await Users.getAllUsersProjects(id);
         let result = await project.removeUsers(users);
 
-        // await users.removeProjects();
 
-        // await usersProjects.removeUser();
+        const usersTasks = await Users.findAll({
+            include: [{
+                model: Tasks,
+                as: 'newTasks',
+                required: true,
+                where: {
+                    projectid: id,
+                },
+            }
+            ]
+        })
 
+        const tasks = await Tasks.getTasksBuyProjectId(id);
+
+        for(let key of usersTasks) {
+            await key.removeNewTasks(tasks);
+        }
         const deletedTasks = await Tasks.destroyTasksByProjectId(id);
         const deletedColumns = await Columns.destroyColumnsByProjectId(id);
 

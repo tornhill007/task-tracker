@@ -62,10 +62,8 @@ router.delete("/task/user/:taskId/:userId", catchWrap(async (req, res) => {
     // let {projectId, taskId} = req.params;
 
     const task = await Tasks.getTaskById(taskId);
-
     const user = await Users.getUserByUserId(userId);
-
-    const result = await task.removeNewUsers(user);
+    const result = await task.removeNewUser(user);
 
     res.json("Remove user from project");
 

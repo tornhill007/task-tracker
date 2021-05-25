@@ -3,7 +3,7 @@ const db = require('../config/database');
 const Projects = require('./Projects');
 const UsersProjects = require('./UsersProjects');
 const Tasks = require('./Tasks');
-const UsersTasks = require('./UsersTask');
+const UsersTask = require('./UsersTask');
 
 const Users = db.define('users', {
         userid: {
@@ -23,7 +23,8 @@ const Users = db.define('users', {
     },
     {
         timestamps: false,
-        tableName: 'users'
+        tableName: 'users',
+
     })
 
 
@@ -97,19 +98,50 @@ Users.getAllUsersProjects = function (projectid) {
     });
 }
 
-Users.getUsersTasksByTaskId = function (taskid) {
+
+Users.getUsersTasksByColumnId = function (columnid) {
     return this.findAll({
         include: [{
             model: Tasks,
             as: 'newTasks',
             required: true,
             where: {
-                taskid,
+                columnid
             },
         }
         ]
     });
 }
+
+
+Users.getUserByTasksProjectId = function (projectid) {
+    return this.findAll({
+        include: [{
+            model: Tasks,
+            as: 'newTasks',
+            required: true,
+            where: {
+                projectid
+            },
+        }]
+
+    });
+}
+
+
+// Users.getUsersTasksByTaskId = function (taskid) {
+//     return this.findAll({
+//         include: [{
+//             model: Tasks,
+//             as: 'newTasks',
+//             required: true,
+//             where: {
+//                 taskid,
+//             },
+//         }
+//         ]
+//     });
+// }
 
 // Users.getAllProjectsUsers = function (userid) {
 //     return this.findAll({
@@ -164,9 +196,6 @@ Projects.belongsToMany(Users, {
 //     otherKey: 'taskid'
 // });
 //
-
-
-
 
 
 // db.sync({force:true}).then(()=>{

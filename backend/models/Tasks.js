@@ -50,19 +50,22 @@ const Tasks = db.define('tasks', {
     },
 )
 
+Tasks.belongsToMany(Users, {
+    through: UsersTask,
+    as: 'newUsers',
+    foreignKey: 'taskid',
+    otherKey: 'userid'
+});
 
-    Users.belongsToMany(Tasks, {
-        through: UsersTask,
-        as: 'newTasks',
-        foreignKey: 'userid',
-        otherKey: 'taskid'
-    });
-     Tasks.belongsToMany(Users, {
-        through: UsersTask,
-        as: 'newUsers',
-        foreignKey: 'taskid',
-        otherKey: 'userid'
-    });
+
+Users.belongsToMany(Tasks, {
+    through: UsersTask,
+    as: 'newTasks',
+    foreignKey: 'userid',
+    otherKey: 'taskid'
+});
+
+
 
 
 Tasks.getTasksBuyProjectId = function (projectid) {

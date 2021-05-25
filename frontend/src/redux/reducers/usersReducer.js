@@ -205,7 +205,7 @@ export const leaveProject = (userId, projectId) => async (dispatch) => {
                 dispatch(removeProject(projectId, userId));
                 return;
             }
-            dispatch(getAllUsers(projectId));
+            // dispatch(getAllUsers(projectId));
             dispatch(getAllProjects(userId));
         } else {
             console.log("ERROR")
