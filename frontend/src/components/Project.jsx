@@ -6,60 +6,60 @@ import Columns from "./Columns/Columns";
 import {connect} from "react-redux";
 import {
     addNewTask,
-    changeIsInput, getAllTasks,
+    changeIsInput, createNewColumn, getAllTasks,
     getColumns,
     onDragEnd, onRemoveColumn, onUpdateColumn,
-    onUpdateColumnsPosition,
+    onUpdateColumnsPosition, openFormForNewColumn,
     openModal, setTaskInfo, updateTasksPosAndColumnId
 } from "../redux/reducers/columnsReducer";
 import {columnsApi, usersApi} from "../api/api";
 import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import {getProjectName, getProjects} from "../redux/selectors/projectsSelector";
 import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
-import {getAllProjects, setIsOpenInviteList} from "../redux/reducers/projectsReducer";
+import {createNewProject, getAllProjects, setIsOpenInviteList} from "../redux/reducers/projectsReducer";
 import {addToProject, getAllUsers, leaveProject, removeFromProject} from "../redux/reducers/usersReducer";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPlus, faTimes, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {setAuthUserData} from "../redux/reducers/authReducer";
 import {Redirect} from "react-router-dom";
 import InviteList from "./InviteList";
 
-const initialData = {
-    tasks: {
-        'task-1': {id: 'task-1', content: 'Take out the garbage'},
-        'task-2': {id: 'task-2', content: 'qqqqqqqqqqqqqqqqq'},
-        'task-3': {id: 'task-3', content: 'wwwwwwwwwwwwwwwwwwwwwwwwww'},
-        'task-4': {id: 'task-4', content: 'eeeeeeeeeeeeeeeeeee'},
-    },
-    columns: {
-        'column-1': {
-            id: 'column-1',
-            name: 'Kek1',
-            taskIds: ['task-1', 'task-2', 'task-3', 'task-4']
-        },
-        'column-2': {
-            id: 'column-2',
-            name: 'Kek2',
-            taskIds: []
-        },
-        'column-3': {
-            id: 'column-3',
-            name: 'Kek3',
-            taskIds: []
-        },
-        'column-4': {
-            id: 'column-4',
-            name: 'Kek4',
-            taskIds: []
-        },
-        'column-5': {
-            id: 'column-5',
-            name: 'Kek5',
-            taskIds: []
-        }
-    },
-    columnOrder: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5']
-}
+// const initialData = {
+//     tasks: {
+//         'task-1': {id: 'task-1', content: 'Take out the garbage'},
+//         'task-2': {id: 'task-2', content: 'qqqqqqqqqqqqqqqqq'},
+//         'task-3': {id: 'task-3', content: 'wwwwwwwwwwwwwwwwwwwwwwwwww'},
+//         'task-4': {id: 'task-4', content: 'eeeeeeeeeeeeeeeeeee'},
+//     },
+//     columns: {
+//         'column-1': {
+//             id: 'column-1',
+//             name: 'Kek1',
+//             taskIds: ['task-1', 'task-2', 'task-3', 'task-4']
+//         },
+//         'column-2': {
+//             id: 'column-2',
+//             name: 'Kek2',
+//             taskIds: []
+//         },
+//         'column-3': {
+//             id: 'column-3',
+//             name: 'Kek3',
+//             taskIds: []
+//         },
+//         'column-4': {
+//             id: 'column-4',
+//             name: 'Kek4',
+//             taskIds: []
+//         },
+//         'column-5': {
+//             id: 'column-5',
+//             name: 'Kek5',
+//             taskIds: []
+//         }
+//     },
+//     columnOrder: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5']
+// }
 // let tasks = [
 //     {
 //         id: 1,
@@ -76,9 +76,39 @@ const initialData = {
 // ]
 
 
-
 class Project extends React.Component {
 
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // id: this.props.id,
+            text: this.props.text
+        };
+
+        this.changeText = this.changeText.bind(this);
+    }
+    newRef = React.createRef();
+
+    changeText(event) {
+        this.setState({
+            text: event.target.value
+        });
+    }
+
+    createNewColumn(projectListId) {
+        const {text} = this.state;
+        let position;
+        if(this.props.columnsOrder.length === 0) {
+            position = 1;
+        }
+        else {
+            position = this.props.columns[this.props.columnsOrder[this.props.columnsOrder.length-1]].position + 1;
+        }
+        this.props.createNewColumn(text, projectListId, position);
+        // this.close();
+    }
 
 
     // constructor(props) {
@@ -100,29 +130,29 @@ class Project extends React.Component {
     // }
 
     projectId = this.props.match.params.projectId;
+
     componentDidMount() {
 
         document.addEventListener('mousedown', this.handleClickOutside);
 
-        if(JSON.parse(localStorage.getItem('user'))) {
+        if (JSON.parse(localStorage.getItem('user'))) {
 
             let user = JSON.parse(localStorage.getItem('user'));
-            if(user.timestamp > Date.now() - 3600000) {
+            if (user.timestamp > Date.now() - 3600000) {
                 console.log(user.userId, user.userName, user.token)
                 this.props.setAuthUserData(user.userId, user.userName, user.token)
                 this.getProjects(user.userId, user.userName, user.token);
-            }
-            else {
+            } else {
                 window.localStorage.removeItem('user');
 
-                this.props.setAuthUserData(null,null, null)
+                this.props.setAuthUserData(null, null, null)
             }
         }
         console.log("this.props.userId", this.props.userId)
 
-            // alert(2)
-            // this.getUsers();
-            // this.props.getUsers(this.props.pageSize, this.props.currentPage);
+        // alert(2)
+        // this.getUsers();
+        // this.props.getUsers(this.props.pageSize, this.props.currentPage);
 
 
         // let result = usersApi.getActiveUsers(30);
@@ -151,12 +181,12 @@ class Project extends React.Component {
     getProjectNameOrId() {
         console.log("[1]", this.projectId)
         console.log("[2]", this.props.projects)
-       let result = this.props.projects.filter(item => item.projectid == this.projectId)
+        let result = this.props.projects.filter(item => item.projectid == this.projectId)
         console.log(result);
         return result[0];
     }
 
-    state = initialData;
+    // state = initialData;
 
     editProject = (title, buttonName, id, text) => {
         this.props.openModal(<EditModalContainer title={title} id={id} text={text} parameters={{buttonName}}/>);
@@ -202,9 +232,7 @@ class Project extends React.Component {
         // }
 
 
-
-
-        if(type === 'column') {
+        if (type === 'column') {
             if (!destination || source.index === destination.index) {
                 return;
             }
@@ -214,16 +242,15 @@ class Project extends React.Component {
             console.log("cloneObjColumns", cloneObjColumns);
             // console.log(cloneColumnOrderTmp === this.props.columnOrder);
             cloneObjColumns[this.props.columnOrder[source.index]].position = this.props.columns[this.props.columnOrder[destination.index]].position
-            if(destination.index > source.index) {
-                for(let i = destination.index; i >= 0; i--) {
-                    if(i === source.index) {
+            if (destination.index > source.index) {
+                for (let i = destination.index; i >= 0; i--) {
+                    if (i === source.index) {
                         continue;
                     }
                     cloneObjColumns[this.props.columnOrder[i]].position = +cloneObjColumns[this.props.columnOrder[i]].position - 1;
                 }
-            }
-            else {
-                for(let i = destination.index; i < source.index; i++) {
+            } else {
+                for (let i = destination.index; i < source.index; i++) {
                     cloneObjColumns[this.props.columnOrder[i]].position = +cloneObjColumns[this.props.columnOrder[i]].position + 1;
                 }
             }
@@ -249,7 +276,6 @@ class Project extends React.Component {
             // let sortedColumns = newColumns.map((column, index) => {
             //
             // })
-
 
 
             this.props.onDragEnd(result);
@@ -291,8 +317,6 @@ class Project extends React.Component {
         // }
 
 
-
-
         console.log("this.props.columns[source.droppableId]", this.props.columns[source.droppableId])
         console.log("this.props.columns[destination.droppableId]", this.props.columns[destination.droppableId]);
 
@@ -313,20 +337,17 @@ class Project extends React.Component {
             })
 
 
-
-
-            if(destination.index > source.index) {
-                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index-1].position;
-                for(let i = destination.index - 1; i >= 0; i--) {
+            if (destination.index > source.index) {
+                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index - 1].position;
+                for (let i = destination.index - 1; i >= 0; i--) {
                     // if(i === source.index) {
                     //     continue;
                     // }
                     tmpTasksArr[i].position = +tmpTasksArr[i].position - 1;
                 }
-            }
-            else {
+            } else {
                 tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index + 1].position;
-                for(let i = destination.index + 1; i <= source.index; i++) {
+                for (let i = destination.index + 1; i <= source.index; i++) {
                     tmpTasksArr[i].position = +tmpTasksArr[i].position + 1;
                 }
             }
@@ -415,28 +436,26 @@ class Project extends React.Component {
         console.log("returnedTask", returnedTask);
         let tmpTasksArr = finishTaskIds.map(task => {
             // console.log("taskT", task)
-            if(task === returnedTask[0]) {
+            if (task === returnedTask[0]) {
                 // console.log("zzz", task, returnedTask);
                 this.props.tasks[task].columnid = String(finish.columnId);
             }
             return this.props.tasks[task];
         })
 
-        if(destination.index == tmpTasksArr.length - 1) {
+        if (destination.index == tmpTasksArr.length - 1) {
             console.log("AP", tmpTasksArr[destination.index].position, +tmpTasksArr[destination.index].position + 1)
             console.log("destination.index", destination.index)
             console.log("tmp.length - 1", tmpTasksArr.length - 1)
-            if(tmpTasksArr.length - 1 == 0) {
+            if (tmpTasksArr.length - 1 == 0) {
                 tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index].position + 1;
-            }
-        else {
-                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index-1].position + 1;
+            } else {
+                tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index - 1].position + 1;
             }
 
-        }
-        else {
-            tmpTasksArr[destination.index].position = tmpTasksArr[destination.index+1].position;
-            for(let i = tmpTasksArr.length - 1; i > destination.index; i--) {
+        } else {
+            tmpTasksArr[destination.index].position = tmpTasksArr[destination.index + 1].position;
+            for (let i = tmpTasksArr.length - 1; i > destination.index; i--) {
                 tmpTasksArr[i].position = +tmpTasksArr[i].position + 1;
             }
         }
@@ -514,7 +533,6 @@ class Project extends React.Component {
     };
 
 
-
     onOpenOrCloseInviteList = () => {
         this.props.setIsOpenInviteList();
     }
@@ -524,6 +542,9 @@ class Project extends React.Component {
         this.props.openModal(<EditModalContainer title={title} parameters={{projectListId, position, buttonName}}/>);
     };
 
+    openFormForNewColumn = () => {
+        this.props.openFormForNewColumn();
+    };
 
 
     onLeaveProject = () => {
@@ -532,64 +553,122 @@ class Project extends React.Component {
 
     render() {
 
-console.log("[dsds]",this.projectId);
+        console.log("[dsds]", this.projectId);
         console.log("1111111111111111111", this.props)
         console.log("ACTIVE_USERS", this.props.activeUsers)
         console.log("USERS", this.props.users)
         console.log("this.props.tasks", this.props.tasks);
         console.log("this.props.taskInfo", this.props.taskInfo);
         console.log("this.props.projects", this.props.projects);
-let res = this.props.projects.find(project => project.projectid == this.projectId);
-if(!res && this.props.projects.length !== 0) {
-    return <Redirect to={'/projects'}/>
-}
+        let res = this.props.projects.find(project => project.projectid == this.projectId);
+        if (!res && this.props.projects.length !== 0) {
+            return <Redirect to={'/projects'}/>
+        }
 
-console.log("res", res)
-        return this.props.projects.length !== 0 ? <div>
-            {this.props.taskInfo && this.props.isTaskInfo  && this.props.tasks[this.props.taskInfo.id] ? <TaskInfo/> : ''}
+        console.log("res", res)
+        return this.props.projects.length !== 0 ? <div className={classes.mainWrap}>
+            {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
+                <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
-            <div onClick={() => {this.editProject("Edit project", "Save changes",  this.projectId, this.getProjectNameOrId().name)}}>{this.getProjectNameOrId().name}</div>
-            <div onClick={() => {this.onLeaveProject()}}>
-                Leave the project</div>
-            <div onClick={() => {this.onOpenOrCloseInviteList()}}>Invite</div>
+                <div onClick={() => {
+                    this.editProject("Edit project", "Save changes", this.projectId, this.getProjectNameOrId().name)
+                }}>{this.getProjectNameOrId().name}</div>
+                <div onClick={() => {
+                    this.onLeaveProject()
+                }}>
+                    Leave the project
+                </div>
+                <div onClick={() => {
+                    this.onOpenOrCloseInviteList()
+                }}>Invite
+                </div>
                 <div className={classes.containerBlock}>
 
-                    {this.props.IsOpenInviteList ? <InviteList projectId={this.projectId} userName={this.props.userName} users={this.props.users} /> : ''}
+                    {this.props.IsOpenInviteList ? <InviteList projectId={this.projectId} userName={this.props.userName}
+                                                               users={this.props.users}/> : ''}
                 </div>
-                <button onClick={() => {this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)}}>New column</button>
-            <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                {(provided) => (
+                {/*<button onClick={() => {*/}
+                {/*    this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)*/}
+                {/*}}>New column*/}
+                {/*</button>*/}
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                        {(provided) => (
 
 
-                    <div className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
-                        {this.props.columnOrder.map((columnId, index) => {
+                            <div className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
+                                {this.props.columnOrder.map((columnId, index) => {
 
-                            const column = this.props.columns[columnId];
-                            console.log("column.taskIds", column.taskIds)
-                            let res = column.taskIds.filter(task => {
-                                return this.props.tasks[task] === undefined ? false : true;
-                            })
-                            console.log("res", res)
-                            const tasks = res.map(
-                                taskId => {
-                                    console.log("this.props.tasks", this.props.tasks)
-                                    console.log("this.props.columns", this.props.columns)
-                                    console.log("taskId", taskId)
-                                    return this.props.tasks[taskId]
-                                } ,
-                            );
-                            // let indexUndefined = tasks.indexOf(undefined);
-                            // console.log("indexUndefined", indexUndefined);
-                            // indexUndefined !== -1 && tasks.splice(indexUndefined, 1);
-                            // console.log("this.props.columns", tasks)
-                            return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo} addNewTask={this.props.addNewTask} setTaskInfo={this.props.setTaskInfo} onRemoveColumn={this.props.onRemoveColumn} projectId={this.props.match.params.projectId} onUpdateColumn={this.props.onUpdateColumn} isInput={this.props.isInput} changeIsInput={this.props.changeIsInput} key={column.id} column={column} tasks={tasks} index={index}/>;
-                        })}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
+                                    const column = this.props.columns[columnId];
+                                    console.log("column.taskIds", column.taskIds)
+                                    let res = column.taskIds.filter(task => {
+                                        return this.props.tasks[task] === undefined ? false : true;
+                                    })
+                                    console.log("res", res)
+                                    const tasks = res.map(
+                                        taskId => {
+                                            console.log("this.props.tasks", this.props.tasks)
+                                            console.log("this.props.columns", this.props.columns)
+                                            console.log("taskId", taskId)
+                                            return this.props.tasks[taskId]
+                                        },
+                                    );
+                                    // let indexUndefined = tasks.indexOf(undefined);
+                                    // console.log("indexUndefined", indexUndefined);
+                                    // indexUndefined !== -1 && tasks.splice(indexUndefined, 1);
+                                    // console.log("this.props.columns", tasks)
+                                    return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo}
+                                                    addNewTask={this.props.addNewTask}
+                                                    setTaskInfo={this.props.setTaskInfo}
+                                                    onRemoveColumn={this.props.onRemoveColumn}
+                                                    projectId={this.props.match.params.projectId}
+                                                    onUpdateColumn={this.props.onUpdateColumn}
+                                                    isInput={this.props.isInput}
+                                                    changeIsInput={this.props.changeIsInput} key={column.id}
+                                                    column={column} tasks={tasks} index={index}/>;
+                                })}
+                                {/*<div className={classes.itemCreateColumn}>*/}
+                                {/*    fdsfs*/}
+                                {/*</div>*/}
+
+                                {this.props.isOpenFormNewColumn ? <div className={` ${classes.itemCreateColumnInput}`}>
+
+                                    <div>
+                                        <input ref={this.newRef} onChange={this.changeText} value={this.state.text} autoFocus={true} className={classes.itemInputTitle} placeholder={"Enter title of column"} type="text"/>
+                                    </div>
+                                    <div className={classes.itemCreateColumnWrap}>
+                                    <input onClick={() => {this.createNewColumn(this.getProjectNameOrId().projectid)}} className={classes.itemInput} value={"add column"} type={'button'}/>
+
+
+                                        <div onClick={() => this.openFormForNewColumn()} className={classes.itemLeftColumn}>
+                                            <FontAwesomeIcon  className={`fa-2x`}
+                                                             icon={faTimes}/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                    :
+                                    <div onClick={() => {this.openFormForNewColumn()}} className={classes.itemCreateColumn}>
+
+                                    <div className={classes.itemLeftColumn}>
+                                        <FontAwesomeIcon className={`fa-xs`}
+                                                         icon={faPlus}/>
+                                    </div>
+                                    <div>
+                                        add another column
+                                    </div>
+
+
+                                </div>}
+                                {provided.placeholder}
+
+                            </div>
+                        )}
+
+                    </Droppable>
+
+                </DragDropContext>
+
             </div>
         </div> : ''
 
@@ -599,6 +678,7 @@ console.log("res", res)
 
 const mapStateToProps = (state) => ({
     columns: state.columnsPage.columns,
+    columnsOrder: state.columnsPage.columnOrder,
     columnOrder: state.columnsPage.columnOrder,
     tasks: state.columnsPage.tasks,
     projects: state.projectsPage.projects,
@@ -610,9 +690,31 @@ const mapStateToProps = (state) => ({
     activeUsers: state.usersPage.activeUsers,
     userName: state.auth.userName,
     userId: state.auth.userId,
+    isOpenFormNewColumn: state.columnsPage.isOpenFormNewColumn,
 })
 
 
 let AuthRedirectComponent = withAuthRedirect(Project);
 
-export default connect(mapStateToProps, {leaveProject, getAllProjects, setAuthUserData, addToProject, removeFromProject, getAllUsers, setIsOpenInviteList, addNewTask, updateTasksPosAndColumnId, setTaskInfo, getColumns, getAllTasks, onDragEnd, openModal, onUpdateColumnsPosition, onUpdateColumn, onRemoveColumn, changeIsInput})(AuthRedirectComponent);
+export default connect(mapStateToProps, {
+    leaveProject,
+    getAllProjects,
+    setAuthUserData,
+    addToProject,
+    removeFromProject,
+    getAllUsers,
+    setIsOpenInviteList,
+    addNewTask,
+    updateTasksPosAndColumnId,
+    setTaskInfo,
+    getColumns,
+    getAllTasks,
+    onDragEnd,
+    openModal,
+    onUpdateColumnsPosition,
+    onUpdateColumn,
+    onRemoveColumn,
+    changeIsInput,
+    openFormForNewColumn,
+    createNewColumn
+})(AuthRedirectComponent);

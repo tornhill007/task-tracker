@@ -1,11 +1,19 @@
 .App {
   text-align: center;
+  min-height: 100vh;
 
 }
+/*html {*/
+/*  !*height: 100vh;*!*/
+/*}*/
+
+/*.dashboard {*/
+/*  height: 100vh!important;*/
+/*}*/
 
 .Home {
   background: #eae6ff;
-  height: 100vh;
+  /*height: 100vh;*/
   /*padding-top: 75px;*/
   padding: 75px 300px 0 300px;
 }

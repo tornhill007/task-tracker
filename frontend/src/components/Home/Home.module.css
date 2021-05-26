@@ -4,7 +4,7 @@
 }
 
 .img {
-    width: 100%;
+    width: 400px;
     height: auto;
 }
 
@@ -30,12 +30,14 @@
 }
 
 .title {
+    width: 100%;
     font-size: 3rem;
     line-height: 1.25;
     margin-bottom: 10px;
 }
 
 .text {
+    width: 100%;
     font-size: 1.2rem;
     line-height: 1.5;
 }

@@ -1,7 +1,7 @@
 .container {
     text-align: left;
-/*z-index: -1;*/
-    /*position: absolute;*/
+    z-index: 1;
+    position: relative;
     border-radius: 3px;
     padding: 8px;
     margin-bottom: 8px;
@@ -10,6 +10,7 @@
     box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
     /*overflow: hidden;*/
     /*background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};*/
+    /*width: 95%;*/
 }
 
 .container:hover {
@@ -56,27 +57,39 @@
     width: 100%;
 }
 .icon {
-    /*position: relative;*/
-    /*z-index: 1000;*/
-    /*left: 100px;*/
-    /*top: 22px;*/
-    /*padding: 2px;*/
-    /*z-index: 999;*/
-    /*top: 24px;*/
-    /*float: right;*/
-    /*padding: 2px 6px 6px 6px;*/
-    /*padding-left: 150px;/*/
-    /*left: 100px;*/
-    /*padding: 10px;*/
-    /*left: 2px;*/
-    /*left: 50%;*/
-    /*margin-left: -150px*/
+    color: gray;
+    position: absolute;
+    left: 223px;
+    border-radius: 3px;
+    top: .1562rem;
+    padding: 9px;
+
+}
+
+.icon1 {
+    color: gray;
+    position: absolute;
+    left: 215px;
+    border-radius: 3px;
+    top: .1562rem;
+    padding: 9px;
+
 }
 /*.test {*/
 /*    padding: 10px;*/
 /*}*/
 
 .icon:hover {
-    background-color: gray;
-
+    background-color: #e8e8e8;
+    color: black;
 }
+
+.icon1:hover {
+    background-color: #e8e8e8;
+    color: black;
+}
+
+/*.taskList*/
+/*.u-fancy-scrollbar::-webkit-scrollbar-track-piece {*/
+/*    background: rgba(9,30,66,.08);*/
+/*}*/

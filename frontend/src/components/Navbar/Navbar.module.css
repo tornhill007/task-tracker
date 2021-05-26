@@ -1,6 +1,15 @@
 .nav {
     grid-area: nav;
     background-color: crimson;
+
+}
+
+.navProject {
+    position: absolute;
+    width: 100%;
+    opacity: 0.5;
+    z-index: 1;
+    top: 40px;
 }
 
 .nav a {

@@ -4,6 +4,9 @@ import Tasks from '../Tasks/Tasks';
 import classes from './Columns.module.css';
 import ColumnName from "./ColumnName/ColumnsName";
 import TaskInfo from "../Tasks/TaskInfo/TaskInfo";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPen, faPlus} from '@fortawesome/free-solid-svg-icons'
+import TextareaAutosize from 'react-textarea-autosize';
 
 // const Container = styled.div`
 //   margin: 8px;
@@ -33,12 +36,16 @@ export default class Column extends React.Component {
             isInput: false,
             text: this.props.column.name,
             textNewTask: '',
-            isTaskInput: false
+            isTaskInput: false,
+            isScroll: false,
         };
+
 
         this.changeText = this.changeText.bind(this);
         this.changeTaskText = this.changeTaskText.bind(this);
     }
+
+    inputRef = React.createRef();
 
     // state = {
     //     // id: this.props.id,
@@ -97,25 +104,39 @@ export default class Column extends React.Component {
     onCalculateIndex(allTasks) {
         console.log("qqq", allTasks)
 
-        // console.log("this.props.column.taskIds", this.props.column.taskIds)
-        // console.log("this.props.column.taskIds[this.props.column.taskIds.length-1]", this.props.column.taskIds[this.props.column.taskIds.length-1])
-        // console.log("allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1", +allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1)
         if (this.props.column.taskIds.length === 0) {
             return 1
         } else return +allTasks[this.props.column.taskIds[this.props.column.taskIds.length - 1]].position + 1
         // +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1
     }
 
-    // onEditColumn() {
-    //     // this.setState({
-    //     //     isInput: !this.state.isInput
-    //     // })
-    //     this.props.changeIsInput();
-    // }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.tasks.length !== this.props.tasks.length) {
+            const block = document.getElementById('test' + this.props.column.id);
+            const hasVerScroll = block.scrollHeight > block.clientHeight;
+            this.setState({
+                isScroll: hasVerScroll
+            })
+        }
+    }
+
+    componentDidMount() {
+
+        const block = document.getElementById('test' + this.props.column.id);
+        const hasVerScroll = block.scrollHeight > block.clientHeight;
+        this.setState({
+            isScroll: hasVerScroll
+        })
+    }
+
 
     render() {
+
+        console.log("00000000000000000000000000", this.props.tasks)
         console.log("qthis.props.tasksqq", this.props.tasks)
         console.log("qthis.props.tasksqqAll", this.props.allTasks)
+        console.log("REEEEEEEEEEF", this.inputRef)
         // console.log("STATE", +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1)
         // console.log("this.props.tasks111", this.props.column.taskIds[this.props.column.taskIds.length-1])
         return (
@@ -142,7 +163,7 @@ export default class Column extends React.Component {
                         {/*</button>*/}
                         <Droppable droppableId={this.props.column.id} type="task">
                             {(provided, snapshot) => (
-                                <div className={classes.taskList}
+                                <div id={'test' + this.props.column.id} className={classes.taskList}
                                      ref={provided.innerRef}
                                      {...provided.droppableProps}
                                      isDraggingOver={snapshot.isDraggingOver}
@@ -151,27 +172,57 @@ export default class Column extends React.Component {
                                     {
                                         this.props.tasks.length === 0 ? '' : this.props.tasks[0] === undefined ? '' : this.props.tasks.map((task, index) => {
                                             console.log("[task]", task);
-                                            return <Tasks taskInfo={this.props.taskInfo}
-                                                          setTaskInfo={this.props.setTaskInfo}
-                                                          projectId={this.props.projectId} key={task.id} task={task}
-                                                          index={index}/>
+                                            return <Tasks
+                                                isScroll={this.state.isScroll}
+                                                taskInfo={this.props.taskInfo}
+                                                setTaskInfo={this.props.setTaskInfo}
+                                                projectId={this.props.projectId} key={task.id} task={task}
+                                                index={index}/>
                                         })}
                                     {}
                                     {provided.placeholder}
-                                    {this.state.isTaskInput ? <input onBlur={() => {
-                                        this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()
-                                    }} autoFocus={true} placeholder={"Please, enter header"}
-                                                                     onChange={this.changeTaskText}
-                                                                     value={this.state.textNewTask}/> : ''}
+                                    {/*{this.state.isTaskInput ? <input onBlur={() => {*/}
+                                    {/*    this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()*/}
+                                    {/*}} autoFocus={true} placeholder={"Please, enter header"}*/}
+                                    {/*                                 onChange={this.changeTaskText}*/}
+                                    {/*                                 value={this.state.textNewTask}/> : ''}*/}
+                                    {this.state.isTaskInput ? <div className={classes.containerTask}
+
+                                    >
+                                        <div>
+
+                                            <div className={`${classes.leftItem}`}>
+                                                <TextareaAutosize onBlur={() => {
+                                                    this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()
+                                                }} onChange={this.changeTaskText} value={this.state.textNewTask}
+                                                                  autoFocus={true} placeholder={"Please, enter header"}
+                                                                  className={`${this.state.isScroll ? classes.textareaItemScroll : classes.textareaItem}`}/>
+                                            </div>
+
+                                            {/*{this.state.isActiveTask ? <FontAwesomeIcon className={`fa-xs` + ` ${classes.positionIcon} ${classes.icon}`} icon={faPen}/> : ''}*/}
+                                            {/*<div contentEditable={true} className={classes.textareaItem} onBlur={() => {*/}
+                                            {/*    this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()*/}
+                                            {/*}} autoFocus={true} placeholder={"Please, enter header"}*/}
+                                            {/*     onChange={this.changeTaskText}*/}
+                                            {/*     value={this.state.textNewTask}/>*/}
+                                        </div>
+
+                                    </div> : ''}
                                 </div>
                             )}
 
                         </Droppable>
+                        <div className={classes.wrapItemFooter}>
+                            <div onClick={() => {
+                                this.onOpenInput()
+                            }} className={classes.itemFooterButton}>
+                                <div className={classes.itemFooterButtonLeft}><FontAwesomeIcon className={`fa-xs`}
+                                                                                               icon={faPlus}/></div>
+                                <div className={classes.itemButton}>add another task
+                                </div>
 
-                        <button onClick={() => {
-                            this.onOpenInput()
-                        }}>add task
-                        </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </Draggable>

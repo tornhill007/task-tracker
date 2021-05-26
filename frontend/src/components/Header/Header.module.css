@@ -9,7 +9,18 @@
     background-color: #026AA7;
     text-align: center;
     align-items: center;
+
 }
+
+.headerProject {
+    background-color: rgba(0, 0, 0, 0.32);
+    position: absolute;
+    /*opacity: 0.5;*/
+    width: 100%;
+    z-index: 1;
+}
+
+
 
 
 .headerHome {
@@ -26,6 +37,18 @@
     align-items: center;
 }
 
+.img {
+    width: 100%;
+}
+
+.wrapImg {
+    width: 35px;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+
 .headerHomeLeftBlock {
     /*color: #5E6C84;*/
     color: #091e42;
@@ -37,6 +60,60 @@
 .headerHomeLeftBlock:hover {
     opacity: .8;
 }
+
+.headerHomeLeftBlockMain {
+    /*color: #5E6C84;*/
+    display: flex;
+    font-size: 2em;
+    color: #82b6d2;
+    font-weight: 700;
+    /*font-size: 1.5em!important;*/
+    cursor: pointer;
+}
+
+.svgItem {
+    fill: #82b6d2;
+}
+
+/*.svgItem:hover {*/
+/*    fill: #cde2ed;*/
+/*}*/
+
+.headerHomeLeftBlockMain:hover .svgItem {
+    fill: #cde2ed;
+}
+
+.headerHomeLeftBlockMain:hover{
+    color: #cde2ed;
+}
+
+.headerHomeLeftBlockMainProject {
+    color: white;
+    opacity: 0.5;
+}
+
+.svgItemProject {
+    fill: white;
+
+}
+
+
+.headerHomeLeftBlockMainProject:hover .svgItemProject {
+    fill: white;
+
+}
+
+.headerHomeLeftBlockMainProject:hover{
+    color: white;
+    opacity: 0.8;
+}
+
+
+
+/*.headerHomeLeftBlockMain:hover {*/
+/*    color: #cde2ed;*/
+
+/*}*/
 
 
 .itemRight {
@@ -214,12 +291,25 @@
 }
 
 .itemLeft {
+    display: flex;
+    width: 33.3%;
+}
+
+.itemLeftMain {
+    display: flex;
+    justify-content: center;
+    /*flex-direction: row;*/
+    width: 33.3%;
+}
+
+.itemCenter {
     width: 33.3%;
 }
 
 .headerHomeLeftBlock {
     font-size: 2em;
 }
+
 
 .itemCenter {
     width: 33.3%;

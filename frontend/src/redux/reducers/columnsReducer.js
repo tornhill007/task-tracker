@@ -17,8 +17,10 @@ const UPDATE_COLUMN = 'UPDATE_COLUMN';
 const SET_ALL_TASKS = 'SET_ALL_TASKS';
 const SET_TASK_INFO = 'SET_TASK_INFO';
 const CLOSE_TASK_INFO = 'CLOSE_TASK_INFO';
+const OPEN_FORM_FOR_NEW_COLUMN = 'OPEN_FORM_FOR_NEW_COLUMN';
 
 let initialState = {
+    isOpenFormNewColumn: false,
     isInput: false,
     isOpen: false,
     content: null,
@@ -41,6 +43,11 @@ const columnsReducer = (state = initialState, action) => {
                 ...state,
                 isOpen: true,
                 content: action.content
+            };
+            case OPEN_FORM_FOR_NEW_COLUMN:
+            return {
+                ...state,
+                isOpenFormNewColumn: !state.isOpenFormNewColumn,
             };
         case CHANGE_IS_INPUT:
             return {
@@ -240,6 +247,7 @@ export const onDragEnd = (result) => ({
 // })
 
 export const openModal = (content) => ({type: OPEN_MODAL, content});
+export const openFormForNewColumn = () => ({type: OPEN_FORM_FOR_NEW_COLUMN});
 export const closeModal = () => ({type: CLOSE_MODAL});
 export const changeIsInput = () => ({type: CHANGE_IS_INPUT});
 export const setTaskInfo = (taskInfo) => ({type: SET_TASK_INFO, taskInfo});

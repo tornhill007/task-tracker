@@ -7,8 +7,15 @@
     background-color: #ebecf0;
     display: flex;
     flex-direction: column;
+    /*float: left;*/
     color: #172b4d;
     width: 272px;
+/*float: left;*/
+    /*white-space: nowrap;*/
+    /*float: left;*/
+   /*width: 1000px;*/
+    /*box-sizing: border-box;*/
+    /*display: inline-block;*/
     /*margin: 0 4px;*/
     /*height: 100%;*/
     /*box-sizing: border-box;*/
@@ -17,6 +24,61 @@
     /*white-space: nowrap;*/
 
 }
+
+.containerTask {
+    text-align: left;
+    z-index: 1;
+    position: relative;
+    border-radius: 3px;
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    word-break: break-all;
+    box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+}
+
+.leftItem {
+    width: 100%;
+    height: 100%;
+    resize: vertical;
+}
+.textareaItem:focus {
+    outline: none;
+}
+
+.textareaItemScroll:focus {
+    outline: none;
+}
+
+.textareaItemScroll {
+    width: 230px;
+    resize: none;
+    border: none;
+    min-height: 50px;
+    max-height: 200px;
+    display: inline-block;
+}
+
+.textareaItem {
+    display: inline-block;
+    /*border: solid 1px #000;*/
+    min-height: 50px;
+    max-height: 200px;
+    width: 240px;
+    /*max-height: 162px;*/
+    border: none;
+    /*overflow: hidden;*/
+    /*overflow-wrap: break-word;*/
+    /*resize: vertical;*/
+    resize: none;
+    /*overflow: hidden;*/
+}
+
+
+
+/*.textareaItem:focus {*/
+/*    outline: none;*/
+/*}*/
 
 .title {
     font-size: 14px;
@@ -49,6 +111,31 @@
 
     /*min-height: 50px;*/
 }
+
+.itemButton {
+    /*margin-top: 5px;*/
+    width: 60%;
+    /*text-align: left;*/
+    /*margin-left: 20px;*/
+}
+
+.taskList::-webkit-scrollbar {
+    width: 8px;
+    /*height: 8px;*/
+
+}
+
+.taskList::-webkit-scrollbar-track-piece {
+    background: rgba(9,30,66,.08);
+    border-radius: 5px;
+}
+
+.taskList::-webkit-scrollbar-thumb {
+    background: #cccdd6;
+    border-radius: 5px;
+    /*height: 100px!important;*/
+
+}
 .itemTitleRigth {
     /*float: left;*/
 
@@ -60,4 +147,31 @@
     cursor: pointer;
     background-color: rgba(9,30,66,.08);
     z-index: 1000;
+}
+
+.itemFooterButton {
+    display: flex;
+    justify-content: flex-start;
+    padding: 5px 8px 5px 8px;
+
+}
+.itemFooterButtonRight {
+    width: 5%;
+}
+
+.itemFooterButtonLeft {
+    display: flex;
+    align-items: center;
+}
+
+.wrapItemFooter {
+    padding: 8px 8px 5px 8px;
+}
+
+/*.itemFooterButtonLeft*/
+
+.itemFooterButton:hover {
+    background-color: rgba(9,30,66,.08);
+    cursor: pointer;
+    border-radius: 4px;
 }

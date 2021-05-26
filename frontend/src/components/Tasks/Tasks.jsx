@@ -27,7 +27,6 @@ export default class Task extends React.Component {
 
     render() {
 
-        console.log("vvvv", this.props)
         return (
             <Draggable draggableId={this.props.task.id} index={this.props.index}>
 
@@ -53,7 +52,7 @@ export default class Task extends React.Component {
                          draggable={snapshot.isDragging}
 
                     >
-                        <FontAwesomeIcon className={`fa-xs` + ` ${classes.icon}`} icon={faPen}/>
+                        {this.state.isActiveTask ? <FontAwesomeIcon onClick={(e) => {}} className={`fa-xs` + ` ${this.props.isScroll ? classes.icon1 : classes.icon}`} icon={faPen}/> : ''}
                         <div  className={`${classes.positionIcon}`}>
 
                             <div className={`${classes.leftItem}`}>{this.props.task.content}

@@ -1,13 +1,117 @@
 .wrap {
     border: 1px solid red;
+    /*width: 10000px;*/
 }
 
 .container {
     display: flex;
+    /*width: 500px;*/
+    /*white-space: nowrap;*/
+    /*overflow-x: auto;*/
+    /*overflow-x: auto;*/
+    /*width: 100vh;*/
+    /*display: inline-block;*/
+    /*width: 100vh;*/
+    /*width:5000px;*/
+}
 
+.itemAnotherColumn {
+    /*display: flex;*/
+    /*text-align: center;*/
+}
+
+.itemLeftColumn {
+    width: 15%;
+    color: #42526e;
+}
+
+.itemLeftColumn:hover {
+    color: #172b4d;
 }
 
 
+.itemCreateColumnWrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.itemInput {
+    margin: 6px;
+    background-color: #0079bf;
+    box-shadow: none;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    padding: 7px 10px;
+    font-size: 1rem;
+    /*font-weight: 200;*/
+}
+
+.itemInput:hover {
+    cursor: pointer;
+    background-color: #026aa7;
+}
+
+.itemCreateColumn {
+    display: flex;
+    align-items: center;
+    /*justify-content: flex-start;*/
+    background-color: rgba(0,0,0,.08);
+    height: 50px;
+    width: 272px;
+    margin: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.itemCreateColumnInput {
+    background-color: #ebecf0;
+    height: 93px;
+    /*background-color: rgba(0,0,0,.08);*/
+    /*height: 50px;*/
+    width: 272px;
+    margin: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.itemInputTitle {
+    margin-top: 5px;
+    width: 240px;
+    height: 30px;
+}
+
+
+.itemInputTitle {
+    /*padding: 1px 3px;*/
+    padding: 5px 8px;
+    outline: #0079bf auto 3px;
+}
+
+
+
+.itemCreateColumn:hover {
+    background-color: rgba(0,0,0,.16);
+}
+
+.itemCreateColumnInput:hover {
+    background-color: #ebecf0;
+}
+
+
+.mainWrap {
+    background: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2133x1600/0f3b61d73a4028608dfa43344ad0302a/photo-1620839954053-e446ef13fa2e.jpg");
+    background-position: 50%;
+    background-size: cover;
+    /*height: 100vh;*/
+    /*position: relative;*/
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    padding-top: 90px;
+
+}
 
 .map {
 
