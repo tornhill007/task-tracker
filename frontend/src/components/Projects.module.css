@@ -184,6 +184,7 @@
 }
 
 .listWrap {
+    box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
     height: 350px;
     background-color: #fff;
     color: #091e42;
@@ -214,7 +215,7 @@
     text-align: center;
     border-bottom: 1px solid hsl(0,0%,80%);
     width: 90%;
-    padding-top: 10px;
+    padding-top: 15px;
     padding-bottom: 10px;
     margin-bottom: 10px;
     display: flex;
@@ -229,6 +230,17 @@
 
 .itemWrap {
     text-align: center;
+
+}
+
+.itemWrapColumnMenu {
+    text-align: left;
+    padding: 10px 15px;
+}
+
+.itemWrapColumnMenu:hover {
+    background-color: rgba(9,30,66,.04);
+    cursor: pointer;
 }
 
 .itemColor {

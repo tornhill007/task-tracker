@@ -7,6 +7,7 @@ import TaskInfo from "../Tasks/TaskInfo/TaskInfo";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPen, faPlus, faTimes} from '@fortawesome/free-solid-svg-icons'
 import TextareaAutosize from 'react-textarea-autosize';
+import InviteList from "../InviteList";
 
 // const Container = styled.div`
 //   margin: 8px;
@@ -38,11 +39,14 @@ export default class Column extends React.Component {
             textNewTask: '',
             isTaskInput: false,
             isScroll: false,
+            isOpenColumnMenu: false
         };
 
 
         this.changeText = this.changeText.bind(this);
         this.changeTaskText = this.changeTaskText.bind(this);
+        this.onOpenColumnMenu = this.onOpenColumnMenu.bind(this);
+        this.onRemoveColumn = this.onRemoveColumn.bind(this);
     }
 
     inputRef = React.createRef();
@@ -73,6 +77,12 @@ export default class Column extends React.Component {
         })
     }
 
+    onKeyDown(e) {
+        if (e.key === 'Enter') {
+            this.onUpdateColumn(this.props.column.columnId, this.state.text, this.props.projectId)
+        }
+    }
+
     onUpdateColumn(idColumn, name, projectId) {
         if(!name || name === '') {
             this.setState({
@@ -91,6 +101,18 @@ export default class Column extends React.Component {
         this.setState({
             isTaskInput: !this.state.isTaskInput
         })
+    }
+
+    onOpenColumnMenu() {
+        this.setState({
+            isOpenColumnMenu: !this.state.isOpenColumnMenu
+        })
+    }
+
+    onKeyNewTask = (e) => {
+        if (e.key === 'Enter') {
+            this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks))
+        }
     }
 
     onAddNewTask(columnId, projectId, position) {
@@ -162,9 +184,10 @@ export default class Column extends React.Component {
                         {this.state.isInput ? <div className={classes.headerWrapper}>
                                 <div><input className={classes.itemTextAreaTitle} onFocus={this.handleFocus}
                                             onChange={this.changeText}
+                                            onKeyDown={(e) => this.onKeyDown(e)}
                                             onBlur={() => this.onUpdateColumn(this.props.column.columnId, this.state.text, this.props.projectId)}
                                             autoFocus={true} value={this.state.text}/></div>
-                                <div className={classes.itemTitleRigth} {...provided.dragHandleProps}><span>...</span>
+                                <div onClick={() => {this.onOpenColumnMenu()}} className={classes.itemTitleRigth} {...provided.dragHandleProps}><span>...</span>
                                 </div>
                             </div> :
                             <div className={classes.headerWrapper}>
@@ -172,10 +195,11 @@ export default class Column extends React.Component {
                                      className={classes.title}>
                                     <div><span>{this.props.column.name}</span></div>
                                 </div>
-                                <div className={classes.itemTitleRigth} {...provided.dragHandleProps}><span>...</span>
+                                <div onClick={() => {this.onOpenColumnMenu()}} className={classes.itemTitleRigth} {...provided.dragHandleProps}><span>...</span>
                                 </div>
-                            </div>}
-
+                            </div>
+                        }
+                        {this.state.isOpenColumnMenu ? <InviteList onRemoveColumn={this.onRemoveColumn} columnId={this.props.column.columnId} onOpenColumnMenu={this.onOpenColumnMenu} columnMenu={true} projectId={this.props.projectId}/>  : ''}
                         {/*<button onClick={() => {*/}
                         {/*    this.onRemoveColumn(this.props.column.columnId, this.props.projectId)*/}
                         {/*}}>Del*/}
@@ -211,7 +235,7 @@ export default class Column extends React.Component {
                                         <div>
 
                                             <div className={`${classes.leftItem}`}>
-                                                <TextareaAutosize  onChange={this.changeTaskText} value={this.state.textNewTask}
+                                                <TextareaAutosize onKeyDown={(e) => {this.onKeyNewTask(e)}}  onChange={this.changeTaskText} value={this.state.textNewTask}
                                                                   autoFocus={true} placeholder={"Please, enter header"}
                                                                   className={`${this.state.isScroll ? classes.textareaItemScroll : classes.textareaItem}`}/>
                                             </div>
