@@ -5,7 +5,7 @@ import classes from './Columns.module.css';
 import ColumnName from "./ColumnName/ColumnsName";
 import TaskInfo from "../Tasks/TaskInfo/TaskInfo";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPen, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {faPen, faPlus, faTimes} from '@fortawesome/free-solid-svg-icons'
 import TextareaAutosize from 'react-textarea-autosize';
 
 // const Container = styled.div`
@@ -53,6 +53,8 @@ export default class Column extends React.Component {
     //     text: this.props.column.name
     // };
 
+    handleFocus = (event) => event.target.select();
+
     changeText(event) {
         this.setState({
             text: event.target.value
@@ -72,6 +74,12 @@ export default class Column extends React.Component {
     }
 
     onUpdateColumn(idColumn, name, projectId) {
+        if(!name || name === '') {
+            this.setState({
+                isInput: !this.state.isInput
+            })
+            return;
+        }
         console.log("[123123123]", idColumn, name, projectId)
         this.props.onUpdateColumn(idColumn, name, projectId);
         this.setState({
@@ -87,6 +95,9 @@ export default class Column extends React.Component {
 
     onAddNewTask(columnId, projectId, position) {
         console.log("[POS]", position);
+        if(!this.state.textNewTask || this.state.textNewTask === '') {
+            return;
+        }
         this.props.addNewTask(this.state.textNewTask, columnId, projectId, position);
         this.setState({
             isTaskInput: !this.state.isTaskInput
@@ -124,6 +135,9 @@ export default class Column extends React.Component {
     componentDidMount() {
 
         const block = document.getElementById('test' + this.props.column.id);
+        // const block1 = document.getElementById('qwe' + + this.props.column.id);
+        // debugger
+
         const hasVerScroll = block.scrollHeight > block.clientHeight;
         this.setState({
             isScroll: hasVerScroll
@@ -145,9 +159,14 @@ export default class Column extends React.Component {
 
 
                     <div {...provided.draggableProps} ref={provided.innerRef} className={classes.container}>
-                        {this.state.isInput ? <input onChange={this.changeText}
-                                                     onBlur={() => this.onUpdateColumn(this.props.column.columnId, this.state.text, this.props.projectId)}
-                                                     autoFocus={true} value={this.state.text}/> :
+                        {this.state.isInput ? <div className={classes.headerWrapper}>
+                                <div><input className={classes.itemTextAreaTitle} onFocus={this.handleFocus}
+                                            onChange={this.changeText}
+                                            onBlur={() => this.onUpdateColumn(this.props.column.columnId, this.state.text, this.props.projectId)}
+                                            autoFocus={true} value={this.state.text}/></div>
+                                <div className={classes.itemTitleRigth} {...provided.dragHandleProps}><span>...</span>
+                                </div>
+                            </div> :
                             <div className={classes.headerWrapper}>
                                 <div onClick={() => this.onEditColumn()} {...provided.dragHandleProps}
                                      className={classes.title}>
@@ -192,9 +211,7 @@ export default class Column extends React.Component {
                                         <div>
 
                                             <div className={`${classes.leftItem}`}>
-                                                <TextareaAutosize onBlur={() => {
-                                                    this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()
-                                                }} onChange={this.changeTaskText} value={this.state.textNewTask}
+                                                <TextareaAutosize  onChange={this.changeTaskText} value={this.state.textNewTask}
                                                                   autoFocus={true} placeholder={"Please, enter header"}
                                                                   className={`${this.state.isScroll ? classes.textareaItemScroll : classes.textareaItem}`}/>
                                             </div>
@@ -213,15 +230,27 @@ export default class Column extends React.Component {
 
                         </Droppable>
                         <div className={classes.wrapItemFooter}>
-                            <div onClick={() => {
-                                this.onOpenInput()
-                            }} className={classes.itemFooterButton}>
-                                <div className={classes.itemFooterButtonLeft}><FontAwesomeIcon className={`fa-xs`}
-                                                                                               icon={faPlus}/></div>
-                                <div className={classes.itemButton}>add another task
+                            {this.state.isTaskInput ? <div className={classes.itemCreateColumnWrap}>
+                                <input onClick={() => {
+                                    this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks))
+                                }} className={classes.itemInput} value={"add another task"} type={'button'}/>
+                                <div onClick={() => {this.onOpenInput()}} className={` ${classes.itemLeftColumn} `}>
+                                    <FontAwesomeIcon  className={`fa-2x`}
+                                                      icon={faTimes}/>
                                 </div>
 
-                            </div>
+                            </div> :
+                                <div onClick={() => {
+                                    this.onOpenInput()
+                                }} className={classes.itemFooterButton}>
+                                    <div className={classes.itemFooterButtonLeft}><FontAwesomeIcon className={`fa-xs`}
+                                                                                                   icon={faPlus}/></div>
+                                    <div className={classes.itemButton}>add another task
+                                    </div>
+
+                                </div>}
+
+
                         </div>
                     </div>
                 )}

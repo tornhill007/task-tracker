@@ -20,14 +20,23 @@
     /*text-align: center;*/
 }
 
+
+
 .itemLeftColumn {
     width: 15%;
     color: #42526e;
+    /*color: white;*/
 }
+
+.itemLeftIcon {
+    color: white;
+}
+
 
 .itemLeftColumn:hover {
     color: #172b4d;
 }
+
 
 
 .itemCreateColumnWrap {
@@ -57,7 +66,9 @@
     display: flex;
     align-items: center;
     /*justify-content: flex-start;*/
-    background-color: rgba(0,0,0,.08);
+    /*background-color: rgba(0,0,0,.08);*/
+    background-color: hsla(0,0%,100%,.24);
+    color: white;
     height: 50px;
     width: 272px;
     margin: 8px;
@@ -92,7 +103,8 @@
 
 
 .itemCreateColumn:hover {
-    background-color: rgba(0,0,0,.16);
+    /*background-color: rgba(0,0,0,.16);*/
+    background-color: hsla(0,0%,100%,.32)
 }
 
 .itemCreateColumnInput:hover {
@@ -109,8 +121,60 @@
     height: 100%;
     position: fixed;
     width: 100%;
-    padding-top: 90px;
+    padding-top: 50px;
 
+}
+
+.inputItem {
+    /*width: 98%;*/
+    /*padding: 1%;*/
+    /*height: 31px!important;*/
+    /*font-size: 20px!important;*/
+    /*margin-left: 8px;*/
+    /*width: inherit;*/
+    /*padding-left: 8px;*/
+    /*margin: 0!important;*/
+    /*outline: #0079bf auto 3px;*/
+    /*outline: none;*/
+    /*border: .18rem solid #0079bf;*/
+    /*border-radius: 3px;*/
+    /*resize: horizontal!important;*/
+    /*border: solid 3px #f2f2f2;*/
+}
+
+/*inputItem:focus {*/
+/*    outline: none!important;*/
+/*}*/
+
+.wrapItemTitle {
+    /*width: 100%;*/
+    /*margin-left: 8px;*/
+    /*outline: #0079bf auto 3px;*/
+    /*border: none!important;*/
+    /*outline: none;*/
+    border-radius: 3px;
+}
+
+
+.wrapNavbar {
+    display: flex;
+}
+
+.itemNameProject {
+    color: white;
+    background-color: hsla(0,0%,100%,.24);
+    padding: 8px 12px;
+    /*background-color: red;*/
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 3px;
+    margin-left: 8px;
+    font-family: Arial;
+}
+
+.itemNameProject:hover {
+    background-color: hsla(0,0%,100%,.32);
 }
 
 .map {
@@ -121,9 +185,16 @@
 
 .listWrap {
     height: 350px;
-    background-color: aliceblue;
-    width: 20%;
+    background-color: #fff;
+    color: #091e42;
+    width: 280px;
+    z-index: 1001;
+    /*right: 10px;*/
+    /*left: 290px;*/
     text-align: left;
+    margin-top: 40px;
+    margin-left: 135px;
+    border-radius: 3px;
     position: absolute;
 }
 
@@ -134,6 +205,9 @@
 
 .itemName {
     padding-bottom: 3px;
+    color: #091e42!important;
+    font-size: 14px!important;
+    font-weight: 400!important;
 }
 
 .itemTitle {
@@ -145,7 +219,7 @@
     margin-bottom: 10px;
     display: flex;
     justify-content: flex-end;
-
+    color: #5e6c84;
 }
 
 .wrapperItem {
@@ -167,6 +241,21 @@
 
 .cursor {
     cursor: pointer;
+    color: #6b778c;
+}
+
+.cursor:hover {
+    color: #172b4d;
+}
+
+.itemText {
+    margin: 10px 20px;
+    color: #5e6c84;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .04em;
+
+    text-transform: uppercase;
 }
 
 .wrapIcon {
@@ -255,12 +344,23 @@
 }
 
 .itemName {
+    margin: 0 10px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: #fff;
     line-height: 20px;
     text-decoration: none;
     font-weight: 700;
     font-size: 16px;
     word-wrap: break-word;
+    padding: 6px;
+    border-radius: 3px;
+}
+
+.itemName:hover {
+    background-color: rgba(9,30,66,.04);
+    cursor: pointer;
 }
 
 
@@ -281,3 +381,53 @@
     /*min-width: 288px;*/
 }
 
+
+.imgItem {
+    margin-right: 10px;
+}
+
+.wrapIconMain {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 40px;
+    color: #fff;
+
+    height: 40px;
+    background-color: #00875a;
+    /*border: 1px solid #fff;*/
+}
+
+.containerIconName {
+    margin-right: 5px;
+    /*border: none;*/
+    /*box-shadow: none;*/
+    /*background-color: transparent;*/
+    /*display: block;*/
+    height: 32px;
+    /*margin-right: 0;*/
+    /*position: relative;*/
+    width: 32px;
+    /*maring: 5px;*/
+    /*outline: 0;*/
+}
+
+.wrapIconName {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 32px;
+    color: #fff;
+    height: 32px;
+    background-color: #00875a;
+    /*border: 1px solid #fff;*/
+}
+
+.itemGroupLeft {
+    display: flex;
+    align-items: center;
+}

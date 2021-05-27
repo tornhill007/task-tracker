@@ -16,13 +16,19 @@ import {columnsApi, usersApi} from "../api/api";
 import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import {getProjectName, getProjects} from "../redux/selectors/projectsSelector";
 import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
-import {createNewProject, getAllProjects, setIsOpenInviteList} from "../redux/reducers/projectsReducer";
+import {
+    createNewProject, editProject,
+    getAllProjects,
+    setIsOpenInputEditProject,
+    setIsOpenInviteList
+} from "../redux/reducers/projectsReducer";
 import {addToProject, getAllUsers, leaveProject, removeFromProject} from "../redux/reducers/usersReducer";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPlus, faTimes, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {faPlus, faTimes, faCheck, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {setAuthUserData} from "../redux/reducers/authReducer";
 import {Redirect} from "react-router-dom";
 import InviteList from "./InviteList";
+import AutosizeInput from 'react-input-autosize';
 
 // const initialData = {
 //     tasks: {
@@ -84,18 +90,42 @@ class Project extends React.Component {
 
         this.state = {
             // id: this.props.id,
-            text: this.props.text
+            text: this.props.text,
+            projectName: ''
         };
 
         this.changeText = this.changeText.bind(this);
+        this.changeProjectName = this.changeProjectName.bind(this);
     }
     newRef = React.createRef();
+
+    handleFocus = (event) => event.target.select();
+
+    save(id) {
+        // console.log(event.target.value)
+        const {projectName} = this.state;
+        console.log(projectName)
+        // this.setState({text: text});
+        // const text1 = this.newRef.current.value;
+        // console.log("event.target.value", text1);
+        this.props.editProject(id, projectName, this.props.userId);
+        this.onOpenInputEditProject();
+
+        // this.close();
+    }
 
     changeText(event) {
         this.setState({
             text: event.target.value
         });
     }
+
+    changeProjectName(event) {
+        this.setState({
+            projectName: event.target.value
+        });
+    }
+
 
     createNewColumn(projectListId) {
         const {text} = this.state;
@@ -191,6 +221,15 @@ class Project extends React.Component {
     editProject = (title, buttonName, id, text) => {
         this.props.openModal(<EditModalContainer title={title} id={id} text={text} parameters={{buttonName}}/>);
     };
+
+    onOpenInputEditProject = () => {
+        if(!this.state.projectName || this.state.projectName === '') {
+            this.setState({
+                projectName: this.getProjectNameOrId().name
+            });
+        }
+        this.props.setIsOpenInputEditProject();
+    }
 
 
     onDragEnd = async result => {
@@ -463,73 +502,7 @@ class Project extends React.Component {
         console.log("finishTaskIds", finishTaskIds);
         this.props.onDragEnd(result);
         this.props.updateTasksPosAndColumnId(tmpTasksArr, projectId);
-        // const newFinish = {
-        //     ...finish,
-        //     taskIds: finishTaskIds,
-        // };
-        //
-        // const newState = {
-        //     ...this.state,
-        //     columns: {
-        //         ...this.state.columns,
-        //         [newStart.id]: newStart,
-        //         [newFinish.id]: newFinish,
-        //     },
-        // };
-        // this.setState(newState);
 
-
-        // const start = this.state.columns[source.droppableId];
-        // const finish = this.state.columns[destination.droppableId];
-        //
-        // if (start === finish) {
-        //     console.log("[000]")
-        //     const newTaskIds = Array.from(start.taskIds);
-        //     newTaskIds.splice(source.index, 1);
-        //     newTaskIds.splice(destination.index, 0, draggableId);
-        //
-        //     const newColumn = {
-        //         ...start,
-        //         taskIds: newTaskIds,
-        //     };
-        //
-        //     const newState = {
-        //         ...this.state,
-        //         columns: {
-        //             ...this.state.columns,
-        //             [newColumn.id]: newColumn,
-        //         },
-        //     };
-        //
-        //     this.setState(newState);
-        //     return;
-        // }
-        //
-        // console.log("[111]")
-        // // Moving from one list to another
-        // const startTaskIds = Array.from(start.taskIds);
-        // startTaskIds.splice(source.index, 1);
-        // const newStart = {
-        //     ...start,
-        //     taskIds: startTaskIds,
-        // };
-        //
-        // const finishTaskIds = Array.from(finish.taskIds);
-        // finishTaskIds.splice(destination.index, 0, draggableId);
-        // const newFinish = {
-        //     ...finish,
-        //     taskIds: finishTaskIds,
-        // };
-        //
-        // const newState = {
-        //     ...this.state,
-        //     columns: {
-        //         ...this.state.columns,
-        //         [newStart.id]: newStart,
-        //         [newFinish.id]: newFinish,
-        //     },
-        // };
-        // this.setState(newState);
     };
 
 
@@ -552,7 +525,6 @@ class Project extends React.Component {
     }
 
     render() {
-
         console.log("[dsds]", this.projectId);
         console.log("1111111111111111111", this.props)
         console.log("ACTIVE_USERS", this.props.activeUsers)
@@ -564,29 +536,46 @@ class Project extends React.Component {
         if (!res && this.props.projects.length !== 0) {
             return <Redirect to={'/projects'}/>
         }
-
         console.log("res", res)
         return this.props.projects.length !== 0 ? <div className={classes.mainWrap}>
             {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
                 <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
-                <div onClick={() => {
-                    this.editProject("Edit project", "Save changes", this.projectId, this.getProjectNameOrId().name)
-                }}>{this.getProjectNameOrId().name}</div>
-                <div onClick={() => {
-                    this.onLeaveProject()
-                }}>
-                    Leave the project
-                </div>
-                <div onClick={() => {
-                    this.onOpenOrCloseInviteList()
-                }}>Invite
-                </div>
-                <div className={classes.containerBlock}>
+                <div className={classes.wrapNavbar}>
+                    {this.props.isOpenInputEditProject ? <div className={classes.wrapItemTitle}>
+                <AutosizeInput onFocus={this.handleFocus} spellCheck={false} inputStyle={{ border: 'none', outline: '.20rem solid #0079bf', fontSize: '18px', fontWeight: '700', margin: '0.15rem 0 2px 10px', height: '33px', padding: `0 10px 0 10px`,  fontFamily: 'Arial' }} value={this.state.projectName} onChange={this.changeProjectName} name="form-field-name" autoFocus={true} onBlur={() => {this.save(this.projectId)}}
+                    //     onClick={() => {
+                    //     this.editProject("Edit project", "Save changes", this.projectId, this.getProjectNameOrId().name)
+                    // }}
+                />
 
-                    {this.props.IsOpenInviteList ? <InviteList projectId={this.projectId} userName={this.props.userName}
-                                                               users={this.props.users}/> : ''}
+                    {/*{this.getProjectNameOrId().name}</input>*/}
+                    </div> : <div onClick={() => {this.onOpenInputEditProject()}} className={classes.itemNameProject}>
+                <span
+                    //     onClick={() => {
+                    //     this.editProject("Edit project", "Save changes", this.projectId, this.getProjectNameOrId().name)
+                    // }}
+                >
+
+                    {this.state.projectName !== '' ? this.state.projectName : this.getProjectNameOrId().name}</span>
+                    </div>}
+                {/*<div onClick={() => {*/}
+                {/*    this.onLeaveProject()*/}
+                {/*}}>*/}
+                {/*    Leave the project*/}
+                {/*</div>*/}
+                <div className={classes.itemNameProject} onClick={() => {
+                    this.onOpenOrCloseInviteList()
+                }}><span>Invite</span>
+
                 </div>
+                    <div className={classes.containerBlock}>
+
+                        {this.props.IsOpenInviteList ? <InviteList projectId={this.projectId} userName={this.props.userName}
+                                                                   users={this.props.users}/> : ''}
+                    </div>
+                </div>
+
                 {/*<button onClick={() => {*/}
                 {/*    this.addNewColumn("Add new column", "Add new column", this.getProjectNameOrId().projectid)*/}
                 {/*}}>New column*/}
@@ -650,7 +639,7 @@ class Project extends React.Component {
                                     :
                                     <div onClick={() => {this.openFormForNewColumn()}} className={classes.itemCreateColumn}>
 
-                                    <div className={classes.itemLeftColumn}>
+                                    <div className={`${classes.itemLeftIcon} ${classes.itemLeftColumn}`}>
                                         <FontAwesomeIcon className={`fa-xs`}
                                                          icon={faPlus}/>
                                     </div>
@@ -691,6 +680,7 @@ const mapStateToProps = (state) => ({
     userName: state.auth.userName,
     userId: state.auth.userId,
     isOpenFormNewColumn: state.columnsPage.isOpenFormNewColumn,
+    isOpenInputEditProject: state.projectsPage.isOpenInputEditProject
 })
 
 
@@ -716,5 +706,7 @@ export default connect(mapStateToProps, {
     onRemoveColumn,
     changeIsInput,
     openFormForNewColumn,
-    createNewColumn
+    createNewColumn,
+    setIsOpenInputEditProject,
+    editProject
 })(AuthRedirectComponent);

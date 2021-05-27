@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar/Navbar";
 const DashboardLayout = ({children}) => (
     <div>
         <HeaderContainer/>
-        <Navbar/>
+        {/*<Navbar/>*/}
         {children}
     </div>
 );

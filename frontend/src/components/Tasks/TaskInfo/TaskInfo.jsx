@@ -125,7 +125,13 @@ class TaskInfo extends React.Component {
     }
 
     onUpdateTaskName = (taskId, projectId) => {
-        console.log("taskId, projectId", taskId, projectId)
+        console.log("taskId, projectId", taskId, projectId);
+        if(!this.state.text || this.state.text === '') {
+            this.setState({
+                isInput: !this.state.isInput
+            })
+            return;
+        }
         this.props.updateTaskName(this.state.text, projectId, taskId);
         this.setState({
             isInput: !this.state.isInput

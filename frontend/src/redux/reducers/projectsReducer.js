@@ -6,10 +6,12 @@ import {getAllUsers} from "./usersReducer";
 
 const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
 const SET_IS_OPEN_INVITE_LIST = 'SET_IS_OPEN_INVITE_LIST';
+const SET_IS_OPEN_INPUT_EDIT_PROJECT = 'SET_IS_OPEN_INPUT_EDIT_PROJECT';
 
 let initialState = {
     projects: [],
-    IsOpenInviteList: false
+    IsOpenInviteList: false,
+    isOpenInputEditProject: false
 };
 
 const projectsReducer = (state = initialState, action) => {
@@ -18,6 +20,12 @@ const projectsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 projects: action.projects
+            };
+
+            case SET_IS_OPEN_INPUT_EDIT_PROJECT:
+            return {
+                ...state,
+                isOpenInputEditProject: !state.isOpenInputEditProject
             };
 
             case SET_IS_OPEN_INVITE_LIST:
@@ -38,6 +46,10 @@ export const setProjects = (projects) => ({
 
 export const setIsOpenInviteList = () => ({
     type: SET_IS_OPEN_INVITE_LIST
+});
+
+export const setIsOpenInputEditProject = () => ({
+    type: SET_IS_OPEN_INPUT_EDIT_PROJECT
 });
 
 export const createNewProject = (projectName, userId) => async (dispatch) => {
