@@ -403,7 +403,7 @@ class TaskInfo extends React.Component {
                                 {this.state.isOpenTaskMenu && <div style={{top: `${this.state.rectTop-47}px`}} className={classes.itemListInvite}>
                                     <InviteList title={this.state.title} activeParticipants={activeUsers} nameRef={this.state.nameRef} onCloseTaskMenu={this.onCloseTaskMenu} taskMenu={true}/>
                                 </div>}
-                                <div>
+                                <div className={classes.itemRigthBlockTitle}>
                                     ADD TO TASK
                                 </div>
                                 <div onClick={() => {this.getCoordinate(this.participantRef, 'Participants', 'Projects Participants')}} ref={this.participantRef} className={classes.itemList}>
@@ -416,7 +416,7 @@ class TaskInfo extends React.Component {
                                                      icon={faTag}/>
                                     <span className={classes.itemNameButton}>Markers</span>
                                 </div>
-                                <div>
+                                <div className={`${classes.itemRigthBlockSecondTitle} ${classes.itemRigthBlockTitle}`}>
                                     ACTIONS
                                 </div>
                                 <div onClick={() => {

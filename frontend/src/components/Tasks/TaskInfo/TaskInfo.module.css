@@ -70,6 +70,7 @@
 }
 
 .secondBlockLeft {
+    width: 70%;
     margin-top: 20px;
     margin-left: 20px;
 }
@@ -182,7 +183,11 @@
 }
 
 .itemBlockName {
+    /*padding: 10px 0;*/
+    display: flex;
+    align-items: center;
     margin-left: 10px;
+    height: 30px;
     font-size: 14px;
     width: 100%;
     color: #172b4d;
@@ -334,7 +339,7 @@
 }
 
 .thirdBlock {
-    width: 100%;
+    width: 30%;
  display: flex;
     justify-content: flex-end;
     margin-right: 20px;
@@ -371,4 +376,15 @@
 
 .itemNameButton{
     margin-left: 10px;
+}
+
+.itemRigthBlockTitle {
+    color: #5e6c84;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.itemRigthBlockSecondTitle {
+    margin-top: 50px;
 }
