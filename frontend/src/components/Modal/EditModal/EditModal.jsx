@@ -45,8 +45,6 @@ class EditModal extends React.Component {
     createNewColumn(projectListId) {
         // const projectId =
         const {text} = this.state;
-        console.log("this.props.columns", this.props.columns)
-        console.log("this.props.columnsOrder", this.props.columnsOrder)
 
         let position;
         if(this.props.columnsOrder.length === 0) {
@@ -68,13 +66,12 @@ class EditModal extends React.Component {
 
 
     render() {
-console.log("[EDITMODAL]",this.props);
-console.log("[text]",this.state.text);
+
         return (
 
             <div>
                 <div className="modal-body">
-                    {console.log("[2223232322]",this.props)}
+
                     <textarea maxlength="30" ref={this.newRef} onChange={this.changeText} value={this.state.text} cols="40"/>
                 </div>
                 <div className="modal-footer">

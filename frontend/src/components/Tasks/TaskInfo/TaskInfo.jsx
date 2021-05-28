@@ -16,25 +16,47 @@ import {
     setIsOpenUserList
 } from "../../../redux/reducers/usersReducer";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimes, faWindowMaximize, faTimesCircle, faBars} from '@fortawesome/free-solid-svg-icons'
+import {
+    faTimes,
+    faWindowMaximize,
+    faTimesCircle,
+    faBars,
+    faUser,
+    faTag,
+    faEraser
+} from '@fortawesome/free-solid-svg-icons'
 import TextareaAutosize from "react-textarea-autosize";
+import InviteList from "../../InviteList";
 
 class TaskInfo extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            // id: this.props.id,
-            markers: ["critical", "important", "not important", "bug"],
+            nameRef: '',
+            title: '',
+            rectTop: false,
             isInput: false,
             isTextArea: false,
             text: this.props.tasks[this.props.taskInfo.id].content,
-            textForDescription: this.props.tasks[this.props.taskInfo.id].description
+            textForDescription: this.props.tasks[this.props.taskInfo.id].description,
+            textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description,
+            isButton: false,
+            isOpenTaskMenu: false
         };
+        this.myRef = React.createRef();
+        this.participantRef = React.createRef();
+        this.MarkersRef = React.createRef();
 
-        // this.changeText = this.changeText.bind(this);
+
+        this.onCloseTaskMenu = this.onCloseTaskMenu.bind(this);
 
     }
+
+
+    handleFocus = (event) => event.target.focus();
+
+    // focusRef = React.createRef();
 
     componentDidMount() {
         this.props.getParticipantOnTask(this.props.taskInfo.projectid, this.props.taskInfo.taskid, this.props.userId);
@@ -58,9 +80,34 @@ class TaskInfo extends React.Component {
         });
     }
 
+    setIsButton = (isButton) => {
+        this.setState({
+            isButton: isButton
+        });
+    }
+
+    getCoordinate = (ref, refName, title) => {
+        let rect = ref.current.getBoundingClientRect();
+        console.log("ref", ref.current);
+        console.log("rect", rect);
+        this.setState({
+            isOpenTaskMenu: true,
+            rectTop: rect.top,
+            nameRef: refName,
+            title
+        })
+    }
+
+
     changeDescription = (event) => {
         this.setState({
-            textForDescription: event.target.value
+            textForDescription: event.target.value,
+        });
+    }
+
+    onCloseTaskMenu = () => {
+        this.setState({
+            isOpenTaskMenu: false,
         });
     }
 
@@ -84,7 +131,7 @@ class TaskInfo extends React.Component {
 
     onEditDescription() {
         this.setState({
-            isTextArea: !this.state.isTextArea
+            isTextArea: true
         })
     }
 
@@ -107,23 +154,23 @@ class TaskInfo extends React.Component {
         //  }
     }
 
-    checkParticipantInList(user) {
-        // console.log(users, user)
-        // this.props.activeUsers
-        // this.props.participantOnTask
-
-        let participantOnTask = this.props.participantOnTask.map(participant => participant.username);
-        console.log("8", user, participantOnTask)
-        if (participantOnTask === null) {
-            return false;
-        }
-        let index = participantOnTask.indexOf(user);
-        if (index === -1) {
-            return false
-        } else {
-            return true
-        }
-    }
+    // checkParticipantInList(user) {
+    //     // console.log(users, user)
+    //     // this.props.activeUsers
+    //     // this.props.participantOnTask
+    //
+    //     let participantOnTask = this.props.participantOnTask.map(participant => participant.username);
+    //
+    //     if (participantOnTask === null) {
+    //         return false;
+    //     }
+    //     let index = participantOnTask.indexOf(user);
+    //     if (index === -1) {
+    //         return false
+    //     } else {
+    //         return true
+    //     }
+    // }
 
     checkMarkerInList(markers, marker) {
         if (markers === null) {
@@ -139,7 +186,7 @@ class TaskInfo extends React.Component {
 
     onUpdateTaskName = (taskId, projectId) => {
 
-        console.log("taskId, projectId", taskId, projectId);
+
         if (!this.state.text || this.state.text === '') {
             // alert(1)
             this.setState({
@@ -155,53 +202,70 @@ class TaskInfo extends React.Component {
         return;
     }
 
-    onUpdateDescription = (taskId, projectId) => {
-        console.log("taskId, projectId", this.state.textForDescription, taskId, projectId)
-        // let text = this.state.textForDescription ? this.state.textForDescription : null
-        this.props.updateDescription(this.state.textForDescription, projectId, taskId);
+    onCloseTextarea = () => {
         this.setState({
-            isTextArea: !this.state.isTextArea
+            isTextArea: false,
+            textForDescription: this.props.tasks[this.props.taskInfo.id].description,
+            textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description
         })
     }
 
-    onRemoveParticipant(user, users) {
-        // console.log("allUsers", users)
-        // console.log("newUser", newUser)
-
-        let index = users.indexOf(user);
-        if (index !== -1) {
-            users.splice(index, 1);
+    onUpdateDescription = (taskId, projectId) => {
+        // let text = this.state.textForDescription ? this.state.textForDescription : null
+        if (this.state.textForDescription === this.state.textForDescriptionTmp) {
+            this.setState({
+                isTextArea: false,
+            })
+            return
         }
-        this.props.addNewParticipant(users, this.props.taskInfo.projectid, this.props.taskInfo.taskid);
+        this.props.updateDescription(this.state.textForDescription, projectId, taskId);
+        this.setState({
+            isTextArea: false,
+        })
+
+        this.setState({
+            textForDescriptionTmp: this.state.textForDescription,
+        })
+
+        // if(this.state.textForDescription === '') {
+        //     this.setState({
+        //         isTextArea: !this.state.isTextArea,
+        //     })
+        // }
     }
 
-    removeParticipant(userId) {
-        this.props.removeParticipant(this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId);
-    }
+    // onRemoveParticipant(user, users) {
+    //
+    //     let index = users.indexOf(user);
+    //     if (index !== -1) {
+    //         users.splice(index, 1);
+    //     }
+    //     this.props.addNewParticipant(users, this.props.taskInfo.projectid, this.props.taskInfo.taskid);
+    // }
 
-    onAddNewParticipant(newUser, users, userId) {
-        console.log("allUsers", users)
-        console.log("newUser", newUser)
-        if (users) {
-            users.push(newUser);
-        } else {
-            users = [newUser];
-        }
-        console.log("5", this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId)
-        this.props.addNewParticipant(this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId);
-    }
+    // removeParticipant(userId) {
+    //     this.props.removeParticipant(this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId);
+    // }
+    //
+    // onAddNewParticipant(newUser, users, userId) {
+    //
+    //     if (users) {
+    //         users.push(newUser);
+    //     } else {
+    //         users = [newUser];
+    //     }
+    //
+    //     this.props.addNewParticipant(this.props.taskInfo.projectid, this.props.taskInfo.taskid, userId);
+    // }
 
     onAddNewMarker(newMarker, markers) {
-        console.log("allmarkers", markers)
-        console.log("newMarker", newMarker)
+
         if (markers) {
             markers.push(newMarker);
         } else {
             markers = [newMarker];
         }
-        console.log("markers", markers)
-        console.log("markers", markers)
-        console.log("markers1", markers, this.props.taskInfo.projectid, this.props.taskInfo.taskid)
+
         this.props.addNewMarker(markers, this.props.taskInfo.projectid, this.props.taskInfo.taskid);
     }
 
@@ -222,20 +286,17 @@ class TaskInfo extends React.Component {
     }
 
     render() {
-        const name = this.props.columns['column-'+this.props.tasks[this.props.taskInfo.id].columnid].name;
-        console.log("participantOnTask", this.props.participantOnTask)
-        console.log("[444]", this.props.taskInfo)
-        console.log("[555]", this.props.tasks[this.props.taskInfo.id].columnid)
-        console.log("[222]", this.props.columns['column-'+this.props.tasks[this.props.taskInfo.id].columnid].name)
-        console.log("[333]", this.props.activeUsers)
+
+        // alert(this.state.rect)
+        const name = this.props.columns['column-' + this.props.tasks[this.props.taskInfo.id].columnid].name;
+        console.log("[098]", this.state.textForDescriptionTmp)
+
         let activeUsers = [];
         this.props.activeUsers.forEach(activeUser => {
             let user = this.props.users.find(user => user.username === activeUser);
             activeUsers.push(user);
         })
-        console.log("activeUsers", activeUsers)
-
-        console.log("[666]", this.props.tasks[this.props.taskInfo.id].users)
+        console.log('activeUsers', activeUsers)
         // let task = this.props.tasks[`task-${+this.props.match.params.taskId}`]
         // console.log("[666]", task);
         return (
@@ -245,46 +306,18 @@ class TaskInfo extends React.Component {
                 <div className={classes.wrapper}>
                     <div className={classes.firstBlock}>
                         <div className={classes.firstBlockLeft}>
-                        <div className={classes.firstBlockLeftIcon}>
-                            <FontAwesomeIcon className={`${classes.iconStyle} fa-lg`}
-                                             icon={faWindowMaximize}/>
-                        </div>
-
-                        <div>
-                             <TextareaAutosize value={this.state.text} onBlur={() => this.onUpdateTaskName(this.props.taskInfo.taskid, this.props.taskInfo.projectid)} onChange={this.changeText} className={classes.firstBlockCenter} onFocus={() => {
-                                 this.onEditTaskName()
-                             }}/>
-                            {/*this.props.tasks[this.props.taskInfo.id].content*/}
-
-                            {/*{this.state.isInput ? <input onChange={this.changeText}*/}
-                            {/*                             onBlur={() => this.onUpdateTaskName(this.props.taskInfo.taskid, this.props.taskInfo.projectid)}*/}
-                            {/*                             autoFocus={true} value={this.state.text}/> :*/}
-                            {/*    <textarea onFocus={() => {*/}
-                            {/*        this.onEditTaskName()*/}
-                            {/*    }}>*/}
-                            {/*        {this.props.tasks[this.props.taskInfo.id].content}*/}
-                            {/*    </textarea>}*/}
-                        </div>
-                        </div>
-                        <div onClick={() => {
-                            this.onCloseTaskInfo()
-                        }} className={classes.firstBlockRight}><FontAwesomeIcon className={'fa-lg'}
-                                                                                icon={faTimesCircle}/></div>
-                    </div>
-                    <div className={classes.itemActiveColumn}>in column <span className={classes.itemActiveColumnUnderline}>{name}</span></div>
-                    <div className={classes.secondBlock}>
-                        <div className={classes.secondBlockLeft}>
                             <div className={classes.firstBlockLeftIcon}>
                                 <FontAwesomeIcon className={`${classes.iconStyle} fa-lg`}
-                                                 icon={faBars}/>
-                                <span className={classes.itemDesc}>Description</span>
+                                                 icon={faWindowMaximize}/>
                             </div>
 
-                            <div className={classes.secondBlockTextArea}>
-
-                                <TextareaAutosize value={"Add more detail information..."} onBlur={() => this.onUpdateTaskName(this.props.taskInfo.taskid, this.props.taskInfo.projectid)} onChange={this.changeText} className={classes.secondBlockCenter} onFocus={() => {
-                                    this.onEditTaskName()
-                                }}/>
+                            <div>
+                                <TextareaAutosize value={this.state.text}
+                                                  onBlur={() => this.onUpdateTaskName(this.props.taskInfo.taskid, this.props.taskInfo.projectid)}
+                                                  onChange={this.changeText} className={classes.firstBlockCenter}
+                                                  onFocus={() => {
+                                                      this.onEditTaskName()
+                                                  }}/>
                                 {/*this.props.tasks[this.props.taskInfo.id].content*/}
 
                                 {/*{this.state.isInput ? <input onChange={this.changeText}*/}
@@ -297,43 +330,142 @@ class TaskInfo extends React.Component {
                                 {/*    </textarea>}*/}
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        Description: {this.props.tasks[this.props.taskInfo.id].description && <div onClick={() => {
-                        this.onEditDescription()
-                    }}>{this.props.tasks[this.props.taskInfo.id].description}</div>}
-                        {this.state.isTextArea ? <textarea onBlur={() => {
-                                this.onUpdateDescription(this.props.taskInfo.taskid, this.props.taskInfo.projectid)
-                            }} onChange={this.changeDescription} autoFocus={true} name="" id="" cols="30"
-                                                           rows="10">{this.state.textForDescription}</textarea> :
-                            <div onClick={() => {
-                                this.onEditDescription()
-                            }}>{!this.props.tasks[this.props.taskInfo.id].description &&
-                            <span>Add more detail description</span>} </div>}
 
                     </div>
-                    <div>
+                    <div onClick={() => {
+                        this.onCloseTaskInfo()
+                    }} className={classes.firstBlockRight}><FontAwesomeIcon className={`${classes.borderIcon} fa-lg`}
+                                                                            icon={faTimesCircle}/></div>
+                    <div className={classes.itemActiveColumn}>in column <span
+                        className={classes.itemActiveColumnUnderline}>{name}</span></div>
+                    <div className={classes.secondBlock}>
+                        <div className={classes.secondBlockLeft}>
+                            <div className={classes.firstBlockLeftIcon}>
+                                <FontAwesomeIcon className={`${classes.iconStyle} fa-lg`}
+                                                 icon={faBars}/>
+                                <span className={classes.itemDesc}>Description</span>
+                                {(this.state.textForDescriptionTmp) && (!this.state.isTextArea) ? <a onClick={() => {
+                                    this.onEditDescription()
+                                }} className={classes.itemButtonChange}>Change</a> : false}
+                            </div>
+
+                            <div className={classes.secondBlockTextArea}>
+
+                                {this.state.textForDescriptionTmp && !this.state.isTextArea ?
+                                    <div className={classes.itemBlockName} onClick={() => {
+                                        this.onEditDescription()
+                                    }}>{this.state.textForDescription}</div> : <><TextareaAutosize onFocus={() => {
+                                        this.setIsButton(true)
+                                    }} ref={this.myRef} autoFocus={this.state.isTextArea && true}
+                                                                                                   value={this.state.textForDescription}
+                                                                                                   placeholder={"Add more detail information..."}
+                                                                                                   onBlur={() => {
+                                                                                                       this.onUpdateDescription(this.props.taskInfo.taskid, this.props.taskInfo.projectid);
+                                                                                                       this.setIsButton(false)
+                                                                                                   }}
+                                                                                                   onChange={this.changeDescription}
+                                                                                                   className={classes.secondBlockCenter}/>
+                                        {(this.state.textForDescriptionTmp || this.state.isButton) &&
+                                        <div className={classes.itemCreateColumnWrap}>
+                                            <input className={classes.itemInput} value={"Save changes"}
+                                                   type={'button'}/>
+
+
+                                            <div className={classes.itemLeftColumn}>
+                                                <FontAwesomeIcon onMouseDown={(e) => {
+                                                    this.onCloseTextarea()
+                                                }} className={`fa-2x`}
+                                                                 icon={faTimes}/>
+                                            </div>
+
+                                        </div>}
+
+                                    </>
+
+                                }
+
+
+                                {/*this.props.tasks[this.props.taskInfo.id].content*/}
+
+                                {/*{this.state.isInput ? <input onChange={this.changeText}*/}
+                                {/*                             onBlur={() => this.onUpdateTaskName(this.props.taskInfo.taskid, this.props.taskInfo.projectid)}*/}
+                                {/*                             autoFocus={true} value={this.state.text}/> :*/}
+                                {/*    <textarea onFocus={() => {*/}
+                                {/*        this.onEditTaskName()*/}
+                                {/*    }}>*/}
+                                {/*        {this.props.tasks[this.props.taskInfo.id].content}*/}
+                                {/*    </textarea>}*/}
+                            </div>
+
+                        </div>
+                        <div className={classes.thirdBlock}>
+                            <div className={classes.thirdItemWrap}>
+                                {this.state.isOpenTaskMenu && <div style={{top: `${this.state.rectTop-47}px`}} className={classes.itemListInvite}>
+                                    <InviteList title={this.state.title} activeParticipants={activeUsers} nameRef={this.state.nameRef} onCloseTaskMenu={this.onCloseTaskMenu} taskMenu={true}/>
+                                </div>}
+                                <div>
+                                    ADD TO TASK
+                                </div>
+                                <div onClick={() => {this.getCoordinate(this.participantRef, 'Participants', 'Projects Participants')}} ref={this.participantRef} className={classes.itemList}>
+                                    <FontAwesomeIcon className={`${classes.itemIcon} fa-cm`}
+                                                     icon={faUser}/>
+                                    <span className={classes.itemNameButton}>Participants</span>
+                                </div>
+                                <div onClick={() => {this.getCoordinate(this.MarkersRef, 'Markers', 'Project Markers')}} ref={this.MarkersRef} className={classes.itemList}>
+                                    <FontAwesomeIcon className={`${classes.itemIcon} fa-cm`}
+                                                     icon={faTag}/>
+                                    <span className={classes.itemNameButton}>Markers</span>
+                                </div>
+                                <div>
+                                    ACTIONS
+                                </div>
+                                <div onClick={() => {
+                                    this.onRemoveTask(this.props.taskInfo.taskid)
+                                }} className={classes.itemList}>
+                                    <FontAwesomeIcon className={`${classes.itemIcon} fa-cm`}
+                                                     icon={faEraser}/>
+                                    <span className={classes.itemNameButton}>Remove task</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {/*<div>*/}
+                    {/*    Description: {this.props.tasks[this.props.taskInfo.id].description && <div onClick={() => {*/}
+                    {/*    this.onEditDescription()*/}
+                    {/*}}>{this.props.tasks[this.props.taskInfo.id].description}</div>}*/}
+                    {/*    {this.state.isTextArea ? <textarea onBlur={() => {*/}
+                    {/*            this.onUpdateDescription(this.props.taskInfo.taskid, this.props.taskInfo.projectid)*/}
+                    {/*        }} onChange={this.changeDescription} autoFocus={true} name="" id="" cols="30"*/}
+                    {/*                                       rows="10">{this.state.textForDescription}</textarea> :*/}
+                    {/*        <div onClick={() => {*/}
+                    {/*            this.onEditDescription()*/}
+                    {/*        }}>{!this.props.tasks[this.props.taskInfo.id].description &&*/}
+                    {/*        <span>Add more detail description</span>} </div>}*/}
+
+                    {/*</div>*/}
+                    {/*<div>*/}
                         Participants: {this.props.participantOnTask ? this.props.participantOnTask.map(item =>
                         <div>{item.username}</div>) : <div>list is empty</div>}
-                        <div className={classes.container}>
-                            {this.props.isOpenUsersList ? <div className={classes.listWrap}>
-                                {/*{activeUsers.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*/}
-                                {/*this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid*/}
-                                {/*this.removeParticipant(user.userid)*/}
-                                {activeUsers.map(user => <div onClick={() => {
-                                    !this.checkParticipantInList(user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid) : this.removeParticipant(user.userid)
-                                }}
-                                                              className={`${classes.userWrap} ${this.checkParticipantInList(user.username) && classes.cursor}`}>
-                                    <div>{user.username}</div>
-                                    {this.checkParticipantInList(user.username) ? <div>OK</div> : ''}</div>)}
-                            </div> : ''}
-                            {/*<div onClick={() => {this.removeParticipant()}}>REMOVE</div>*/}
-                        </div>
-                        {/*{this.props.isOpenUsersList ? <select onBlur={() => {this.onOpenListUsers()}} autoFocus={true} multiple>{this.props.users.map((user, index) => <option key={index}>{user.username}</option>)}</select> : ''}*/}
-                        <button onClick={() => {
-                            this.onOpenListUsers()
-                        }}>{this.props.isOpenUsersList ? 'close list' : "add participants"}</button>
-                    </div>
+                    {/*    <div className={classes.container}>*/}
+                    {/*        {this.props.isOpenUsersList ? <div className={classes.listWrap}>*/}
+                    {/*            /!*{activeUsers.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*!/*/}
+                    {/*            /!*this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid*!/*/}
+                    {/*            /!*this.removeParticipant(user.userid)*!/*/}
+                    {/*            {activeUsers.map(user => <div onClick={() => {*/}
+                    {/*                !this.checkParticipantInList(user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid) : this.removeParticipant(user.userid)*/}
+                    {/*            }}*/}
+                    {/*                                          className={`${classes.userWrap} ${this.checkParticipantInList(user.username) && classes.cursor}`}>*/}
+                    {/*                <div>{user.username}</div>*/}
+                    {/*                {this.checkParticipantInList(user.username) ? <div>OK</div> : ''}</div>)}*/}
+                    {/*        </div> : ''}*/}
+                    {/*        /!*<div onClick={() => {this.removeParticipant()}}>REMOVE</div>*!/*/}
+                    {/*    </div>*/}
+                    {/*    /!*{this.props.isOpenUsersList ? <select onBlur={() => {this.onOpenListUsers()}} autoFocus={true} multiple>{this.props.users.map((user, index) => <option key={index}>{user.username}</option>)}</select> : ''}*!/*/}
+                    {/*    <button onClick={() => {*/}
+                    {/*        this.onOpenListUsers()*/}
+                    {/*    }}>{this.props.isOpenUsersList ? 'close list' : "add participants"}</button>*/}
+                    {/*</div>*/}
                     <div>
                         Marker's
                         list: {this.props.tasks[this.props.taskInfo.id].markers ? this.props.tasks[this.props.taskInfo.id].markers.map(marker =>
@@ -350,16 +482,16 @@ class TaskInfo extends React.Component {
                             </div> : ''}
                         </div>
                         {/*{this.props.isOpenUsersList ? <select onBlur={() => {this.onOpenListUsers()}} autoFocus={true} multiple>{this.props.users.map((user, index) => <option key={index}>{user.username}</option>)}</select> : ''}*/}
-                        <button onClick={() => {
-                            this.onOpenListMarkers()
-                        }}>{this.props.isOpenMarkersList ? 'close list' : "add marker"}</button>
+                        {/*<button onClick={() => {*/}
+                        {/*    this.onOpenListMarkers()*/}
+                        {/*}}>{this.props.isOpenMarkersList ? 'close list' : "add marker"}</button>*/}
                     </div>
-                    <div>
-                        <button onClick={() => {
-                            this.onRemoveTask(this.props.taskInfo.taskid)
-                        }}>delete card
-                        </button>
-                    </div>
+                    {/*<div>*/}
+                    {/*    <button onClick={() => {*/}
+                    {/*        this.onRemoveTask(this.props.taskInfo.taskid)*/}
+                    {/*    }}>delete card*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
                 </div>
             </>
         );

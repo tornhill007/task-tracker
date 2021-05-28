@@ -169,12 +169,6 @@ export default class Column extends React.Component {
 
     render() {
 
-        console.log("00000000000000000000000000", this.props.tasks)
-        console.log("qthis.props.tasksqq", this.props.tasks)
-        console.log("qthis.props.tasksqqAll", this.props.allTasks)
-        console.log("REEEEEEEEEEF", this.inputRef)
-        // console.log("STATE", +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1)
-        // console.log("this.props.tasks111", this.props.column.taskIds[this.props.column.taskIds.length-1])
         return (
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided) => (
@@ -199,7 +193,7 @@ export default class Column extends React.Component {
                                 </div>
                             </div>
                         }
-                        {this.state.isOpenColumnMenu ? <InviteList onRemoveColumn={this.onRemoveColumn} columnId={this.props.column.columnId} onOpenColumnMenu={this.onOpenColumnMenu} columnMenu={true} projectId={this.props.projectId}/>  : ''}
+                        {this.state.isOpenColumnMenu ? <InviteList menuName={"Column Actions"} onRemoveColumn={this.onRemoveColumn} columnId={this.props.column.columnId} onOpenColumnMenu={this.onOpenColumnMenu} columnMenu={true} projectId={this.props.projectId}/>  : ''}
                         {/*<button onClick={() => {*/}
                         {/*    this.onRemoveColumn(this.props.column.columnId, this.props.projectId)*/}
                         {/*}}>Del*/}
@@ -214,7 +208,6 @@ export default class Column extends React.Component {
                                 >
                                     {
                                         this.props.tasks.length === 0 ? '' : this.props.tasks[0] === undefined ? '' : this.props.tasks.map((task, index) => {
-                                            console.log("[task]", task);
                                             return <Tasks
                                                 isScroll={this.state.isScroll}
                                                 taskInfo={this.props.taskInfo}

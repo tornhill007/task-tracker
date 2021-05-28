@@ -102,16 +102,11 @@ class Project extends React.Component {
     handleFocus = (event) => event.target.select();
 
     save(id) {
-        // console.log(event.target.value)
         const {projectName} = this.state;
         console.log(projectName)
-        // this.setState({text: text});
-        // const text1 = this.newRef.current.value;
-        // console.log("event.target.value", text1);
         this.props.editProject(id, projectName, this.props.userId);
         this.onOpenInputEditProject();
 
-        // this.close();
     }
 
     changeText(event) {
@@ -137,27 +132,13 @@ class Project extends React.Component {
             position = this.props.columns[this.props.columnsOrder[this.props.columnsOrder.length-1]].position + 1;
         }
         this.props.createNewColumn(text, projectListId, position);
-        // this.close();
+
     }
 
-
-    // constructor(props) {
-    //     super(props);
-    //
-    //     this.wrapperRef = React.createRef();
-    //     this.setWrapperRef = this.setWrapperRef.bind(this);
-    //     this.handleClickOutside = this.handleClickOutside.bind(this);
-    // }
 
     getProjects = async (userId, userName, token) => {
-        console.log("this.props.userId", this.props.userId)
         this.props.getAllProjects(userId, userName, token);
     }
-
-
-    // componentWillMount() {
-    //
-    // }
 
     projectId = this.props.match.params.projectId;
 
@@ -178,18 +159,9 @@ class Project extends React.Component {
                 this.props.setAuthUserData(null, null, null)
             }
         }
-        console.log("this.props.userId", this.props.userId)
 
-        // alert(2)
-        // this.getUsers();
-        // this.props.getUsers(this.props.pageSize, this.props.currentPage);
-
-
-        // let result = usersApi.getActiveUsers(30);
-        // console.log("result", result)
         this.props.getAllUsers(this.projectId);
         let projectId = this.props.match.params.projectId;
-        console.log("PROJECTID", projectId);
         this.props.getColumns(projectId);
 
 
@@ -209,10 +181,7 @@ class Project extends React.Component {
     // }
 
     getProjectNameOrId() {
-        console.log("[1]", this.projectId)
-        console.log("[2]", this.props.projects)
         let result = this.props.projects.filter(item => item.projectid == this.projectId)
-        console.log(result);
         return result[0];
     }
 
@@ -233,43 +202,9 @@ class Project extends React.Component {
 
 
     onDragEnd = async result => {
-        //
+
         let projectId = this.props.match.params.projectId;
         const {destination, source, draggableId, type} = result;
-        //
-        // if(type === 'column') {
-        //     const newColumnOrder = Array.from(this.props.columnOrder);
-        //     console.log("POSITION1", newColumnOrder[source.index]);
-        //     console.log("POSITION-START", this.props.columns[newColumnOrder[source.index]].position);
-        //     console.log("POSITION-START", this.props.columns[newColumnOrder[source.index]].columnId);
-        //
-        //     console.log("COLUMN_ID-FINISH", this.props.columns[newColumnOrder[destination.index]].position);
-        //     console.log("COLUMN_ID-FINISH", this.props.columns[newColumnOrder[destination.index]].columnId);
-        //     await columnsApi.updateColumnsPosition(
-        //         this.props.columns[newColumnOrder[source.index]].columnId,
-        //         this.props.columns[newColumnOrder[destination.index]].columnId,
-        //         this.props.columns[newColumnOrder[source.index]].position,
-        //         this.props.columns[newColumnOrder[destination.index]].position
-        //         )
-        //     let projectId = this.props.match.params.projectId;
-        //
-        //     console.log("PROJECTID", projectId);
-        //     this.props.getColumns(projectId);
-        //     console.log("newColumnOrder", newColumnOrder)
-        //     console.log("source.index", source.index)
-        //
-        //
-        //     console.log("destination.index", destination.index)
-        //     // newColumnOrder.splice(source.index, 1);
-        //     // newColumnOrder.splice(destination.index, 0, draggableId);
-        //     //
-        //     // const newState = {
-        //     //     ...state,
-        //     //     columnOrder: newColumnOrder
-        //     // }
-        //     // return newState;
-        // }
-
 
         if (type === 'column') {
             if (!destination || source.index === destination.index) {
@@ -356,21 +291,18 @@ class Project extends React.Component {
         // }
 
 
-        console.log("this.props.columns[source.droppableId]", this.props.columns[source.droppableId])
-        console.log("this.props.columns[destination.droppableId]", this.props.columns[destination.droppableId]);
 
         const start = this.props.columns[source.droppableId];
         const finish = this.props.columns[destination.droppableId];
-        console.log("start", start);
-        console.log("finish", finish);
+
 
         if (start === finish) {
-            console.log("[000]")
+
             const newTaskIds = Array.from(start.taskIds);
             let returnedTask = newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, draggableId);
 
-            console.log("returnedTask", returnedTask);
+
             let tmpTasksArr = newTaskIds.map(task => {
                 return this.props.tasks[task];
             })
@@ -391,84 +323,27 @@ class Project extends React.Component {
                 }
             }
 
-            console.log("tmpTasksArr", tmpTasksArr);
             this.props.onDragEnd(result);
             this.props.updateTasksPosAndColumnId(tmpTasksArr, projectId);
 
 
-            // if(destination.index == tmpTasksArr.length - 1) {
-            //     console.log("AP", tmpTasksArr[destination.index].position, +tmpTasksArr[destination.index].position + 1)
-            //     console.log("destination.index", destination.index)
-            //     console.log("tmp.length - 1", tmpTasksArr.length - 1)
-            //     tmpTasksArr[destination.index].position = +tmpTasksArr[destination.index-1].position + 1;
-            // }
-            // else {
-            //     tmpTasksArr[destination.index].position = tmpTasksArr[destination.index+1].position;
-            //     for(let i = tmpTasksArr.length - 1; i > destination.index; i--) {
-            //         tmpTasksArr[i].position = +tmpTasksArr[i].position + 1;
-            //     }
-            // }
-
-
-            // const newColumn = {
-            //     ...start,
-            //     taskIds: newTaskIds,
-            // };
-            //
-            // const newState = {
-            //     ...this.state,
-            //     columns: {
-            //         ...this.state.columns,
-            //         [newColumn.id]: newColumn,
-            //     },
-            // };
-
-            // this.setState(newState);
             return;
         }
 
 
-        // if (start === finish) {
-        //     console.log("[000]")
-        //     const newTaskIds = Array.from(start.taskIds);
-        //     newTaskIds.splice(source.index, 1);
-        //     newTaskIds.splice(destination.index, 0, draggableId);
-        //
-        //
-        //     const newColumn = {
-        //         ...start,
-        //         taskIds: newTaskIds,
-        //     };
-        //
-        //     const newState = {
-        //         ...this.state,
-        //         columns: {
-        //             ...this.state.columns,
-        //             [newColumn.id]: newColumn,
-        //         },
-        //     };
-        //
-        //     this.setState(newState);
-        //     return;
-        // }
 
-        console.log("[111]")
-        console.log("this>TASKS", this.props.tasks);
         // console.log("start.taskIds", start.taskIds);
         // Moving from one list to another
         const startTaskIds = Array.from(start.taskIds);
-        // const testArr = Array.from(this.props.tasks);
-        // console.log("testArr", testArr)
-        console.log("source.index", source.index)
-        console.log("destination.index", destination.index)
+
         let returnedTask = startTaskIds.splice(source.index, 1);
 
-        console.log("startTaskIds", startTaskIds)
+
         const newStart = {
             ...start,
             taskIds: startTaskIds,
         };
-        console.log("newStart", newStart);
+
 
         const finishTaskIds = Array.from(finish.taskIds);
         finishTaskIds.splice(destination.index, 0, draggableId);
@@ -571,7 +446,7 @@ class Project extends React.Component {
                 </div>
                     <div className={classes.containerBlock}>
 
-                        {this.props.IsOpenInviteList ? <InviteList projectId={this.projectId} userName={this.props.userName}
+                        {this.props.IsOpenInviteList ? <InviteList title={'list of possible users'} menuName={'Invite to project'} projectId={this.projectId} userName={this.props.userName}
                                                                    users={this.props.users}/> : ''}
                     </div>
                 </div>
@@ -589,16 +464,13 @@ class Project extends React.Component {
                                 {this.props.columnOrder.map((columnId, index) => {
 
                                     const column = this.props.columns[columnId];
-                                    console.log("column.taskIds", column.taskIds)
+
                                     let res = column.taskIds.filter(task => {
                                         return this.props.tasks[task] === undefined ? false : true;
                                     })
-                                    console.log("res", res)
+
                                     const tasks = res.map(
                                         taskId => {
-                                            console.log("this.props.tasks", this.props.tasks)
-                                            console.log("this.props.columns", this.props.columns)
-                                            console.log("taskId", taskId)
                                             return this.props.tasks[taskId]
                                         },
                                     );

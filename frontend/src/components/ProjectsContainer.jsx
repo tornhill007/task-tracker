@@ -11,7 +11,6 @@ import {setAuthUserData} from "../redux/reducers/authReducer";
 class ProjectsContainer extends React.Component {
 
     getProjects = async (userId, userName, token) => {
-        console.log("this.props.userId", this.props.userId)
        this.props.getAllProjects(userId, userName, token);
     }
 
@@ -34,15 +33,13 @@ class ProjectsContainer extends React.Component {
                 this.props.setAuthUserData(null,null, null)
             }
         }
-        console.log("this.props.userId", this.props.userId)
+
 
         // this.getUsers();
         // this.props.getUsers(this.props.pageSize, this.props.currentPage);
     }
 
     render() {
-        console.log("projects", this.props.projects)
-        console.log("users", this.props.users)
         return (
             <Projects userId={this.props.userId} removeProject={this.props.removeProject} projects={this.props.projects} openModal={this.props.openModal}/>
         )

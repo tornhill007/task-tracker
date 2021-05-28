@@ -5,6 +5,8 @@ import {faTimesCircle, faCheck} from "@fortawesome/free-solid-svg-icons";
 import {connect} from "react-redux";
 import {addToProject, getAllUsers, removeFromProject} from "../redux/reducers/usersReducer";
 import {setIsOpenInviteList} from "../redux/reducers/projectsReducer";
+import ParticipantsList from "./Tasks/TaskInfo/ParticipantsList";
+import MarkersList from "./Tasks/TaskInfo/MarkersList";
 
 class InviteList extends React.Component {
 
@@ -43,9 +45,9 @@ class InviteList extends React.Component {
             <div className={classes.listWrap}>
                 <div className={classes.wrapperItem}>
                     <div className={classes.itemTitle}>
-                        <div className={classes.closeItem}>{this.props.columnMenu ? 'Column Actions' : 'Invite to project'}</div>
+                        <div className={classes.closeItem}>{this.props.menuName || this.props.nameRef}</div>
                         <div className={classes.cursor} onClick={() => {
-                            this.props.columnMenu ? this.onOpenColumnMenu() :
+                            this.props.columnMenu ? this.onOpenColumnMenu() : this.props.taskMenu ? this.props.onCloseTaskMenu() :
                             this.onOpenOrCloseInviteList()
                         }}><FontAwesomeIcon icon={faTimesCircle}/></div>
                     </div>
@@ -53,9 +55,9 @@ class InviteList extends React.Component {
                     </div>
                 </div>
                 <div>
-                    {this.props.columnMenu ? false : <div className={classes.itemText}><span>list of possible users</span></div>}
+                    {this.props.columnMenu ? false : <div className={classes.itemText}><span>{this.props.title}</span></div>}
                 </div>
-                {!this.props.users ? <div className={classes.itemWrapColumnMenu}><div onClick={() => {this.onRemoveColumn()}}>Remove column</div></div> : <div className={classes.itemWrap}>
+                {this.props.nameRef === 'Participants' ? <ParticipantsList activeParticipants={this.props.activeParticipants}/> : this.props.nameRef === 'Markers' ? <MarkersList/> : !this.props.users ? <div className={classes.itemWrapColumnMenu}><div onClick={() => {this.onRemoveColumn()}}>Remove column</div></div> : <div className={classes.itemWrap}>
                     {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user => <div
                         onClick={() => {
                             !this.checkActiveUsers(user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)
