@@ -26,12 +26,7 @@ let initialState = {
     content: null,
     taskInfo: null,
     isTaskInfo: false,
-    tasks: {
-        // 'task-1': {id: 'task-1', content: 'Take out the garbage'},
-        // 'task-2': {id: 'task-2', content: 'qqqqqqqqqqqqqqqqq'},
-        // 'task-3': {id: 'task-3', content: 'wwwwwwwwwwwwwwwwwwwwwwwwww'},
-        // 'task-4': {id: 'task-4', content: 'eeeeeeeeeeeeeeeeeee'},
-    },
+    tasks: {},
     columns: {},
     columnOrder: []
 };
@@ -44,7 +39,7 @@ const columnsReducer = (state = initialState, action) => {
                 isOpen: true,
                 content: action.content
             };
-            case OPEN_FORM_FOR_NEW_COLUMN:
+        case OPEN_FORM_FOR_NEW_COLUMN:
             return {
                 ...state,
                 isOpenFormNewColumn: !state.isOpenFormNewColumn,
@@ -54,14 +49,14 @@ const columnsReducer = (state = initialState, action) => {
                 ...state,
                 isInput: !state.isInput
             };
-            case SET_TASK_INFO:
-                console.log("taskInfo", action.taskInfo)
+        case SET_TASK_INFO:
+            console.log("taskInfo", action.taskInfo)
             return {
                 ...state,
                 taskInfo: action.taskInfo,
                 isTaskInfo: true
             };
-                case CLOSE_TASK_INFO:
+        case CLOSE_TASK_INFO:
             return {
                 ...state,
                 isTaskInfo: false
@@ -88,7 +83,7 @@ const columnsReducer = (state = initialState, action) => {
                     position: task.position
                 }
             })
-            newTasksArr.forEach((key,index) => {
+            newTasksArr.forEach((key, index) => {
                 newTasks[key.id] = key;
             })
             console.log("newTasks", newTasks)
@@ -97,8 +92,8 @@ const columnsReducer = (state = initialState, action) => {
                 tasks: newTasks
             };
         case SET_COLUMNS:
-console.log("[11]", action.tasks);
-console.log("[22]", action.columns);
+            console.log("[11]", action.tasks);
+            console.log("[22]", action.columns);
             let columnsArr = action.columns.map((column, index) => {
                 let taskSort = action.tasks.filter((task, index) => task.columnid == column.columnid);
                 console.log("taskSort", taskSort);
@@ -112,12 +107,7 @@ console.log("[22]", action.columns);
                     columnId: column.columnid
                 }
             })
-            // let tasksId = action.tasks.filter((task, index) => task.columnid == column.columnid);
-            //
-            // sortByPosition(tasksId);
-            //
-            // tasksId.map((item, index) => `task-${item.taskid}`)
-            // console.log("SORTBYTASK", tasksId)
+
             let columnsObj = {};
             let columnsOrder = [];
             columnsArr.forEach(key => {
@@ -240,11 +230,6 @@ export const onDragEnd = (result) => ({
     type: ON_DRAG_END,
     result
 })
-//
-// export const setColumnOrder = (columns) => ({
-//     type: SET_COLUMN_ORDER,
-//     columns
-// })
 
 export const openModal = (content) => ({type: OPEN_MODAL, content});
 export const openFormForNewColumn = () => ({type: OPEN_FORM_FOR_NEW_COLUMN});
@@ -255,174 +240,114 @@ export const closeTaskInfo = () => ({type: CLOSE_TASK_INFO});
 
 
 export const getColumns = (projectId) => async (dispatch) => {
-    // alert(2)
-console.log('222222222222222222')
-    // let response1 = await tasksAPI.getAllTasks(projectId);
-
-    let response = await columnsApi.getColumns(projectId);
-    console.log("[333333333333333333333333333]", response)
-    dispatch(setAllTasks(response.data.tasks));
-    dispatch(setColumns(response.data.columns, response.data.tasks));
-    // console.log("response11", response1);
-
+    try {
+        let response = await columnsApi.getColumns(projectId);
+        dispatch(setAllTasks(response.data.tasks));
+        dispatch(setColumns(response.data.columns, response.data.tasks));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const getAllTasks = (projectId) => async (dispatch) => {
-    // alert(2)
-    let response = await tasksAPI.getAllTasks(projectId);
-
-    console.log("response22222", response);
-    dispatch(setAllTasks(response.data));
+    try {
+        let response = await tasksAPI.getAllTasks(projectId);
+        dispatch(setAllTasks(response.data));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const addNewTask = (taskName, columnId, projectId, position) => async (dispatch) => {
+    try {
+        let response = await tasksAPI.addNewTask(taskName, columnId, projectId, position);
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
 
-    let response = await tasksAPI.addNewTask(taskName, columnId, projectId, position);
-    dispatch(getColumns(projectId));
-    // console.log("response22222", response);
-    // dispatch(setAllTasks(response.data));
 };
 
 export const onUpdateColumnsPosition = (newColumns, projectId) => async (dispatch) => {
-    console.log("initialState.columns", initialState)
-
-    let response = await columnsApi.updateColumnsPosition(newColumns)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await columnsApi.updateColumnsPosition(newColumns)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const onUpdateColumn = (id, name, projectId) => async (dispatch) => {
-    // console.log("initialState.columns", initialState)
-
-    let response = await columnsApi.updateColumn(id, name, projectId)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await columnsApi.updateColumn(id, name, projectId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 export const onRemoveColumn = (id, projectId) => async (dispatch) => {
-    // console.log("initialState.columns", initialState)
-
-    let response = await columnsApi.removeColumn(id, projectId)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await columnsApi.removeColumn(id, projectId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const createNewColumn = (name, projectListId, position) => async (dispatch) => {
-    let response = await columnsApi.createNewColumn(name, projectListId, position)
-    console.log("response", response);
-    dispatch(getColumns(projectListId));
+    try {
+        let response = await columnsApi.createNewColumn(name, projectListId, position)
+        dispatch(getColumns(projectListId));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const updateTaskName = (taskName, projectId, taskId) => async (dispatch) => {
-    console.log("UPDATETASKNAME", taskName, projectId, taskId);
-    let response = await tasksAPI.updateTaskName(taskName, projectId, taskId)
-    console.log("responseTASKSNAME", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await tasksAPI.updateTaskName(taskName, projectId, taskId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 export const updateDescription = (taskDescription, projectId, taskId) => async (dispatch) => {
-    console.log("UPDATETASKNAME", taskDescription, projectId, taskId);
-    let response = await tasksAPI.updateTaskDescription(taskDescription, projectId, taskId)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await tasksAPI.updateTaskDescription(taskDescription, projectId, taskId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const addNewMarker = (markers, projectId, taskId) => async (dispatch) => {
-    console.log("UPDATETASKNAME", markers, projectId, taskId);
-    let response = await tasksAPI.addNewMarker(markers, projectId, taskId)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await tasksAPI.addNewMarker(markers, projectId, taskId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
 };
 
 export const updateTasksPosAndColumnId = (tasksArr, projectId) => async (dispatch) => {
-    console.log("UPDATE_TASKS_POSITION", tasksArr, projectId);
-    let response = await tasksAPI.updateTasksPosAndColumnId(tasksArr, projectId)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await tasksAPI.updateTasksPosAndColumnId(tasksArr, projectId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
+
 };
 
 export const removeTask = (taskId, projectId) => async (dispatch) => {
-    // console.log("UPDATE_TASKS_POSITION", tasksArr, projectId);
-    let response = await tasksAPI.removeTask(taskId, projectId)
-    console.log("response", response);
-    dispatch(getColumns(projectId));
+    try {
+        let response = await tasksAPI.removeTask(taskId, projectId)
+        dispatch(getColumns(projectId));
+    } catch (e) {
+        console.log(e)
+    }
 };
-
-
-// export const setProjects = (projects) => ({
-//     type: SET_ALL_PROJECTS,
-//     projects
-// });
-
-// export const getAuthUserData = () => async (dispatch) => {
-//     let response = await authAPI.me();
-//     console.log(response);
-//     if (response.data.resultCode === 0) {
-//         let {id, email, login} = response.data.data;
-//         dispatch(setAuthUserData(id, email, login, true));
-//     }
-// };
-//
-// export const login = (password, userName) => async (dispatch) => {
-//     try {
-//         let response = await authAPI.login(password, userName);
-//         console.log(response);
-//         if (response.statusText === 'OK') {
-//             dispatch(reset('register'))
-//             // dispatch(getAuthUserData());
-//             let {userId, userName, token} = response.data;
-//             dispatch(setAuthUserData(userId, userName, token));
-//             let user = {
-//                 userId,
-//                 userName,
-//                 token,
-//                 timestamp: Date.now()
-//             }
-//             window.localStorage.setItem("user", JSON.stringify(user))
-//         }
-//         else {
-//             let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
-//             // dispatch(stopSubmit("login", {_error: message}))
-//         }
-//     }
-//     catch (err) {
-//         alert(err.response.data.message);
-//     }
-//
-// };
-//
-// export const register = (password, userName, repeatPassword) => async (dispatch) => {
-//     try {
-//         if(password === repeatPassword) {
-//             let response = await authAPI.register(password, userName);
-//             console.log("123", response);
-//             if (response.statusText === 'OK') {
-//                 dispatch(reset('register'))
-//                 alert('you have registered')
-//             } else {
-//                 alert(2)
-//                 let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
-//                 alert(message);
-//
-//                 // dispatch(stopSubmit("login", {_error: message}))
-//             }
-//         }
-//         else {
-//             alert("Password mismatch")
-//         }
-//
-//     } catch (err) {
-//         alert(err.response.data.message);
-//     }
-//
-// };
-
-// export const logout = (email, password, rememberMe) => async (dispatch) => {
-//     let response = await authAPI.logout(email, password, rememberMe);
-//     console.log(response);
-//     if (response.data.resultCode === 0) {
-//         dispatch(setAuthUserData(null, null, null, false));
-//     }
-// };
 
 export default columnsReducer;

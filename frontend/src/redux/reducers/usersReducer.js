@@ -52,7 +52,7 @@ const usersReducer = (state = initialState, action) => {
                 isOpenMarkersList: !state.isOpenMarkersList
             };
 
-            case SET_PARTICIPANT_ON_TASK:
+        case SET_PARTICIPANT_ON_TASK:
             return {
                 ...state,
                 participantOnTask: action.participant
@@ -90,21 +90,16 @@ export const setParticipantOnTask = (participant) => ({
 export const getAllUsers = (projectId, isRemoveProject) => async (dispatch) => {
     try {
         let response = await usersApi.getAllUsers();
-
         if (!isRemoveProject) {
             let response1 = await usersApi.getActiveUsers(projectId);
-            console.log("response1", response1);
             if (response1.statusText === 'OK') {
-                console.log("[RESPONSE1]", response1)
                 dispatch(setActiveUsers(response1.data));
             } else {
                 console.log("ERROR")
             }
         }
 
-
         if (response.statusText === 'OK') {
-            console.log("[RESPONSE]", response)
             dispatch(setAllUsers(response.data));
         } else {
             console.log("ERROR")
@@ -120,10 +115,8 @@ export const addNewParticipant = (projectId, taskId, userId) => async (dispatch)
     try {
         let response = await tasksAPI.addNewParticipant(taskId, userId);
         if (response.statusText === 'OK') {
-            console.log("[RESPONSE]", response)
             dispatch(getColumns(projectId));
             dispatch(getParticipantOnTask(projectId, taskId, userId));
-
         } else {
             console.log("ERROR")
         }
@@ -137,8 +130,6 @@ export const getParticipantOnTask = (projectId, taskId, userId) => async (dispat
     try {
         let response = await tasksAPI.getParticipantOnTask(taskId, userId);
         if (response.statusText === 'OK') {
-            console.log("[RESPONSE23]", response)
-            // dispatch(getColumns(projectId));
             dispatch(setParticipantOnTask(response.data));
         } else {
             console.log("ERROR")
@@ -169,7 +160,6 @@ export const addToProject = (userId, projectId) => async (dispatch) => {
     try {
         let response = await usersApi.addToProject(userId, projectId);
         if (response.statusText === 'OK') {
-            console.log("[RESPONSE]", response)
             dispatch(getAllUsers(projectId));
         } else {
             console.log("ERROR")
@@ -184,7 +174,6 @@ export const removeFromProject = (userId, projectId) => async (dispatch) => {
     try {
         let response = await usersApi.removeFromProject(userId, projectId);
         if (response.statusText === 'OK') {
-            console.log("[RESPONSE]", response)
             dispatch(getAllUsers(projectId));
         } else {
             console.log("ERROR")
@@ -198,14 +187,11 @@ export const removeFromProject = (userId, projectId) => async (dispatch) => {
 export const leaveProject = (userId, projectId) => async (dispatch) => {
     try {
         let response = await usersApi.removeFromProject(userId, projectId);
-        console.log("[RESPONSE]", response)
         if (response.statusText === 'OK') {
-
             if (response.data.length === 0) {
                 dispatch(removeProject(projectId, userId));
                 return;
             }
-            // dispatch(getAllUsers(projectId));
             dispatch(getAllProjects(userId));
         } else {
             console.log("ERROR")
