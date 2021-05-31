@@ -27,6 +27,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import TextareaAutosize from "react-textarea-autosize";
 import InviteList from "../../InviteList";
+import markers from '../../../common/markers';
 
 class TaskInfo extends React.Component {
 
@@ -36,18 +37,27 @@ class TaskInfo extends React.Component {
             nameRef: '',
             title: '',
             rectTop: false,
+            rectLeft: false,
             isInput: false,
             isTextArea: false,
             text: this.props.tasks[this.props.taskInfo.id].content,
             textForDescription: this.props.tasks[this.props.taskInfo.id].description,
             textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description,
             isButton: false,
-            isOpenTaskMenu: false
+            isOpenTaskMenu: false,
         };
+
         this.myRef = React.createRef();
         this.participantRef = React.createRef();
         this.MarkersRef = React.createRef();
+        this.markerRef = React.createRef();
+        this.partRef = React.createRef();
 
+        // for(let key of this.state.markers) {
+        //     console.log("key", key.id);
+        //     let ref = 'markerRef'+key.id;
+        //     this[ref] = React.createRef();
+        // }
 
         this.onCloseTaskMenu = this.onCloseTaskMenu.bind(this);
 
@@ -55,13 +65,11 @@ class TaskInfo extends React.Component {
 
 
     handleFocus = (event) => event.target.focus();
-
     // focusRef = React.createRef();
 
     componentDidMount() {
         this.props.getParticipantOnTask(this.props.taskInfo.projectid, this.props.taskInfo.taskid, this.props.userId);
     }
-
 
     // onKeyName = (e) => {
     //     if (e.keyCode===13 && e.ctrlKey) {
@@ -72,6 +80,22 @@ class TaskInfo extends React.Component {
     //     }
     //
     // }
+
+    checkParticipantInList(user) {
+
+        let participantOnTask = this.props.participantOnTask.map(participant => participant.username);
+
+        if (participantOnTask === null) {
+            return false;
+        }
+        let index = participantOnTask.indexOf(user);
+        if (index === -1) {
+            return false
+        } else {
+            return true
+        }
+    }
+
 
 
     changeText = (event) => {
@@ -87,12 +111,14 @@ class TaskInfo extends React.Component {
     }
 
     getCoordinate = (ref, refName, title) => {
-        let rect = ref.current.getBoundingClientRect();
         console.log("ref", ref.current);
+        let rect = ref.current.getBoundingClientRect();
+
         console.log("rect", rect);
         this.setState({
             isOpenTaskMenu: true,
             rectTop: rect.top,
+            rectLeft: rect.left,
             nameRef: refName,
             title
         })
@@ -287,6 +313,7 @@ class TaskInfo extends React.Component {
 
     render() {
 
+        console.log("ON TASK", this.props.participantOnTask)
         // alert(this.state.rect)
         const name = this.props.columns['column-' + this.props.tasks[this.props.taskInfo.id].columnid].name;
         console.log("[098]", this.state.textForDescriptionTmp)
@@ -338,6 +365,39 @@ class TaskInfo extends React.Component {
                                                                             icon={faTimesCircle}/></div>
                     <div className={classes.itemActiveColumn}>in column <span
                         className={classes.itemActiveColumnUnderline}>{name}</span></div>
+                    <div className={classes.cardDetail}>
+                        {this.props.participantOnTask.length !== 0 ? <div className={classes.cardParticipants}>
+                            <div>
+                                <span className={classes.cardTitle}>Participants</span>
+                            </div>
+                            <div className={classes.containerIconName}>
+                                {this.props.participantOnTask.map(participant => <div className={classes.itemParticipant}><span
+                                    className={classes.wrapIconName}>{participant.username.substr(0, 1)}</span>
+                                </div>)}
+                                <div onClick={() => {this.getCoordinate(this.partRef, 'Participants', 'Projects Participants')}} ref={this.partRef}><span
+                                    className={`${classes.wrapIconPlus} ${classes.wrapIconName}`}>+</span>
+                                </div>
+                            </div>
+                        </div> : ''}
+
+                        {this.props.tasks[this.props.taskInfo.id].markers && this.props.tasks[this.props.taskInfo.id].markers.length !== 0 && <div className={classes.cardParticipants}>
+                            <div>
+                                <span className={classes.cardTitle}>Markers</span>
+                            </div>
+                            <div className={classes.containerIconName}>
+                                {this.props.tasks[this.props.taskInfo.id].markers.map((marker, index) => {
+                                    // let ref = `markerRef`+this.state.markers.find(item => item.name === marker).id;
+                                    // console.log(this);
+                                    return <div  className={classes.itemParticipant}><span style={{backgroundColor: markers.find(item => item.name === marker).style}}
+                                                                                   className={classes.wrapIconMarker}>{marker.substr(0, 1)}</span>
+                                    </div>})}
+                                <div onClick={() => {this.getCoordinate(this.markerRef, 'Markers', 'Project Markers')}} ref={this.markerRef}><span
+                                    className={`${classes.wrapIconMarkerPlus} ${classes.wrapIconMarker}`}>+</span>
+                                </div>
+                            </div>
+                        </div> }
+
+                    </div>
                     <div className={classes.secondBlock}>
                         <div className={classes.secondBlockLeft}>
                             <div className={classes.firstBlockLeftIcon}>
@@ -401,7 +461,7 @@ class TaskInfo extends React.Component {
                         <div className={classes.thirdBlock}>
                             <div className={classes.thirdItemWrap}>
                                 {this.state.isOpenTaskMenu && <div style={{top: `${this.state.rectTop-47}px`}} className={classes.itemListInvite}>
-                                    <InviteList title={this.state.title} activeParticipants={activeUsers} nameRef={this.state.nameRef} onCloseTaskMenu={this.onCloseTaskMenu} taskMenu={true}/>
+                                    <InviteList markers={markers} title={this.state.title} activeParticipants={activeUsers} nameRef={this.state.nameRef} onCloseTaskMenu={this.onCloseTaskMenu} taskMenu={true}/>
                                 </div>}
                                 <div className={classes.itemRigthBlockTitle}>
                                     ADD TO TASK
@@ -445,8 +505,8 @@ class TaskInfo extends React.Component {
 
                     {/*</div>*/}
                     {/*<div>*/}
-                        Participants: {this.props.participantOnTask ? this.props.participantOnTask.map(item =>
-                        <div>{item.username}</div>) : <div>list is empty</div>}
+                    {/*    Participants: {this.props.participantOnTask ? this.props.participantOnTask.map(item =>*/}
+                    {/*    <div>{item.username}</div>) : <div>list is empty</div>}*/}
                     {/*    <div className={classes.container}>*/}
                     {/*        {this.props.isOpenUsersList ? <div className={classes.listWrap}>*/}
                     {/*            /!*{activeUsers.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*!/*/}
@@ -466,26 +526,26 @@ class TaskInfo extends React.Component {
                     {/*        this.onOpenListUsers()*/}
                     {/*    }}>{this.props.isOpenUsersList ? 'close list' : "add participants"}</button>*/}
                     {/*</div>*/}
-                    <div>
-                        Marker's
-                        list: {this.props.tasks[this.props.taskInfo.id].markers ? this.props.tasks[this.props.taskInfo.id].markers.map(marker =>
-                        <div>{marker}</div>) : <div>No markers</div>}
-                        <div className={classes.container}>
-                            {this.props.isOpenMarkersList ? <div className={classes.listWrap}>
-                                {this.state.markers.map(marker => <div onClick={() => {
-                                    !this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker) ? this.onAddNewMarker(marker, this.props.tasks[this.props.taskInfo.id].markers) : this.onRemoveMarker(marker, this.props.tasks[this.props.taskInfo.id].markers)
-                                }}
-                                                                       className={`${classes.userWrap} ${this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker) && classes.cursor}`}>
-                                    <div>{marker}</div>
-                                    {this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker) ?
-                                        <div>OK</div> : ''}</div>)}
-                            </div> : ''}
-                        </div>
-                        {/*{this.props.isOpenUsersList ? <select onBlur={() => {this.onOpenListUsers()}} autoFocus={true} multiple>{this.props.users.map((user, index) => <option key={index}>{user.username}</option>)}</select> : ''}*/}
-                        {/*<button onClick={() => {*/}
-                        {/*    this.onOpenListMarkers()*/}
-                        {/*}}>{this.props.isOpenMarkersList ? 'close list' : "add marker"}</button>*/}
-                    </div>
+                    {/*<div>*/}
+                    {/*    Marker's*/}
+                    {/*    list: {this.props.tasks[this.props.taskInfo.id].markers ? this.props.tasks[this.props.taskInfo.id].markers.map(marker =>*/}
+                    {/*    <div>{marker}</div>) : <div>No markers</div>}*/}
+                    {/*    <div className={classes.container}>*/}
+                    {/*        {this.props.isOpenMarkersList ? <div className={classes.listWrap}>*/}
+                    {/*            {this.state.markers.map(marker => <div onClick={() => {*/}
+                    {/*                !this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker) ? this.onAddNewMarker(marker, this.props.tasks[this.props.taskInfo.id].markers) : this.onRemoveMarker(marker, this.props.tasks[this.props.taskInfo.id].markers)*/}
+                    {/*            }}*/}
+                    {/*                                                   className={`${classes.userWrap} ${this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker) && classes.cursor}`}>*/}
+                    {/*                <div>{marker}</div>*/}
+                    {/*                {this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker) ?*/}
+                    {/*                    <div>OK</div> : ''}</div>)}*/}
+                    {/*        </div> : ''}*/}
+                    {/*    </div>*/}
+                    {/*    /!*{this.props.isOpenUsersList ? <select onBlur={() => {this.onOpenListUsers()}} autoFocus={true} multiple>{this.props.users.map((user, index) => <option key={index}>{user.username}</option>)}</select> : ''}*!/*/}
+                    {/*    /!*<button onClick={() => {*!/*/}
+                    {/*    /!*    this.onOpenListMarkers()*!/*/}
+                    {/*    /!*}}>{this.props.isOpenMarkersList ? 'close list' : "add marker"}</button>*!/*/}
+                    {/*</div>*/}
                     {/*<div>*/}
                     {/*    <button onClick={() => {*/}
                     {/*        this.onRemoveTask(this.props.taskInfo.taskid)*/}

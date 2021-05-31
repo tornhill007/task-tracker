@@ -22,7 +22,6 @@ router.use('/users/active', passport.authenticate('jwt', {session: false}), asyn
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
 
-
     // user = await UsersProjects.getUsersProjects(req.query.projectId, decoded.userId);
     user = await Users.getUserProject(req.query.projectId, decoded.userId)
 

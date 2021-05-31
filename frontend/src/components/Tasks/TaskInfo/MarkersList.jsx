@@ -5,6 +5,7 @@ import {addNewParticipant, removeParticipant} from "../../../redux/reducers/user
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {addNewMarker} from "../../../redux/reducers/columnsReducer";
+import markers from '../../../common/markers'
 
 class MarkersList extends React.Component {
 
@@ -16,28 +17,7 @@ class MarkersList extends React.Component {
             // isHoveredMarkerImportant: false,
             // isHoveredMarkerNotImportant: false,
             // isHoveredMarkerBug: false,
-            markers: [
-                {
-                    name: "critical",
-                    style: "#eb5a46",
-                    shadow: "#b04632"
-                },
-                {
-                    name: "important",
-                    style: "#0079bf",
-                    shadow: "#055a8c"
-                },
-                {
-                    name: "not important",
-                    style: "#61bd4f",
-                    shadow: "#519839"
-                },
-                {
-                    name: "bug",
-                    style: "#f2d600",
-                    shadow: "#d9b51c"
-                }
-            ],
+
         }
     }
 
@@ -78,7 +58,7 @@ class MarkersList extends React.Component {
         console.log("[123454]", this.props.activeUsers);
         return (
             <div className={classes.itemWrap}>
-                {this.state.markers.map((marker,index) => {
+                {markers.map((marker,index) => {
                     // console.log(user)
                     return <div onMouseOver={() => {
                         let newObj = Object.assign({}, this.state.isHoveredMarker);

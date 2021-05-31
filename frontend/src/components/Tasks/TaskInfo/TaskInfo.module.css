@@ -388,3 +388,90 @@
 .itemRigthBlockSecondTitle {
     margin-top: 50px;
 }
+
+.containerIconName {
+    display: flex;
+    margin-top: 10px;
+    margin-right: 5px;
+    height: 32px;
+    width: 32px;
+}
+
+.wrapIconName {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 32px;
+    color: #fff;
+    height: 32px;
+    background-color: #00875a;
+}
+
+.wrapIconName:hover {
+    opacity: 0.8;
+}
+
+.wrapIconPlus {
+    color: #172b4d;
+    background-color: rgba(9,30,66,.04);
+}
+
+.wrapIconPlus:hover {
+    background-color: rgba(9,30,66,.08);
+    box-shadow: none;
+    border: none;
+}
+
+.cardParticipants {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 59px;
+    margin-top: 30px;
+}
+
+.itemParticipant {
+    margin-right: 3px;
+}
+
+.cardTitle {
+    color: #5e6c84;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    line-height: 16px;
+    text-transform: uppercase;
+}
+
+.cardDetail {
+    display: flex;
+}
+
+.wrapIconMarker {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    width: 40px;
+    color: #fff;
+    height: 32px;
+    background-color: #00875a;
+}
+
+.wrapIconMarkerPlus {
+    color: #172b4d;
+    background-color: rgba(9,30,66,.04);
+}
+
+.wrapIconMarkerPlus:hover {
+    background-color: rgba(9,30,66,.08);
+    box-shadow: none;
+    border: none;
+}
+
+.wrapIconMarker:hover {
+    opacity: 0.8;
+}

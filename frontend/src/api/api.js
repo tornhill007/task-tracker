@@ -143,6 +143,11 @@ export const tasksAPI = {
             description
         })
     },
+
+    getTasksUsers(projectId, userId) {
+      return instance.get(`tasks/${projectId}/${userId}`)
+    },
+
     getAllTasks(projectId) {
         return instance.get(`tasks/` + projectId);
     },

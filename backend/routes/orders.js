@@ -27,41 +27,16 @@ router.post('/orders/create', catchWrap(async (req, res) => {
 
     await savedOrder.addProduct(product);
 
-    // const productOrder = {
-    //     orderid: savedOrder.id,
-    //     productid: req.body.product.id,
-    //     quantity: req.body.product.quantity
-    // }
-
-    // const savedProductOrder = ProductOrder.build(productOrder, { w: 1 }, { returning: true });
-
-    // await savedProductOrder.save();
-
-
     await savedOrder.save();
     return res.status(200).json(savedOrder);
 
 }));
-
-// router.delete('/orders/create', catchWrap(async (req, res) => {
-//
-//     // Create and save the order
-//     const savedOrder = await ProductOrder.destroy({truncate: true});
-//
-//     return res.json("deleted");
-//
-// }));
-
 
 router.get('/orders', async (req, res) => {
 
     // Get all orders
     const allOrders = await Order.findAll({
 
-            // where: {
-            //     id: 1
-            // },
-            // Make sure to include the products
             include: [{
                 model: Product,
                 as: 'products',
@@ -73,13 +48,6 @@ router.get('/orders', async (req, res) => {
             ]
         }
     );
-
-    // const orders = allOrders[0].orders;
-
-    // allOrders.getProducts({where: {
-    //
-    //     }})
-
 
     // If everything goes well respond with the orders
     res.json(allOrders);

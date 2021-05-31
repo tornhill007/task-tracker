@@ -22,7 +22,13 @@ import {
     setIsOpenInputEditProject,
     setIsOpenInviteList
 } from "../redux/reducers/projectsReducer";
-import {addToProject, getAllUsers, leaveProject, removeFromProject} from "../redux/reducers/usersReducer";
+import {
+    addToProject,
+    getAllUsers,
+    getParticipantsOnTask,
+    leaveProject,
+    removeFromProject
+} from "../redux/reducers/usersReducer";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus, faTimes, faCheck, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {setAuthUserData} from "../redux/reducers/authReducer";
@@ -143,6 +149,8 @@ class Project extends React.Component {
     projectId = this.props.match.params.projectId;
 
     componentDidMount() {
+
+        this.props.getParticipantsOnTask(this.props.match.params.projectId, this.props.userId);
 
         document.addEventListener('mousedown', this.handleClickOutside);
 
@@ -552,7 +560,8 @@ const mapStateToProps = (state) => ({
     userName: state.auth.userName,
     userId: state.auth.userId,
     isOpenFormNewColumn: state.columnsPage.isOpenFormNewColumn,
-    isOpenInputEditProject: state.projectsPage.isOpenInputEditProject
+    isOpenInputEditProject: state.projectsPage.isOpenInputEditProject,
+
 })
 
 
@@ -580,5 +589,6 @@ export default connect(mapStateToProps, {
     openFormForNewColumn,
     createNewColumn,
     setIsOpenInputEditProject,
-    editProject
+    editProject,
+    getParticipantsOnTask
 })(AuthRedirectComponent);

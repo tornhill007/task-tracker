@@ -209,6 +209,7 @@ export default class Column extends React.Component {
                                     {
                                         this.props.tasks.length === 0 ? '' : this.props.tasks[0] === undefined ? '' : this.props.tasks.map((task, index) => {
                                             return <Tasks
+                                                taskId={task.taskid}
                                                 isScroll={this.state.isScroll}
                                                 taskInfo={this.props.taskInfo}
                                                 setTaskInfo={this.props.setTaskInfo}

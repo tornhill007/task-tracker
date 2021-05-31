@@ -31,6 +31,39 @@ const catchWrap = require("../common/wrapper")
 //     next();
 //
 // })
+router.get("/tasks/:projectId/:userId", catchWrap(async (req, res) => {
+
+    let {projectId} = req.params;
+
+    const tasks = await Tasks.findAll({
+        attributes: ['taskid'],
+        where: {
+            projectid: projectId
+        },
+        include: [{
+            model: Users,
+            as: "newUsers",
+            required: true,
+            attributes: ['userid', 'username']
+        }]
+    })
+
+    // const users = await Users.findAll({
+    //     include: [{
+    //         model: Tasks,
+    //         as: 'newTasks',
+    //         required: true,
+    //         where: {
+    //             taskid: taskId,
+    //         },
+    //     }
+    //     ],
+    // });
+
+
+    res.json(tasks);
+
+}))
 
 
 router.post("/task/user", catchWrap(async (req, res) => {
@@ -97,6 +130,8 @@ router.get("/task/user/:taskId/:userId", catchWrap(async (req, res) => {
     res.json(users);
 
 }))
+
+
 
 
 module.exports = router;

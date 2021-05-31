@@ -57,7 +57,7 @@ class InviteList extends React.Component {
                 <div>
                     {this.props.columnMenu ? false : <div className={classes.itemText}><span>{this.props.title}</span></div>}
                 </div>
-                {this.props.nameRef === 'Participants' ? <ParticipantsList activeParticipants={this.props.activeParticipants}/> : this.props.nameRef === 'Markers' ? <MarkersList/> : !this.props.users ? <div className={classes.itemWrapColumnMenu}><div onClick={() => {this.onRemoveColumn()}}>Remove column</div></div> : <div className={classes.itemWrap}>
+                {this.props.nameRef === 'Participants' ? <ParticipantsList activeParticipants={this.props.activeParticipants}/> : this.props.nameRef === 'Markers' ? <MarkersList markers={this.props.markers}/> : !this.props.users ? <div className={classes.itemWrapColumnMenu}><div onClick={() => {this.onRemoveColumn()}}>Remove column</div></div> : <div className={classes.itemWrap}>
                     {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user => <div
                         onClick={() => {
                             !this.checkActiveUsers(user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)

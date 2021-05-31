@@ -54,6 +54,7 @@
 }
 
 .leftItem {
+    /*margin-top: 4px;*/
     width: 100%;
 }
 .icon {
@@ -93,3 +94,69 @@
 /*.u-fancy-scrollbar::-webkit-scrollbar-track-piece {*/
 /*    background: rgba(9,30,66,.08);*/
 /*}*/
+
+.blockMarkers {
+    display: flex;
+}
+
+.itemMarker {
+    margin-right: 4px;
+    max-width: 48px;
+    min-width: 48px;
+    border-radius: 4px;
+    height: 8px;
+    /*background-color: red;*/
+}
+
+.itemMarker:hover {
+
+    opacity: 0.8;
+}
+
+.itemMarkerWrap {
+
+}
+
+.itemMarkerPadding {
+    margin-top: 5px;
+}
+
+.itemParticipant {
+    margin-right: 3px;
+}
+
+.wrapIconName {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 32px;
+    color: #fff;
+    height: 32px;
+    background-color: #00875a;
+}
+
+.wrapIconName:hover {
+    opacity: 0.8;
+}
+
+.blockWrapParticipant {
+    display: flex;
+    justify-content: flex-end;
+    /*text-align: right;*/
+    /*flex-direction: column;*/
+    /*justify-content: c;*/
+    /*margin-top: 10px;*/
+    /*margin-right: 5px;*/
+    /*height: 32px;*/
+    /*width: 32px;*/
+}
+
+.blockItemParticipant {
+    display: flex;
+}
+
+.blockMargin {
+    margin-top: 10px;
+}
