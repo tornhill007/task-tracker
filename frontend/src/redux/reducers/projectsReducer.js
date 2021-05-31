@@ -1,4 +1,4 @@
-import {authAPI, projectsApi} from "../../api/api";
+import {projectsApi} from "../../api/api";
 import {getAllUsers} from "./usersReducer";
 
 const SET_ALL_PROJECTS = 'SET_ALL_PROJECTS';
@@ -18,14 +18,12 @@ const projectsReducer = (state = initialState, action) => {
                 ...state,
                 projects: action.projects
             };
-
-            case SET_IS_OPEN_INPUT_EDIT_PROJECT:
+        case SET_IS_OPEN_INPUT_EDIT_PROJECT:
             return {
                 ...state,
                 isOpenInputEditProject: !state.isOpenInputEditProject
             };
-
-            case SET_IS_OPEN_INVITE_LIST:
+        case SET_IS_OPEN_INVITE_LIST:
             return {
                 ...state,
                 IsOpenInviteList: !state.IsOpenInviteList
@@ -34,7 +32,6 @@ const projectsReducer = (state = initialState, action) => {
             return state;
     }
 };
-
 
 export const setProjects = (projects) => ({
     type: SET_ALL_PROJECTS,
@@ -50,43 +47,32 @@ export const setIsOpenInputEditProject = () => ({
 });
 
 export const createNewProject = (projectName, userId) => async (dispatch) => {
-try {
-    let response = await projectsApi.createNewProject(projectName, userId);
-    dispatch(getAllProjects(userId));
-}
-   catch (e) {
-    console.log("error", e);
-   }
-
+    try {
+        let response = await projectsApi.createNewProject(projectName, userId);
+        dispatch(getAllProjects(userId));
+    } catch (e) {
+        console.log("error", e);
+    }
 };
-
 export const removeProject = (projectId, userId) => async (dispatch) => {
-
     try {
         let response = await projectsApi.removeProject(projectId, userId);
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err);
     }
     dispatch(getAllUsers(projectId, true));
     dispatch(getAllProjects(userId));
-
-
 };
 
 export const getAllProjects = (userId, userName, token) => async (dispatch) => {
     try {
         let response = await projectsApi.getAllProjects(userId);
         if (response.statusText === 'OK') {
-            console.log(response)
             dispatch(setProjects(response.data));
-        }
-        else {
+        } else {
             console.log("ERROR")
         }
-
-    }
-    catch(err) {
+    } catch (err) {
         console.log(err)
     }
 };
@@ -95,15 +81,11 @@ export const editProject = (id, name, userId) => async (dispatch) => {
     try {
         let response = await projectsApi.editProject(id, name, userId);
         if (response.statusText === 'OK') {
-            console.log(response)
             dispatch(getAllProjects(userId));
-        }
-        else {
+        } else {
             console.log("ERROR")
         }
-
-    }
-    catch(err) {
+    } catch (err) {
         console.log(err)
     }
 };

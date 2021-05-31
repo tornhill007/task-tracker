@@ -2,32 +2,10 @@ import React from 'react';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import Tasks from '../Tasks/Tasks';
 import classes from './Columns.module.css';
-import ColumnName from "./ColumnName/ColumnsName";
-import TaskInfo from "../Tasks/TaskInfo/TaskInfo";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPen, faPlus, faTimes} from '@fortawesome/free-solid-svg-icons'
 import TextareaAutosize from 'react-textarea-autosize';
 import InviteList from "../InviteList";
-
-// const Container = styled.div`
-//   margin: 8px;
-//   border: 1px solid lightgrey;
-//   border-radius: 2px;
-//   width: 220px;
-//
-//   display: flex;
-//   flex-direction: column;
-// `;
-// const Title = styled.h3`
-//   padding: 8px;
-// `;
-// const TaskList = styled.div`
-//   padding: 8px;
-//   transition: background-color 0.2s ease;
-//   background-color: ${props => (props.isDraggingOver ? 'skyblue' : 'white')};
-//   flex-grow: 1;
-//   min-height: 100px;
-// `;
 
 export default class Column extends React.Component {
     constructor(props) {
@@ -42,7 +20,6 @@ export default class Column extends React.Component {
             isOpenColumnMenu: false
         };
 
-
         this.changeText = this.changeText.bind(this);
         this.changeTaskText = this.changeTaskText.bind(this);
         this.onOpenColumnMenu = this.onOpenColumnMenu.bind(this);
@@ -50,12 +27,6 @@ export default class Column extends React.Component {
     }
 
     inputRef = React.createRef();
-
-    // state = {
-    //     // id: this.props.id,
-    //     isInput: false,
-    //     text: this.props.column.name
-    // };
 
     handleFocus = (event) => event.target.select();
 
@@ -90,7 +61,6 @@ export default class Column extends React.Component {
             })
             return;
         }
-        console.log("[123123123]", idColumn, name, projectId)
         this.props.onUpdateColumn(idColumn, name, projectId);
         this.setState({
             isInput: !this.state.isInput
@@ -116,7 +86,6 @@ export default class Column extends React.Component {
     }
 
     onAddNewTask(columnId, projectId, position) {
-        console.log("[POS]", position);
         if(!this.state.textNewTask || this.state.textNewTask === '') {
             return;
         }
@@ -127,22 +96,14 @@ export default class Column extends React.Component {
     }
 
     onRemoveColumn(idColumn, projectId) {
-        // console.log("[123123123]", idColumn, name, projectId)
         this.props.onRemoveColumn(idColumn, projectId);
-        // this.setState({
-        //     isInput: !this.state.isInput
-        // })
     }
 
     onCalculateIndex(allTasks) {
-        console.log("qqq", allTasks)
-
         if (this.props.column.taskIds.length === 0) {
             return 1
         } else return +allTasks[this.props.column.taskIds[this.props.column.taskIds.length - 1]].position + 1
-        // +this.props.allTasks[this.props.column.taskIds[this.props.column.taskIds.length-1]].position + 1
     }
-
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.tasks.length !== this.props.tasks.length) {
@@ -155,25 +116,18 @@ export default class Column extends React.Component {
     }
 
     componentDidMount() {
-
         const block = document.getElementById('test' + this.props.column.id);
-        // const block1 = document.getElementById('qwe' + + this.props.column.id);
-        // debugger
-
         const hasVerScroll = block.scrollHeight > block.clientHeight;
         this.setState({
             isScroll: hasVerScroll
         })
     }
 
-
     render() {
 
         return (
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided) => (
-
-
                     <div {...provided.draggableProps} ref={provided.innerRef} className={classes.container}>
                         {this.state.isInput ? <div className={classes.headerWrapper}>
                                 <div><input className={classes.itemTextAreaTitle} onFocus={this.handleFocus}
@@ -194,17 +148,12 @@ export default class Column extends React.Component {
                             </div>
                         }
                         {this.state.isOpenColumnMenu ? <InviteList menuName={"Column Actions"} onRemoveColumn={this.onRemoveColumn} columnId={this.props.column.columnId} onOpenColumnMenu={this.onOpenColumnMenu} columnMenu={true} projectId={this.props.projectId}/>  : ''}
-                        {/*<button onClick={() => {*/}
-                        {/*    this.onRemoveColumn(this.props.column.columnId, this.props.projectId)*/}
-                        {/*}}>Del*/}
-                        {/*</button>*/}
                         <Droppable droppableId={this.props.column.id} type="task">
                             {(provided, snapshot) => (
                                 <div id={'test' + this.props.column.id} className={classes.taskList}
                                      ref={provided.innerRef}
                                      {...provided.droppableProps}
                                      isDraggingOver={snapshot.isDraggingOver}
-
                                 >
                                     {
                                         this.props.tasks.length === 0 ? '' : this.props.tasks[0] === undefined ? '' : this.props.tasks.map((task, index) => {
@@ -218,34 +167,18 @@ export default class Column extends React.Component {
                                         })}
                                     {}
                                     {provided.placeholder}
-                                    {/*{this.state.isTaskInput ? <input onBlur={() => {*/}
-                                    {/*    this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()*/}
-                                    {/*}} autoFocus={true} placeholder={"Please, enter header"}*/}
-                                    {/*                                 onChange={this.changeTaskText}*/}
-                                    {/*                                 value={this.state.textNewTask}/> : ''}*/}
                                     {this.state.isTaskInput ? <div className={classes.containerTask}
-
                                     >
                                         <div>
-
                                             <div className={`${classes.leftItem}`}>
                                                 <TextareaAutosize onKeyDown={(e) => {this.onKeyNewTask(e)}}  onChange={this.changeTaskText} value={this.state.textNewTask}
                                                                   autoFocus={true} placeholder={"Please, enter header"}
                                                                   className={`${this.state.isScroll ? classes.textareaItemScroll : classes.textareaItem}`}/>
                                             </div>
-
-                                            {/*{this.state.isActiveTask ? <FontAwesomeIcon className={`fa-xs` + ` ${classes.positionIcon} ${classes.icon}`} icon={faPen}/> : ''}*/}
-                                            {/*<div contentEditable={true} className={classes.textareaItem} onBlur={() => {*/}
-                                            {/*    this.state.textNewTask ? this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks)) : this.onOpenInput()*/}
-                                            {/*}} autoFocus={true} placeholder={"Please, enter header"}*/}
-                                            {/*     onChange={this.changeTaskText}*/}
-                                            {/*     value={this.state.textNewTask}/>*/}
                                         </div>
-
                                     </div> : ''}
                                 </div>
                             )}
-
                         </Droppable>
                         <div className={classes.wrapItemFooter}>
                             {this.state.isTaskInput ? <div className={classes.itemCreateColumnWrap}>
@@ -256,7 +189,6 @@ export default class Column extends React.Component {
                                     <FontAwesomeIcon  className={`fa-2x`}
                                                       icon={faTimes}/>
                                 </div>
-
                             </div> :
                                 <div onClick={() => {
                                     this.onOpenInput()
@@ -265,10 +197,7 @@ export default class Column extends React.Component {
                                                                                                    icon={faPlus}/></div>
                                     <div className={classes.itemButton}>add another task
                                     </div>
-
                                 </div>}
-
-
                         </div>
                     </div>
                 )}

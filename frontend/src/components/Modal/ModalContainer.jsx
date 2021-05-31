@@ -9,5 +9,4 @@ let mapStateToProps = (state) => {
     }
 };
 
-
 export default connect(mapStateToProps, {})(Modal);

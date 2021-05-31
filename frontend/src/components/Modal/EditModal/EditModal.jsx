@@ -4,9 +4,7 @@ import {createNewProject} from "../../../redux/reducers/projectsReducer";
 class EditModal extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            // id: this.props.id,
             text: this.props.text
         };
 
@@ -27,23 +25,18 @@ class EditModal extends React.Component {
 
     createProject() {
         const {text} = this.state;
-        // const text1 = this.newRef.current.value;
         this.props.createNewProject(text, this.props.userId);
         this.close();
     }
 
     save(id, event) {
         const {text} = this.state;
-        // this.setState({text: text});
-
         const text1 = this.newRef.current.value;
-        console.log("event.target.value", text1);
         this.props.editProject(id, text1, this.props.userId);
         this.close();
     }
 
     createNewColumn(projectListId) {
-        // const projectId =
         const {text} = this.state;
 
         let position;
@@ -54,28 +47,18 @@ class EditModal extends React.Component {
             position = this.props.columns[this.props.columnsOrder[this.props.columnsOrder.length-1]].position + 1;
         }
 
-        console.log("position", position)
-
-        // this.setState({text: text});
         this.props.createNewColumn(text, projectListId, position);
-        // const text1 = this.newRef.current.value;
-        // console.log("event.target.value", text1);
-        // this.props.editProject(id, text1);
         this.close();
     }
-
 
     render() {
 
         return (
-
             <div>
                 <div className="modal-body">
-
                     <textarea maxlength="30" ref={this.newRef} onChange={this.changeText} value={this.state.text} cols="40"/>
                 </div>
                 <div className="modal-footer">
-                    {/*{this.props.title === 'Edit project' ? <button type="button" className="btn btn-primary" onClick={(e) => this.save(this.props.id, e)}>Save changes</button> : <button type="button" className="btn btn-primary" onClick={() => this.createProject()}>Create new project</button>}*/}
                     {<button type="button" className="btn btn-primary" onClick={(e) => this.props.title === 'Edit project' ? this.save(this.props.id, e) : this.props.title === 'Add new column' ? this.createNewColumn(this.props.parameters.projectListId) : this.createProject()}>{this.props.parameters.buttonName}</button>}
                     <button type="button" className="btn btn-secondary" onClick={() => this.close()}>Close</button>
                 </div>

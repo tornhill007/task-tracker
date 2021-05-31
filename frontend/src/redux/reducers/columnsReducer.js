@@ -1,23 +1,19 @@
 import {
-    authAPI,
     columnsApi,
-    projectsApi, tasksAPI,
+    tasksAPI,
 } from "../../api/api";
-import {reset} from "redux-form";
-// import {stopSubmit} from "redux-form"
 import {sortByPosition} from '../../utils/sort'
 
 const SET_COLUMNS = 'SET_COLUMNS';
-const SET_COLUMN_ORDER = 'SET_COLUMN_ORDER';
 const ON_DRAG_END = 'ON_DRAG_END';
 const OPEN_MODAL = 'OPEN_MODAL';
 const CLOSE_MODAL = 'CLOSE_MODAL';
 const CHANGE_IS_INPUT = 'CHANGE_IS_INPUT';
-const UPDATE_COLUMN = 'UPDATE_COLUMN';
 const SET_ALL_TASKS = 'SET_ALL_TASKS';
 const SET_TASK_INFO = 'SET_TASK_INFO';
 const CLOSE_TASK_INFO = 'CLOSE_TASK_INFO';
 const OPEN_FORM_FOR_NEW_COLUMN = 'OPEN_FORM_FOR_NEW_COLUMN';
+const CHANGE_TEXT_FOR_DESCRIPTION_TMP = 'CHANGE_TEXT_FOR_DESCRIPTION_TMP';
 
 let initialState = {
     isOpenFormNewColumn: false,
@@ -28,7 +24,8 @@ let initialState = {
     isTaskInfo: false,
     tasks: {},
     columns: {},
-    columnOrder: []
+    columnOrder: [],
+    textForDescriptionTmp: []
 };
 
 const columnsReducer = (state = initialState, action) => {
@@ -44,13 +41,17 @@ const columnsReducer = (state = initialState, action) => {
                 ...state,
                 isOpenFormNewColumn: !state.isOpenFormNewColumn,
             };
+        case CHANGE_TEXT_FOR_DESCRIPTION_TMP:
+            return {
+                ...state,
+                textForDescriptionTmp: action.textForDescriptionTmp,
+            };
         case CHANGE_IS_INPUT:
             return {
                 ...state,
                 isInput: !state.isInput
             };
         case SET_TASK_INFO:
-            console.log("taskInfo", action.taskInfo)
             return {
                 ...state,
                 taskInfo: action.taskInfo,
@@ -68,8 +69,6 @@ const columnsReducer = (state = initialState, action) => {
             };
         case SET_ALL_TASKS:
             let newTasks = {};
-
-            console.log("STATE>COLUMNS", state.columns)
             let newTasksArr = action.tasks.map((task, index) => {
                 return {
                     id: `task-${task.taskid}`,
@@ -86,22 +85,17 @@ const columnsReducer = (state = initialState, action) => {
             newTasksArr.forEach((key, index) => {
                 newTasks[key.id] = key;
             })
-            console.log("newTasks", newTasks)
             return {
                 ...state,
                 tasks: newTasks
             };
         case SET_COLUMNS:
-            console.log("[11]", action.tasks);
-            console.log("[22]", action.columns);
             let columnsArr = action.columns.map((column, index) => {
                 let taskSort = action.tasks.filter((task, index) => task.columnid == column.columnid);
-                console.log("taskSort", taskSort);
                 sortByPosition(taskSort);
                 return {
                     id: `column-${column.columnid}`,
                     name: column.name,
-                    // taskIds: ['task-5', 'task-6', 'task-7', 'task-8', 'task-9'],
                     taskIds: taskSort.map((item, index) => `task-${item.taskid}`),
                     position: column.position,
                     columnId: column.columnid
@@ -117,15 +111,8 @@ const columnsReducer = (state = initialState, action) => {
                     position: key.position
                 })
             });
-
-            console.log("columnsArr", columnsArr);
-
             sortByPosition(columnsOrder);
             let columnsOrderFinish = columnsOrder.map(column => column.id)
-            console.log("columnsOrder", columnsOrderFinish);
-            console.log("columnsObj", columnsObj);
-
-            console.log(action.columns)
             return {
                 ...state,
                 columns: columnsObj,
@@ -148,9 +135,6 @@ const columnsReducer = (state = initialState, action) => {
 
             if (type === 'column') {
                 const newColumnOrder = Array.from(state.columnOrder);
-                console.log("newColumnOrder", newColumnOrder)
-                console.log("source.index", source.index)
-                console.log("destination.index", destination.index)
                 newColumnOrder.splice(source.index, 1);
                 newColumnOrder.splice(destination.index, 0, draggableId);
 
@@ -237,6 +221,7 @@ export const closeModal = () => ({type: CLOSE_MODAL});
 export const changeIsInput = () => ({type: CHANGE_IS_INPUT});
 export const setTaskInfo = (taskInfo) => ({type: SET_TASK_INFO, taskInfo});
 export const closeTaskInfo = () => ({type: CLOSE_TASK_INFO});
+export const changeTextForDescription = (textForDescriptionTmp) => ({type: CHANGE_TEXT_FOR_DESCRIPTION_TMP, textForDescriptionTmp});
 
 
 export const getColumns = (projectId) => async (dispatch) => {

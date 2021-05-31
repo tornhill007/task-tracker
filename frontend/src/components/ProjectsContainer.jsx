@@ -8,40 +8,37 @@ import {openModal} from "../redux/reducers/columnsReducer";
 import {getAllUsers} from "../redux/reducers/usersReducer";
 import {withAuthRedirect} from "../hoc/withAuthRedirect";
 import {setAuthUserData} from "../redux/reducers/authReducer";
+
 class ProjectsContainer extends React.Component {
 
     getProjects = async (userId, userName, token) => {
-       this.props.getAllProjects(userId, userName, token);
+        this.props.getAllProjects(userId, userName, token);
     }
 
     getUsers = () => {
         this.props.getAllUsers();
     }
 
-
     componentDidMount() {
-        if(JSON.parse(localStorage.getItem('user'))) {
+        if (JSON.parse(localStorage.getItem('user'))) {
             let user = JSON.parse(localStorage.getItem('user'));
-            if(user.timestamp > Date.now() - 3600000) {
+            if (user.timestamp > Date.now() - 3600000) {
                 console.log(user.userId, user.userName, user.token)
                 this.props.setAuthUserData(user.userId, user.userName, user.token)
                 this.getProjects(user.userId, user.userName, user.token);
-            }
-            else {
+            } else {
                 window.localStorage.removeItem('user');
 
-                this.props.setAuthUserData(null,null, null)
+                this.props.setAuthUserData(null, null, null)
             }
         }
 
-
-        // this.getUsers();
-        // this.props.getUsers(this.props.pageSize, this.props.currentPage);
     }
 
     render() {
         return (
-            <Projects userId={this.props.userId} removeProject={this.props.removeProject} projects={this.props.projects} openModal={this.props.openModal}/>
+            <Projects userId={this.props.userId} removeProject={this.props.removeProject} projects={this.props.projects}
+                      openModal={this.props.openModal}/>
         )
     }
 }
@@ -56,7 +53,14 @@ const mapStateToProps = (state) => {
 
 let AuthRedirectComponentProjects = withAuthRedirect(ProjectsContainer);
 
-export default connect(mapStateToProps, {setAuthUserData, getAllUsers, setProjects, openModal, getAllProjects, removeProject})(AuthRedirectComponentProjects);
+export default connect(mapStateToProps, {
+    setAuthUserData,
+    getAllUsers,
+    setProjects,
+    openModal,
+    getAllProjects,
+    removeProject
+})(AuthRedirectComponentProjects);
 
 
 

@@ -2,45 +2,24 @@
 const passport = require('passport')
 const express = require("express");
 const router = express.Router();
-const pool = require('../db')
 const jwt = require("jsonwebtoken");
 const keys = require('../config/keys');
-
 const Tasks = require('../models/Tasks');
 const Users = require('../models/Users');
-const Projects = require('../models/Projects');
-const UsersProjects = require('../models/UsersProjects');
+
 
 const catchWrap = require("../common/wrapper");
-const {wrapWhereProjectId, wrapWhereColumnId, wrapWhereTaskId} = require('../common/wrapWhere')
 
 router.use('/tasks/:projectId', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     let user;
-
 
     if(req.params.projectId === 'position') {
         next();
         return;
     }
 
-    // user = await UsersProjects.getUsersProjects(req.params.projectId, decoded.userId);
     user = await Users.getUserProject(req.params.projectId, decoded.userId);
-    // findOne({
-    //     where: {
-    //         userid: decoded.userId
-    //     },
-    //     include: [{
-    //         model: Projects,
-    //         as: 'projects',
-    //         required: true,
-    //         where: {
-    //             projectid: req.params.projectId,
-    //         }
-    //     }
-    //     ]
-    // });
-
 
     if (!user) {
         res.status(401).json({
@@ -51,7 +30,6 @@ router.use('/tasks/:projectId', passport.authenticate('jwt', {session: false}), 
     next();
 
 })
-
 
 //create new task
 
@@ -64,35 +42,7 @@ router.post("/tasks/:projectId", catchWrap(async (req, res, next) => {
 
 }))
 
-
-//get all project's tasks
-
-// router.get("/tasks/:projectId", catchWrap(async (req, res,) => {
-//     const {projectId} = req.params;
-//     const allTasks = await Tasks.getTasksBuyProjectId(projectId);
-//     res.json(allTasks);
-// }))
-
-
-// //get all column's tasks
-//
-// router.get("/tasks", catchWrap(async (req, res) => {
-//     const {columnId} = req.body;
-//     const allTasks = await Tasks.getTasksBuyColumnId(columnId);
-//     res.json(allTasks);
-// }))
-
-
-// //get task
-//
-// router.get("/tasks/:projectId/:id", catchWrap(async (req, res) => {
-//     const {id} = req.params;
-//     const task = await Tasks.getTaskById(id);
-//     res.json(task);
-// }))
-
 //update task's position and columnId
-
 
 router.put("/tasks/position/:projectId", catchWrap(async (req, res) => {
     const {tasksArr} = req.body;
@@ -102,9 +52,7 @@ router.put("/tasks/position/:projectId", catchWrap(async (req, res) => {
         updatedTask.position = tasksArr[i].position;
         updatedTask.columnid = tasksArr[i].columnid;
         await updatedTask.save();
-
     }
-
     res.json("Task updated");
 
 }))
@@ -124,22 +72,11 @@ router.put("/tasks/:projectId/:id", catchWrap(async (req, res) => {
 }))
 
 
-//delete all task from column
-
-// router.delete("/tasks/:projectId/:id", catchWrap(async (req, res) => {
-//     const {id} = req.params;
-//     const deletedTasks = await Tasks.destroyTasksByColumnId(id);
-//     res.json("Tasks deleted");
-// }))
-
-
 //delete task
 
 router.delete("/tasks/:projectId/:id", catchWrap(async (req, res) => {
     const {id} = req.params;
-    // const deletedTask = await Tasks.destroyTaskById(id);
     const deletedTask = await Tasks.getTaskById(id);
-    // const users = await Users.getUsersTasksByTaskId(id);
     const users = await Users.findAll({
         include: [{
             model: Tasks,

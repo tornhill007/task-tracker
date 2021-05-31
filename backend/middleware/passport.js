@@ -16,11 +16,7 @@ module.exports = passport => {
             try {
 
                 // const user = await pool.query("SELECT * FROM registration WHERE userId=$1", [payload.userId]);
-                const user = await Users.findAll({
-                    where: {
-                        userid: payload.userId
-                    }
-                });
+                const user = await Users.findUserByUserId(payload.userId);
                 if(user.length !== 0) {
                     done(null, user)
                 }

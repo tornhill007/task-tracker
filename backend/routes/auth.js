@@ -8,8 +8,6 @@ const router = express.Router();
 const pool = require('../db');
 
 
-const {wrapWhereUserName} = require('../common/wrapWhere');
-
 const Users = require('../models/Users');
 
 const catchWrap = require("../common/wrapper")

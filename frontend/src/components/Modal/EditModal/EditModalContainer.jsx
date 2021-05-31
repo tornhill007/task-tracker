@@ -8,7 +8,6 @@ import {createNewProject, editProject} from "../../../redux/reducers/projectsRed
 
 let mapStateToProps = (state) => {
     return {
-        // tasks: getAllTasks(state),
         columns: state.columnsPage.columns,
         columnsOrder: state.columnsPage.columnOrder,
         userId: state.auth.userId

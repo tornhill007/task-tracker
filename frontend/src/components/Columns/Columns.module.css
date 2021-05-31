@@ -3,25 +3,11 @@
     height: 100%;
     min-height: 100px;
     border-radius: 3px;
-
     background-color: #ebecf0;
     display: flex;
     flex-direction: column;
-    /*float: left;*/
     color: #172b4d;
     width: 272px;
-/*float: left;*/
-    /*white-space: nowrap;*/
-    /*float: left;*/
-   /*width: 1000px;*/
-    /*box-sizing: border-box;*/
-    /*display: inline-block;*/
-    /*margin: 0 4px;*/
-    /*height: 100%;*/
-    /*box-sizing: border-box;*/
-    /*display: inline-block;*/
-    /*vertical-align: top;*/
-    /*white-space: nowrap;*/
 
 }
 
@@ -61,24 +47,12 @@
 
 .textareaItem {
     display: inline-block;
-    /*border: solid 1px #000;*/
     min-height: 50px;
     max-height: 200px;
     width: 240px;
-    /*max-height: 162px;*/
     border: none;
-    /*overflow: hidden;*/
-    /*overflow-wrap: break-word;*/
-    /*resize: vertical;*/
     resize: none;
-    /*overflow: hidden;*/
 }
-
-
-
-/*.textareaItem:focus {*/
-/*    outline: none;*/
-/*}*/
 
 .title {
     font-size: 14px;
@@ -89,10 +63,7 @@
 
 .headerWrapper {
     margin: 5px 5px -2px 5px;
-    /*display: block;*/
     display: flex;
-    /*justify-content: flex-start;*/
-    /*align-items: center;*/
     text-align: left;
     align-items: center;
 }
@@ -106,23 +77,15 @@
     max-height: 670px;
     padding: 8px;
     transition: background-color 0.2s ease;
-    /*background-color: ${props => (props.isDraggingOver ? 'skyblue' : 'white')};*/
     flex-grow: 1;
-
-    /*min-height: 50px;*/
 }
 
 .itemButton {
-    /*margin-top: 5px;*/
     width: 60%;
-    /*text-align: left;*/
-    /*margin-left: 20px;*/
 }
 
 .taskList::-webkit-scrollbar {
     width: 8px;
-    /*height: 8px;*/
-
 }
 
 .taskList::-webkit-scrollbar-track-piece {
@@ -133,19 +96,14 @@
 .taskList::-webkit-scrollbar-thumb {
     background: #cccdd6;
     border-radius: 5px;
-    /*height: 100px!important;*/
-
 }
 .itemTitleRigth {
-    /*float: left;*/
-
     border-radius: 4px;
     padding: 3px 12px 12px 12px;
 }
 
 .itemTitleRigthInput {
-    /*float: left;*/
-    /*display: flex;*/
+
 }
 
 .itemTitleRigthInput:hover {
@@ -190,8 +148,6 @@
     outline: #0079bf auto 3px;
 }
 
-/*.itemFooterButtonLeft*/
-
 .itemFooterButton:hover {
     background-color: rgba(9,30,66,.08);
     cursor: pointer;
@@ -203,12 +159,10 @@
     margin-top: -13px;
     align-items: center;
     justify-content: flex-start;
-    /*margin: 0;*/
 }
 
 
 .itemInput {
-    /*margin-top: -10px;*/
     margin-bottom: 3px;
     margin-right: 6px;
     background-color: #0079bf;
@@ -218,7 +172,6 @@
     color: #fff;
     padding: 7px 10px;
     font-size: 1rem;
-    /*font-weight: 200;*/
 }
 
 .itemInput:hover {
@@ -226,15 +179,11 @@
     background-color: #026aa7;
 }
 
-
 .itemLeftColumn {
     width: 15%;
     margin-bottom: 3px;
     color: #42526e;
 }
-
-
-
 
 .itemLeftColumn:hover {
     color: #172b4d;

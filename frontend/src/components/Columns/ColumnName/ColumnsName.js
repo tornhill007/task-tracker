@@ -3,7 +3,6 @@ import React from "react";
 class ColumnName extends React.Component {
 
     state = {
-        // id: this.props.id,
         isInput: false
     };
 

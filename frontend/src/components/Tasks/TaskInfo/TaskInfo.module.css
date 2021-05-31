@@ -374,6 +374,13 @@
     /*top: 300px!important;*/
 }
 
+.itemListInvitePlus {
+    position: absolute;
+    /*right: 300px;*/
+    top: 100px;
+    /*top: 300px!important;*/
+}
+
 .itemNameButton{
     margin-left: 10px;
 }
@@ -474,4 +481,8 @@
 
 .wrapIconMarker:hover {
     opacity: 0.8;
+}
+
+.eyeIcon {
+    margin-left: 10px;
 }

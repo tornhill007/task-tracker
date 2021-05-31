@@ -2,7 +2,7 @@ import React from "react";
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
 import {
-    addNewMarker,
+    addNewMarker, changeTextForDescription,
     closeTaskInfo,
     removeTask,
     updateDescription,
@@ -23,7 +23,8 @@ import {
     faBars,
     faUser,
     faTag,
-    faEraser
+    faEraser,
+    faEye
 } from '@fortawesome/free-solid-svg-icons'
 import TextareaAutosize from "react-textarea-autosize";
 import InviteList from "../../InviteList";
@@ -35,8 +36,12 @@ class TaskInfo extends React.Component {
         super(props);
         this.state = {
             nameRef: '',
+            nameRefPlus: '',
             title: '',
+            titlePlus: '',
             rectTop: false,
+            rectTopPlus: false,
+            rectLeftPlus: false,
             rectLeft: false,
             isInput: false,
             isTextArea: false,
@@ -45,6 +50,7 @@ class TaskInfo extends React.Component {
             textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description,
             isButton: false,
             isOpenTaskMenu: false,
+            isOpenTaskMenuLeft: false
         };
 
         this.myRef = React.createRef();
@@ -52,6 +58,8 @@ class TaskInfo extends React.Component {
         this.MarkersRef = React.createRef();
         this.markerRef = React.createRef();
         this.partRef = React.createRef();
+        this.partRefPlus = React.createRef();
+        this.markerRefPlus = React.createRef();
 
         // for(let key of this.state.markers) {
         //     console.log("key", key.id);
@@ -60,6 +68,7 @@ class TaskInfo extends React.Component {
         // }
 
         this.onCloseTaskMenu = this.onCloseTaskMenu.bind(this);
+        this.onCloseTaskMenuPlus = this.onCloseTaskMenuPlus.bind(this);
 
     }
 
@@ -69,6 +78,7 @@ class TaskInfo extends React.Component {
 
     componentDidMount() {
         this.props.getParticipantOnTask(this.props.taskInfo.projectid, this.props.taskInfo.taskid, this.props.userId);
+        // this.props.changeTextForDescription(this.state.textForDescriptionTmp);
     }
 
     // onKeyName = (e) => {
@@ -97,7 +107,6 @@ class TaskInfo extends React.Component {
     }
 
 
-
     changeText = (event) => {
         this.setState({
             text: event.target.value
@@ -117,10 +126,26 @@ class TaskInfo extends React.Component {
         console.log("rect", rect);
         this.setState({
             isOpenTaskMenu: true,
+            isOpenTaskMenuLeft: false,
             rectTop: rect.top,
             rectLeft: rect.left,
             nameRef: refName,
             title
+        })
+    }
+
+    getCoordinateForPlus = (ref, refName, title) => {
+        console.log("ref", ref.current);
+        let rect = ref.current.getBoundingClientRect();
+
+        console.log("rect", rect);
+        this.setState({
+            isOpenTaskMenuLeft: true,
+            isOpenTaskMenu: false,
+            rectTopPlus: rect.top,
+            rectLeftPlus: rect.left,
+            nameRefPlus: refName,
+            titlePlus: title
         })
     }
 
@@ -134,6 +159,12 @@ class TaskInfo extends React.Component {
     onCloseTaskMenu = () => {
         this.setState({
             isOpenTaskMenu: false,
+        });
+    }
+
+    onCloseTaskMenuPlus = () => {
+        this.setState({
+            isOpenTaskMenuLeft: false,
         });
     }
 
@@ -234,6 +265,7 @@ class TaskInfo extends React.Component {
             textForDescription: this.props.tasks[this.props.taskInfo.id].description,
             textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description
         })
+        // this.props.changeTextForDescription(this.props.tasks[this.props.taskInfo.id].description)
     }
 
     onUpdateDescription = (taskId, projectId) => {
@@ -252,6 +284,8 @@ class TaskInfo extends React.Component {
         this.setState({
             textForDescriptionTmp: this.state.textForDescription,
         })
+
+        // this.props.changeTextForDescription(this.state.textForDescription)
 
         // if(this.state.textForDescription === '') {
         //     this.setState({
@@ -364,7 +398,10 @@ class TaskInfo extends React.Component {
                     }} className={classes.firstBlockRight}><FontAwesomeIcon className={`${classes.borderIcon} fa-lg`}
                                                                             icon={faTimesCircle}/></div>
                     <div className={classes.itemActiveColumn}>in column <span
-                        className={classes.itemActiveColumnUnderline}>{name}</span></div>
+                        className={classes.itemActiveColumnUnderline}>{name}</span>
+                        {this.checkParticipantInList(this.props.userName) && <span className={classes.eyeIcon}><FontAwesomeIcon className={`${classes.iconStyle} fa-cm`}
+                                                                                                                                icon={faEye}/></span>}
+                    </div>
                     <div className={classes.cardDetail}>
                         {this.props.participantOnTask.length !== 0 ? <div className={classes.cardParticipants}>
                             <div>
@@ -374,7 +411,7 @@ class TaskInfo extends React.Component {
                                 {this.props.participantOnTask.map(participant => <div className={classes.itemParticipant}><span
                                     className={classes.wrapIconName}>{participant.username.substr(0, 1)}</span>
                                 </div>)}
-                                <div onClick={() => {this.getCoordinate(this.partRef, 'Participants', 'Projects Participants')}} ref={this.partRef}><span
+                                <div onClick={() => {this.getCoordinateForPlus(this.partRefPlus, 'Participants', 'Projects Participants')}} ref={this.partRefPlus}><span
                                     className={`${classes.wrapIconPlus} ${classes.wrapIconName}`}>+</span>
                                 </div>
                             </div>
@@ -386,12 +423,10 @@ class TaskInfo extends React.Component {
                             </div>
                             <div className={classes.containerIconName}>
                                 {this.props.tasks[this.props.taskInfo.id].markers.map((marker, index) => {
-                                    // let ref = `markerRef`+this.state.markers.find(item => item.name === marker).id;
-                                    // console.log(this);
                                     return <div  className={classes.itemParticipant}><span style={{backgroundColor: markers.find(item => item.name === marker).style}}
                                                                                    className={classes.wrapIconMarker}>{marker.substr(0, 1)}</span>
                                     </div>})}
-                                <div onClick={() => {this.getCoordinate(this.markerRef, 'Markers', 'Project Markers')}} ref={this.markerRef}><span
+                                <div onClick={() => {this.getCoordinateForPlus(this.markerRefPlus, 'Markers', 'Project Markers')}} ref={this.markerRefPlus}><span
                                     className={`${classes.wrapIconMarkerPlus} ${classes.wrapIconMarker}`}>+</span>
                                 </div>
                             </div>
@@ -462,6 +497,9 @@ class TaskInfo extends React.Component {
                             <div className={classes.thirdItemWrap}>
                                 {this.state.isOpenTaskMenu && <div style={{top: `${this.state.rectTop-47}px`}} className={classes.itemListInvite}>
                                     <InviteList markers={markers} title={this.state.title} activeParticipants={activeUsers} nameRef={this.state.nameRef} onCloseTaskMenu={this.onCloseTaskMenu} taskMenu={true}/>
+                                </div>}
+                                {this.state.isOpenTaskMenuLeft && <div style={{top: `${this.state.rectTopPlus-50}px`, left: `${this.state.rectLeftPlus-410}px`}} className={classes.itemListInvitePlus}>
+                                    <InviteList markers={markers} title={this.state.titlePlus} activeParticipants={activeUsers} nameRef={this.state.nameRefPlus} onCloseTaskMenu={this.onCloseTaskMenuPlus} taskMenu={true}/>
                                 </div>}
                                 <div className={classes.itemRigthBlockTitle}>
                                     ADD TO TASK
@@ -581,5 +619,6 @@ export default connect(mapStateToProps, {
     closeTaskInfo,
     addNewParticipant,
     setIsOpenMarkersList,
-    setIsOpenUserList
+    setIsOpenUserList,
+    changeTextForDescription
 })(withRouter(TaskInfo));

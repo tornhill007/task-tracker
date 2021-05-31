@@ -10,11 +10,6 @@ import MarkersList from "./Tasks/TaskInfo/MarkersList";
 
 class InviteList extends React.Component {
 
-    // componentDidMount() {
-    //     this.props.getAllUsers(this.props.projectId);
-    // }
-
-
     checkActiveUsers = (activeUser) => {
         let index = this.props.activeUsers.indexOf(activeUser);
         return index !== -1;
@@ -48,25 +43,39 @@ class InviteList extends React.Component {
                         <div className={classes.closeItem}>{this.props.menuName || this.props.nameRef}</div>
                         <div className={classes.cursor} onClick={() => {
                             this.props.columnMenu ? this.onOpenColumnMenu() : this.props.taskMenu ? this.props.onCloseTaskMenu() :
-                            this.onOpenOrCloseInviteList()
+                                this.onOpenOrCloseInviteList()
                         }}><FontAwesomeIcon icon={faTimesCircle}/></div>
                     </div>
                     <div>
                     </div>
                 </div>
                 <div>
-                    {this.props.columnMenu ? false : <div className={classes.itemText}><span>{this.props.title}</span></div>}
+                    {this.props.columnMenu ? false :
+                        <div className={classes.itemText}><span>{this.props.title}</span></div>}
                 </div>
-                {this.props.nameRef === 'Participants' ? <ParticipantsList activeParticipants={this.props.activeParticipants}/> : this.props.nameRef === 'Markers' ? <MarkersList markers={this.props.markers}/> : !this.props.users ? <div className={classes.itemWrapColumnMenu}><div onClick={() => {this.onRemoveColumn()}}>Remove column</div></div> : <div className={classes.itemWrap}>
-                    {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user => <div
-                        onClick={() => {
-                            !this.checkActiveUsers(user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)
-                        }}
-                        className={`${classes.itemName} ${this.checkActiveUsers(user.username) && ''}`}><div className={classes.itemGroupLeft}><div className={classes.containerIconName}><span  className={classes.wrapIconName}>{user.username.substr(0, 1)}</span></div><div>{user.username}</div></div>{this.checkActiveUsers(user.username) ? <div><FontAwesomeIcon icon={faCheck}/></div> : ''}</div>)}
-
-                    {/*{this.props.users.map(user => <div onClick={() => { !this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users) : this.onRemoveParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users)}} className={`${classes.userWrap} ${this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) && classes.cursor}`}><div  >{user.username}</div>{this.checkUserInList( this.props.tasks[this.props.taskInfo.id].users, user.username) ? <div>OK</div> : ''}</div>)}*/}
-                    {/*{this.state.markers.map(marker => <div onClick={() => { !this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? this.onAddNewMarker(marker, this.props.tasks[this.props.taskInfo.id].markers) : this.onRemoveMarker(marker, this.props.tasks[this.props.taskInfo.id].markers)}} className={`${classes.userWrap} ${this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) && classes.cursor}`}><div  >{marker}</div>{this.checkMarkerInList( this.props.tasks[this.props.taskInfo.id].markers, marker) ? <div>OK</div> : ''}</div>)}*/}
-                </div>}
+                {this.props.nameRef === 'Participants' ? <ParticipantsList
+                    activeParticipants={this.props.activeParticipants}/> : this.props.nameRef === 'Markers' ?
+                    <MarkersList markers={this.props.markers}/> : !this.props.users ?
+                        <div className={classes.itemWrapColumnMenu}>
+                            <div onClick={() => {
+                                this.onRemoveColumn()
+                            }}>Remove column
+                            </div>
+                        </div> : <div className={classes.itemWrap}>
+                            {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user =>
+                                <div
+                                    onClick={() => {
+                                        !this.checkActiveUsers(user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)
+                                    }}
+                                    className={`${classes.itemName} ${this.checkActiveUsers(user.username) && ''}`}>
+                                    <div className={classes.itemGroupLeft}>
+                                        <div className={classes.containerIconName}><span
+                                            className={classes.wrapIconName}>{user.username.substr(0, 1)}</span></div>
+                                        <div>{user.username}</div>
+                                    </div>
+                                    {this.checkActiveUsers(user.username) ?
+                                        <div><FontAwesomeIcon icon={faCheck}/></div> : ''}</div>)}
+                        </div>}
 
             </div>
         )
@@ -77,4 +86,9 @@ const mapStateToProps = (state) => ({
     activeUsers: state.usersPage.activeUsers,
 })
 
-export default connect(mapStateToProps, {removeFromProject, getAllUsers, setIsOpenInviteList, addToProject})(InviteList);
+export default connect(mapStateToProps, {
+    removeFromProject,
+    getAllUsers,
+    setIsOpenInviteList,
+    addToProject
+})(InviteList);

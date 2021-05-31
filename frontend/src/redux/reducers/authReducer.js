@@ -30,8 +30,6 @@ export const setAuthUserData = (userId, userName, token) => ({
 export const login = (password, userName) => async (dispatch) => {
     try {
         let response = await authAPI.login(password, userName);
-        console.log("response", response)
-        console.log(response);
         if (response.statusText === 'OK') {
             dispatch(reset('register'))
             let {userId, userName, token} = response.data;
@@ -58,15 +56,12 @@ export const register = (password, userName, repeatPassword) => async (dispatch)
     try {
         if(password === repeatPassword) {
             let response = await authAPI.register(password, userName);
-            console.log("123", response);
             if (response.statusText === 'OK') {
                 dispatch(reset('register'))
                 alert('you have registered')
             } else {
-
                 let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error";
                 alert(message);
-
             }
         }
         else {

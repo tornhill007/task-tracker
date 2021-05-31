@@ -8,53 +8,22 @@
     background-color: #fff;
     word-break: break-all;
     box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
-    /*overflow: hidden;*/
-    /*background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};*/
-    /*width: 95%;*/
 }
 
 .container:hover {
     background-color: #f5f5f5;
     cursor: pointer;
-
 }
+
 .itemTitle{
     font-weight: 600;
 }
 
-.positionIcon {
-    /*float: right;*/
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*width: 100%;*/
-    /*padding: 8px;*/
-    /*float: right;*/
-    /*position: absolute;*/
-/*    left: 400px;*/
-/*    float: right;*/
-/*    position: fixed;*/
-    /*float: right;*/
-    /*z-index: 10000;*/
-/*bottom: 1000px;*/
-    /*align-items: center;*/
+.position-icon {
 
-    /*position:relative;*/
-    /*b:10px;*/
-    /*float: right;*/
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*display: flex;*/
-    /*z-index: 1000;*/
-    /*flex-direction: column;*/
-    /*justify-content: center;*/
-    /*z-index: 10000;*/
-    /*float: top;*/
-    /*left:20px;*/
-    /*width:200px;*/
 }
 
 .leftItem {
-    /*margin-top: 4px;*/
     width: 100%;
 }
 .icon {
@@ -76,9 +45,6 @@
     padding: 9px;
 
 }
-/*.test {*/
-/*    padding: 10px;*/
-/*}*/
 
 .icon:hover {
     background-color: #e8e8e8;
@@ -90,11 +56,6 @@
     color: black;
 }
 
-/*.taskList*/
-/*.u-fancy-scrollbar::-webkit-scrollbar-track-piece {*/
-/*    background: rgba(9,30,66,.08);*/
-/*}*/
-
 .blockMarkers {
     display: flex;
 }
@@ -105,11 +66,9 @@
     min-width: 48px;
     border-radius: 4px;
     height: 8px;
-    /*background-color: red;*/
 }
 
 .itemMarker:hover {
-
     opacity: 0.8;
 }
 
@@ -143,14 +102,7 @@
 
 .blockWrapParticipant {
     display: flex;
-    justify-content: flex-end;
-    /*text-align: right;*/
-    /*flex-direction: column;*/
-    /*justify-content: c;*/
-    /*margin-top: 10px;*/
-    /*margin-right: 5px;*/
-    /*height: 32px;*/
-    /*width: 32px;*/
+    justify-content: space-between;
 }
 
 .blockItemParticipant {
@@ -159,4 +111,14 @@
 
 .blockMargin {
     margin-top: 10px;
+}
+
+.eyeIcon {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+}
+
+.wrapperLeft {
+    display: flex;
 }

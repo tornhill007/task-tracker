@@ -1,43 +1,26 @@
 .wrap {
     border: 1px solid red;
-    /*width: 10000px;*/
 }
 
 .container {
     display: flex;
-    /*width: 500px;*/
-    /*white-space: nowrap;*/
-    /*overflow-x: auto;*/
-    /*overflow-x: auto;*/
-    /*width: 100vh;*/
-    /*display: inline-block;*/
-    /*width: 100vh;*/
-    /*width:5000px;*/
 }
 
 .itemAnotherColumn {
-    /*display: flex;*/
-    /*text-align: center;*/
 }
-
-
 
 .itemLeftColumn {
     width: 15%;
     color: #42526e;
-    /*color: white;*/
 }
 
 .itemLeftIcon {
     color: white;
 }
 
-
 .itemLeftColumn:hover {
     color: #172b4d;
 }
-
-
 
 .itemCreateColumnWrap {
     display: flex;
@@ -54,7 +37,6 @@
     color: #fff;
     padding: 7px 10px;
     font-size: 1rem;
-    /*font-weight: 200;*/
 }
 
 .itemInput:hover {
@@ -65,9 +47,7 @@
 .itemCreateColumn {
     display: flex;
     align-items: center;
-    /*justify-content: flex-start;*/
-    /*background-color: rgba(0,0,0,.08);*/
-    background-color: hsla(0,0%,100%,.24);
+    background-color: hsla(0, 0%, 100%, .24);
     color: white;
     height: 50px;
     width: 272px;
@@ -79,8 +59,6 @@
 .itemCreateColumnInput {
     background-color: #ebecf0;
     height: 93px;
-    /*background-color: rgba(0,0,0,.08);*/
-    /*height: 50px;*/
     width: 272px;
     margin: 8px;
     border-radius: 3px;
@@ -95,16 +73,13 @@
 
 
 .itemInputTitle {
-    /*padding: 1px 3px;*/
     padding: 5px 8px;
     outline: #0079bf auto 3px;
 }
 
 
-
 .itemCreateColumn:hover {
-    /*background-color: rgba(0,0,0,.16);*/
-    background-color: hsla(0,0%,100%,.32)
+    background-color: hsla(0, 0%, 100%, .32)
 }
 
 .itemCreateColumnInput:hover {
@@ -116,45 +91,19 @@
     background: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2133x1600/0f3b61d73a4028608dfa43344ad0302a/photo-1620839954053-e446ef13fa2e.jpg");
     background-position: 50%;
     background-size: cover;
-    /*height: 100vh;*/
-    /*position: relative;*/
     height: 100%;
     position: fixed;
     width: 100%;
     padding-top: 50px;
-
 }
 
 .inputItem {
-    /*width: 98%;*/
-    /*padding: 1%;*/
-    /*height: 31px!important;*/
-    /*font-size: 20px!important;*/
-    /*margin-left: 8px;*/
-    /*width: inherit;*/
-    /*padding-left: 8px;*/
-    /*margin: 0!important;*/
-    /*outline: #0079bf auto 3px;*/
-    /*outline: none;*/
-    /*border: .18rem solid #0079bf;*/
-    /*border-radius: 3px;*/
-    /*resize: horizontal!important;*/
-    /*border: solid 3px #f2f2f2;*/
 }
 
-/*inputItem:focus {*/
-/*    outline: none!important;*/
-/*}*/
 
 .wrapItemTitle {
-    /*width: 100%;*/
-    /*margin-left: 8px;*/
-    /*outline: #0079bf auto 3px;*/
-    /*border: none!important;*/
-    /*outline: none;*/
     border-radius: 3px;
 }
-
 
 .wrapNavbar {
     display: flex;
@@ -162,9 +111,8 @@
 
 .itemNameProject {
     color: white;
-    background-color: hsla(0,0%,100%,.24);
+    background-color: hsla(0, 0%, 100%, .24);
     padding: 8px 12px;
-    /*background-color: red;*/
     cursor: pointer;
     font-size: 18px;
     font-weight: 700;
@@ -174,13 +122,11 @@
 }
 
 .itemNameProject:hover {
-    background-color: hsla(0,0%,100%,.32);
+    background-color: hsla(0, 0%, 100%, .32);
 }
 
 .map {
-
     pointer-events: none;
-
 }
 
 .listWrap {
@@ -190,8 +136,6 @@
     color: #091e42;
     width: 280px;
     z-index: 1001;
-    /*right: 10px;*/
-    /*left: 290px;*/
     text-align: left;
     margin-top: 40px;
     margin-left: 135px;
@@ -206,14 +150,14 @@
 
 .itemName {
     padding-bottom: 3px;
-    color: #091e42!important;
-    font-size: 14px!important;
-    font-weight: 400!important;
+    color: #091e42 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
 }
 
 .itemTitle {
     text-align: center;
-    border-bottom: 1px solid hsl(0,0%,80%);
+    border-bottom: 1px solid hsl(0, 0%, 80%);
     width: 90%;
     padding-top: 15px;
     padding-bottom: 10px;
@@ -230,7 +174,6 @@
 
 .itemWrap {
     text-align: center;
-
 }
 
 .itemWrapColumnMenu {
@@ -240,7 +183,7 @@
 }
 
 .itemWrapColumnMenu:hover {
-    background-color: rgba(9,30,66,.04);
+    background-color: rgba(9, 30, 66, .04);
     cursor: pointer;
 }
 
@@ -267,7 +210,6 @@
     font-size: 12px;
     font-weight: 500;
     letter-spacing: .04em;
-
     text-transform: uppercase;
 }
 
@@ -278,7 +220,7 @@
     margin-top: 10px;
     margin-bottom: 20px;
 }
-/*font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;*/
+
 .icon {
     display: flex;
     align-items: center;
@@ -292,8 +234,6 @@
     font-weight: bold;
 }
 
-
-
 .titleMargin {
     margin-left: 5px;
     color: #172b4d;
@@ -303,20 +243,14 @@
 
 .wrapperItemProject {
     display: flex;
-    /*width: 100%;*/
-    /*padding: 0;*/
     margin: 0 2% 2% 0;
     text-decoration: none;
     border-radius: 3px;
     padding: 8px;
-
-    /*margin: 0 10px 0 0;*/
-    /*margin: 0 2% 2% 0;*/
     height: 80px;
     opacity: 0.95;
     background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x320/50cc3dcbc521f726b1b44812059acc97/photo-1515847049296-a281d6401047.jpg");
     background-size: cover;
-    /*background: linear-gradient(#006644, #00875a);*/
 }
 
 .wrapperItemProject:hover {
@@ -324,7 +258,7 @@
 }
 
 .itemCreate {
-    background: rgba(9,30,66,.04);
+    background: rgba(9, 30, 66, .04);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -332,28 +266,14 @@
 }
 
 .itemCreate:hover {
-    background-color: rgba(9,30,66,.08);
+    background-color: rgba(9, 30, 66, .08);
 }
-
-/*.containerProjects {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*}*/
 
 .wrapList {
     display: grid;
-  grid-template: 120px / 15% 15% 15% 15% 15%;
+    grid-template: 120px / 15% 15% 15% 15% 15%;
     grid-gap: 20px;
     justify-content: center;
-    /*flex-wrap: wrap;*/
-/*margin: 0 3%;*/
-/*    grid-auto-flow: column;*/
-    /*justify-content: center;*/
-/*padding: 0 auto;*/
-
-    /*width: 100%;*/
-    /*flex-direction: row;*/
-
 }
 
 .itemName {
@@ -372,28 +292,17 @@
 }
 
 .itemName:hover {
-    background-color: rgba(9,30,66,.04);
+    background-color: rgba(9, 30, 66, .04);
     cursor: pointer;
 }
-
 
 .itemCreateText {
     color: #172b4d;
     font-weight: 400;
-
 }
 
 .mainContainer {
-    /*justify-content: center;*/
-    /*display: flex;*/
-    /*width: 100%;*/
-    /*margin: 40px 16px 0;*/
-    /*width: 100%;*/
-
-    /*max-width: 400px;*/
-    /*min-width: 288px;*/
 }
-
 
 .imgItem {
     margin-right: 10px;
@@ -407,24 +316,14 @@
     border-radius: 100%;
     width: 40px;
     color: #fff;
-
     height: 40px;
     background-color: #00875a;
-    /*border: 1px solid #fff;*/
 }
 
 .containerIconName {
     margin-right: 5px;
-    /*border: none;*/
-    /*box-shadow: none;*/
-    /*background-color: transparent;*/
-    /*display: block;*/
     height: 32px;
-    /*margin-right: 0;*/
-    /*position: relative;*/
     width: 32px;
-    /*maring: 5px;*/
-    /*outline: 0;*/
 }
 
 .wrapIconName {
@@ -437,7 +336,6 @@
     color: #fff;
     height: 32px;
     background-color: #00875a;
-    /*border: 1px solid #fff;*/
 }
 
 .itemGroupLeft {

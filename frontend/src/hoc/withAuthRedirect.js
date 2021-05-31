@@ -9,12 +9,10 @@ let mapStateToPropsForRedirect = (state) => ({
 export const withAuthRedirect = (Component) => {
     class RedirectComponent extends React.Component {
         render() {
-            console.log("this.props.token", this.props.token)
-            if(!JSON.parse(localStorage.getItem('user'))) return <Redirect to='/login'/>
+            if (!JSON.parse(localStorage.getItem('user'))) return <Redirect to='/login'/>
             return <Component {...this.props}/>
         }
     }
-
 
     let AuthRedirectComponent = connect(mapStateToPropsForRedirect)(RedirectComponent);
 
