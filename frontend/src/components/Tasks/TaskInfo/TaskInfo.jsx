@@ -36,12 +36,14 @@ class TaskInfo extends React.Component {
         super(props);
         this.state = {
             nameRef: '',
+            x: '',
             nameRefPlus: '',
             title: '',
             titlePlus: '',
             rectTop: false,
             rectTopPlus: false,
             rectLeftPlus: false,
+            rectRightPlus: false,
             rectLeft: false,
             isInput: false,
             isTextArea: false,
@@ -106,7 +108,6 @@ class TaskInfo extends React.Component {
         }
     }
 
-
     changeText = (event) => {
         this.setState({
             text: event.target.value
@@ -144,6 +145,8 @@ class TaskInfo extends React.Component {
             isOpenTaskMenu: false,
             rectTopPlus: rect.top,
             rectLeftPlus: rect.left,
+            rectRightPlus: rect.right,
+            x: rect.x,
             nameRefPlus: refName,
             titlePlus: title
         })
@@ -498,7 +501,7 @@ class TaskInfo extends React.Component {
                                 {this.state.isOpenTaskMenu && <div style={{top: `${this.state.rectTop-47}px`}} className={classes.itemListInvite}>
                                     <InviteList markers={markers} title={this.state.title} activeParticipants={activeUsers} nameRef={this.state.nameRef} onCloseTaskMenu={this.onCloseTaskMenu} taskMenu={true}/>
                                 </div>}
-                                {this.state.isOpenTaskMenuLeft && <div style={{top: `${this.state.rectTopPlus-50}px`, left: `${this.state.rectLeftPlus-410}px`}} className={classes.itemListInvitePlus}>
+                                {this.state.isOpenTaskMenuLeft && <div style={{top: `${this.state.rectTopPlus-50}px`}} className={classes.itemListInvitePlus}>
                                     <InviteList markers={markers} title={this.state.titlePlus} activeParticipants={activeUsers} nameRef={this.state.nameRefPlus} onCloseTaskMenu={this.onCloseTaskMenuPlus} taskMenu={true}/>
                                 </div>}
                                 <div className={classes.itemRigthBlockTitle}>

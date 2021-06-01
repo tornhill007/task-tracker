@@ -46,9 +46,9 @@ export const setIsOpenInputEditProject = () => ({
     type: SET_IS_OPEN_INPUT_EDIT_PROJECT
 });
 
-export const createNewProject = (projectName, userId) => async (dispatch) => {
+export const createNewProject = (projectName, userId, background) => async (dispatch) => {
     try {
-        let response = await projectsApi.createNewProject(projectName, userId);
+        let response = await projectsApi.createNewProject(projectName, userId, background);
         dispatch(getAllProjects(userId));
     } catch (e) {
         console.log("error", e);

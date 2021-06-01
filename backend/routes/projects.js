@@ -49,8 +49,8 @@ router.get("/projects", catchWrap(async (req, res) => {
 //create project
 
 router.post("/projects", catchWrap(async (req, res) => {
-    const {name, userId} = req.body;
-    const newProject = Projects.buildProjectByName(name)
+    const {name, userId, background} = req.body;
+    const newProject = Projects.buildProjectByName(name, background)
     await newProject.save();
 
     const user = await Users.getUserByUserId(userId)

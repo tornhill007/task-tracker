@@ -1,7 +1,15 @@
 
 .modal {
-    display: block!important;
-    margin-top: 140px;
+    display: block !important;
+    /*margin-top: 140px;*/
+    background-color: transparent;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    /*right: 50%;*/
+    width: 50%;
+    height: 100px;
+    margin-left: -25%;
 }
 
 .close {
@@ -11,4 +19,184 @@
 .modal-body {
     display: flex;
     justify-content: center;
+}
+
+.grid {
+    width: 110px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.grid > div {
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 30px; /* don't grow, don't shrink, width */
+    height: 30px;
+    margin: 3px;
+    /*width: 30px!important;*/
+    /*margin-bottom: 5px;*/
+    background-color: #999;
+}
+
+/*.grid > div:not(:last-child) {*/
+/*    margin-bottom: 5px;*/
+/*}*/
+.marginBlock {
+    margin-bottom: 2px;
+    margin-right: 2px;
+}
+
+.wrapperModal {
+    /*width: 100%;*/
+    display: flex;
+    justify-content: center;
+}
+
+.wrapLeftModal {
+    width: 296px;
+    /*background-color: green;*/
+    background-size: cover!important;
+    background-position: center center;
+    border-radius: 3px;
+    color: #fff;
+    padding: 10px 10px 10px 10px;
+}
+
+.imgPosition {
+    background-size: cover!important;
+    cursor: pointer;
+}
+
+
+.imgPosition:hover {
+
+}
+
+.inputModal {
+    border: none;
+    /*left: -px;*/
+    width: 230px;
+    padding: 4px 8px;
+    position: relative;
+    background: transparent;
+    box-shadow: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.inputModal:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none;
+}
+
+.inputModal:focus {
+    background: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+}
+
+.inputModal:focus:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none;
+}
+
+.inputModal::placeholder {
+    color: #999999;
+}
+
+.colorCheck {
+    color: white;
+}
+
+.wrapBlockInput {
+    display: flex;
+    justify-content: space-between;
+    /*margin-left: 0!important;*/
+}
+
+.cursorIcon {
+    cursor: pointer;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
+.btn {
+    position: relative;
+    width: 100%;
+    background-color: #0079BF;
+    box-shadow: none;
+    border: none;
+    color: #FFFFFF;
+    margin-top: 7px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+
+}
+
+.btn:hover {
+    background-color: #026AA7;
+    box-shadow: none;
+    border: none;
+    color: #FFFFFF;
+}
+
+.teamTitle {
+    text-align: left;
+    margin-left: 8px;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.modal-footer {
+    /*display: flex;*/
+    /*margin-left: 93px;*/
+/*width: 100%;*/
+    width: 426px;
+    display: flex;
+    /*justify-content: center;*/
+    /*text-align: left;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*margin-left: 100px;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+}
+
+.containerModal {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*text-align: left;*/
+    /*justify-content: left;*/
+    /*justify-content: center;*/
+    width: 100%;
+}
+
+.mainWrap {
+    display: flex;
+/*align-items: inherit;*/
+    flex-direction: column;
+}
+
+.disabledItem {
+
+}
+
+.btn:disabled,
+btn[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: auto;
+
 }

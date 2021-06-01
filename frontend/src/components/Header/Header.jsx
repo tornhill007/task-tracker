@@ -4,7 +4,7 @@ import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
 import {setAuthUserData} from "../../redux/reducers/authReducer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faTimes, faHome, faUserCircle} from "@fortawesome/free-solid-svg-icons";
 import kanbanImg from '../../assets/image/kanbanboard_120442.svg';
 import {withRouter} from 'react-router-dom';
 import SvgItemProject from "./SvgItemProject/SvgItemProject";
@@ -27,7 +27,7 @@ const Header = (props) => {
                     }} className={classes.itenCloseItem}><FontAwesomeIcon icon={faTimes}/></div>
                 </div>
                 <div className={classes.wrapMenuLogin}>
-                    <div className={classes.imgItem}><span onClick={() => {
+                    <div title={props.userName} className={classes.imgItem}><span onClick={() => {
                         setIsOpenUserList(true)
                     }} className={classes.wrapIconMain}>{props.userName.substr(0, 1)}</span></div>
                     <div className={classes.itemLoginName}>{props.userName}</div>
@@ -38,7 +38,17 @@ const Header = (props) => {
                     <span>Log out</span>
                 </div>
             </div>}
-            <div className={classes.itemCenter}>
+            <div className={classes.wrapNavLinks}>
+            <div title="Projects" className={classes.itemCenter}>
+                <NavLink to={'/projects'} className={classes.houseWrap}>
+                    <FontAwesomeIcon icon={faHome} className={'fa-lg'}/>
+                </NavLink>
+            </div>
+            <div title="Profile" className={classes.itemLeftIcon}>
+                <NavLink to={'/profile'} className={classes.houseWrap}>
+                    <FontAwesomeIcon icon={faUserCircle} className={'fa-lg'}/>
+                </NavLink>
+            </div>
             </div>
             <div className={`  ${classes.itemLeftMain}`}>
                 <div
@@ -52,7 +62,7 @@ const Header = (props) => {
                 </div>
             </div>
             <div className={classes.itemRight}>
-                {props.token ? <div className={classes.containerIconName}><span onClick={() => {
+                {props.token ? <div title={props.userName} className={classes.containerIconName}><span onClick={() => {
                         setIsOpenUserList(true)
                     }} className={classes.wrapIconName}>{props.userName.substr(0, 1)}</span></div> :
                     <div className={classes.wrapNavbars}>

@@ -1,5 +1,6 @@
 .header {
     display: flex;
+    justify-content: space-between;
     min-height: 40px;
     max-height: 40px;
     overflow: hidden;
@@ -7,6 +8,36 @@
     text-align: center;
     align-items: center;
 
+}
+
+.itemLeftIcon {
+    margin-left: 5px;
+}
+
+.wrapNavLinks {
+    display: flex;
+    width: 150px;
+}
+
+.houseWrap {
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 34px;
+    /*padding: 5px;*/
+    color: #fff;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.houseWrap:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+    color: #FFFFFF;
+    outline: 0;
+    cursor: pointer;
 }
 
 .headerProject {
@@ -91,7 +122,7 @@
 
 
 .itemRight {
-    width: 33.3%;
+    width: 150px;
     display: flex;
     justify-content: flex-end;
     /*float: right;*/
@@ -182,6 +213,7 @@
 .userMenuWrap {
     position: fixed;
     top: 41px;
+    z-index: 2;
     background-color: #fff;
     right: 2px;
     width: 300px;
@@ -216,7 +248,7 @@
 .itemLeftMain {
     display: flex;
     justify-content: center;
-    width: 33.3%;
+    width: 100%;
 }
 
 .itemCenter {

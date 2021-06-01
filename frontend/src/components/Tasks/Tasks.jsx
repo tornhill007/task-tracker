@@ -71,7 +71,7 @@ return tmp.newUsers.filter(item => item.username == this.props.userName).length 
                             <div className={`${classes.positionIcon}`}>
                                 <div className={classes.blockMarkers}>
                                     {this.props.tasks[this.props.task.id].markers && this.props.tasks[this.props.task.id].markers.map(item =>
-                                        <div>
+                                        <div title={item}>
                                             <div
                                                 style={{backgroundColor: `${markers.find(item1 => item1.name === item).style}`}}
                                                 className={` ${classes.itemMarker}`}></div>
@@ -96,7 +96,7 @@ return tmp.newUsers.filter(item => item.username == this.props.userName).length 
                                 </div>
                                 <div className={classes.blockItemParticipant}>
                                     {(this.props.participantsOnTask.length !== 0) && this.props.participantsOnTask.find(item => item.taskid === this.props.taskId) && this.props.participantsOnTask.find(item => item.taskid === this.props.taskId).newUsers.map(user =>
-                                        <div className={classes.itemParticipant}><span
+                                        <div title={user.username} className={classes.itemParticipant}><span
                                             className={classes.wrapIconName}>{user.username.substr(0, 1)}</span>
                                         </div>)}
                                 </div>

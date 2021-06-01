@@ -146,6 +146,9 @@
 .containerBlock {
     display: flex;
     justify-content: center;
+    position: absolute;
+    left: 305px;
+    top: 50px;
 }
 
 .itemName {
@@ -155,6 +158,22 @@
     font-weight: 400 !important;
 }
 
+.colorTitle {
+    color: #fff!important;
+}
+
+.wrapItemRemove {
+    /*display: flex;*/
+    /*text-align: right;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*width: 1000px;*/
+    margin-right: 20px;
+}
+.wrapWrapNavbar {
+    display: flex;
+    justify-content: space-between;
+}
 .itemTitle {
     text-align: center;
     border-bottom: 1px solid hsl(0, 0%, 80%);
@@ -247,10 +266,10 @@
     text-decoration: none;
     border-radius: 3px;
     padding: 8px;
-    height: 80px;
+    height: 90px;
     opacity: 0.95;
-    background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x320/50cc3dcbc521f726b1b44812059acc97/photo-1515847049296-a281d6401047.jpg");
-    background-size: cover;
+    /*background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x320/50cc3dcbc521f726b1b44812059acc97/photo-1515847049296-a281d6401047.jpg");*/
+    background-size: cover!important;
 }
 
 .wrapperItemProject:hover {
@@ -329,6 +348,9 @@
 .wrapIconName {
     display: flex;
     cursor: pointer;
+
+    /*box-shadow: red;*/
+
     justify-content: center;
     align-items: center;
     border-radius: 100%;
@@ -340,5 +362,19 @@
 
 .itemGroupLeft {
     display: flex;
+    align-items: center;
+}
+
+.itemParticipant {
+    margin-right: -3px;
+}
+
+.wrapIconName:hover {
+    background-color: #009e69;
+}
+
+.wrapUserName {
+    display: flex;
+    margin-left: 5px;
     align-items: center;
 }

@@ -1,11 +1,28 @@
 import React from "react";
 import {createNewProject} from "../../../redux/reducers/projectsReducer";
+import background1 from '../../../assets/image/background/background1.jpg';
+import background2 from '../../../assets/image/background/background2.jpg';
+import background3 from '../../../assets/image/background/background3.jpg';
+import background4 from '../../../assets/image/background/background4.jpg';
+import background5 from '../../../assets/image/background/background5.jpg';
+import background6 from '../../../assets/image/background/background6.jpg';
+import background7 from '../../../assets/image/background/background7.jpg';
+import background8 from '../../../assets/image/background/background8.jpg';
+import background9 from '../../../assets/image/background/background9.jpg';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCheck, faTimes} from '@fortawesome/free-solid-svg-icons'
+import backgrounds from "../../../common/backgrounds/backgrounds";
 
 class EditModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: this.props.text
+            text: this.props.text,
+            selectedBackground: {
+                background: background1,
+                title: 'background1'
+            },
+            backgrounds: backgrounds
         };
 
         this.changeText = this.changeText.bind(this);
@@ -24,8 +41,13 @@ class EditModal extends React.Component {
     }
 
     createProject() {
+
+        console.log("IMG", this.state.selectedBackground.title)
         const {text} = this.state;
-        this.props.createNewProject(text, this.props.userId);
+        if(!text) {
+            return
+        }
+        this.props.createNewProject(text, this.props.userId, this.state.selectedBackground.title);
         this.close();
     }
 
@@ -37,31 +59,68 @@ class EditModal extends React.Component {
     }
 
     createNewColumn(projectListId) {
+
         const {text} = this.state;
 
         let position;
-        if(this.props.columnsOrder.length === 0) {
+        if (this.props.columnsOrder.length === 0) {
             position = 1;
-        }
-        else {
-            position = this.props.columns[this.props.columnsOrder[this.props.columnsOrder.length-1]].position + 1;
+        } else {
+            position = this.props.columns[this.props.columnsOrder[this.props.columnsOrder.length - 1]].position + 1;
         }
 
         this.props.createNewColumn(text, projectListId, position);
         this.close();
     }
 
+    changeBackground(background) {
+        this.setState({
+            selectedBackground: background
+        })
+    }
+
     render() {
 
         return (
-            <div>
-                <div className="modal-body">
-                    <textarea maxlength="30" ref={this.newRef} onChange={this.changeText} value={this.state.text} cols="40"/>
+            <div className={'mainWrap'}>
+                <div className='containerModal'>
+                    <div className={'wrapperModal'}>
+                        <div
+                            style={{background: `url(${this.state.selectedBackground.background})`}}
+                            className={'wrapLeftModal'}>
+                            <div className={'wrapBlockInput'}>
+                                <input className={"inputModal"} placeholder={"Add header of task"} maxLength="30"
+                                       ref={this.newRef} onChange={this.changeText} value={this.state.text}
+                                       cols="40"/>
+                                <FontAwesomeIcon onClick={() => this.close()} className={`cursorIcon fa-cm`}
+                                                 icon={faTimes}/>
+                                {/*<button type="button" className="btn btn-secondary" onClick={() => this.close()}>Close</button>*/}
+                            </div>
+                            <div className="teamTitle">
+                                <span>Me-Team</span>
+                            </div>
+                        </div>
+                        <div className={'grid'}>
+                            {this.state.backgrounds.map(background => <div onClick={() => {
+                                this.changeBackground(background)
+                            }} className={'imgPosition'}
+                                                                           style={{background: `url(${background.background})`}}>{background.title === this.state.selectedBackground.title &&
+                            <FontAwesomeIcon className={`colorCheck fa-cm`}
+                                             icon={faCheck}/>}</div>)}
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <div>
+                            {<button disabled={!this.state.text} type="button" className={`${!this.state.text && 'disabledItem'} btn btn-primary`}
+                                     onClick={(e) => this.props.title === 'Edit project' ? this.save(this.props.id, e) : this.props.title === 'Add new column' ? this.createNewColumn(this.props.parameters.projectListId) : this.createProject()}>{this.props.parameters.buttonName}</button>}
+                        </div>
+                    </div>
                 </div>
-                <div className="modal-footer">
-                    {<button type="button" className="btn btn-primary" onClick={(e) => this.props.title === 'Edit project' ? this.save(this.props.id, e) : this.props.title === 'Add new column' ? this.createNewColumn(this.props.parameters.projectListId) : this.createProject()}>{this.props.parameters.buttonName}</button>}
-                    <button type="button" className="btn btn-secondary" onClick={() => this.close()}>Close</button>
-                </div>
+
+                {/*<div className="modal-body">*/}
+
+                {/*</div>*/}
+
             </div>
         )
     }

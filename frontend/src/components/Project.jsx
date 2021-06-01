@@ -16,7 +16,7 @@ import EditModalContainer from "./Modal/EditModal/EditModalContainer";
 import TaskInfo from "./Tasks/TaskInfo/TaskInfo";
 import {
     editProject,
-    getAllProjects,
+    getAllProjects, removeProject,
     setIsOpenInputEditProject,
     setIsOpenInviteList
 } from "../redux/reducers/projectsReducer";
@@ -33,6 +33,7 @@ import {setAuthUserData} from "../redux/reducers/authReducer";
 import {Redirect} from "react-router-dom";
 import InviteList from "./InviteList";
 import AutosizeInput from 'react-input-autosize';
+import backgrounds from "../common/backgrounds/backgrounds";
 
 class Project extends React.Component {
 
@@ -42,7 +43,8 @@ class Project extends React.Component {
 
         this.state = {
             text: this.props.text,
-            projectName: ''
+            projectName: '',
+            backgrounds: backgrounds
         };
 
         this.changeText = this.changeText.bind(this);
@@ -57,6 +59,12 @@ class Project extends React.Component {
         this.props.editProject(id, projectName, this.props.userId);
         this.onOpenInputEditProject();
 
+    }
+
+    getBackground = () => {
+        console.log("qwe", this.props.projects);
+        let background = this.props.projects.find(item => item.projectid == this.projectId).background;
+        return this.state.backgrounds.find(item => item.title === background).background;
     }
 
     changeText(event) {
@@ -266,16 +274,31 @@ class Project extends React.Component {
         this.props.leaveProject(this.props.userId, this.projectId);
     }
 
+    onRemoveProject = () => {
+        this.props.removeProject(this.projectId, this.props.userId)
+    }
+
     render() {
+
+        // let activeUsers = [];
+        // this.props.activeUsers.forEach(activeUser => {
+        //     let user = this.props.users.find(user => user.username === activeUser);
+        //     activeUsers.push(user);
+        // })
+        console.log('activeUsers', this.props.activeUsers)
+
         let res = this.props.projects.find(project => project.projectid == this.projectId);
         if (!res && this.props.projects.length !== 0) {
             return <Redirect to={'/projects'}/>
         }
-        return this.props.projects.length !== 0 ? <div className={classes.mainWrap}>
+        console.log("background", this.projectId)
+        console.log("background", this.props.projects)
+        return this.props.projects.length !== 0 ? <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
             {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
                 <TaskInfo/> : ''}
             <div className={this.props.isTaskInfo ? classes.map : ''}>
-                <div className={classes.wrapNavbar}>
+                <div className={classes.wrapWrapNavbar}>
+                    <div className={classes.wrapNavbar}>
                     {this.props.isOpenInputEditProject ? <div className={classes.wrapItemTitle}>
                         <AutosizeInput onFocus={this.handleFocus} spellCheck={false} inputStyle={{
                             border: 'none',
@@ -299,19 +322,32 @@ class Project extends React.Component {
 
                     {this.state.projectName !== '' ? this.state.projectName : this.getProjectNameOrId().name}</span>
                     </div>}
+                    <div className={classes.wrapUserName}>
+                    {this.props.activeUsers.map(activeUser => <div title={activeUser} className={classes.itemParticipant}><span
+                        className={classes.wrapIconName}>{activeUser.substr(0, 1)}</span>
+                    </div>)}
+                    </div>
+
                     <div className={classes.itemNameProject} onClick={() => {
                         this.onOpenOrCloseInviteList()
                     }}><span>Invite</span>
                     </div>
-                    <div className={classes.containerBlock}>
-
-                        {this.props.IsOpenInviteList ?
-                            <InviteList title={'list of possible users'} menuName={'Invite to project'}
-                                        projectId={this.projectId} userName={this.props.userName}
-                                        users={this.props.users}/> : ''}
                     </div>
-                </div>
+                    <div className={classes.wrapItemRemove}>
+                    <div className={classes.itemNameProject} onClick={() => {
+                        this.onRemoveProject()
+                    }}><span>Remove project</span>
+                    </div>
+                    </div>
 
+                </div>
+                <div className={classes.containerBlock}>
+
+                    {this.props.IsOpenInviteList ?
+                        <InviteList title={'list of possible users'} menuName={'Invite to project'}
+                                    projectId={this.projectId} userName={this.props.userName}
+                                    users={this.props.users}/> : ''}
+                </div>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="all-columns" direction="horizontal" type="column">
                         {(provided) => (
@@ -429,5 +465,6 @@ export default connect(mapStateToProps, {
     createNewColumn,
     setIsOpenInputEditProject,
     editProject,
-    getParticipantsOnTask
+    getParticipantsOnTask,
+    removeProject
 })(AuthRedirectComponent);

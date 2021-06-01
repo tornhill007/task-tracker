@@ -15,6 +15,10 @@ const Projects = db.define('projectslist', {
             type: DataTypes.STRING,
             allowNull: false
         },
+        background: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         createdAt: {
             field: 'createdat',
             type: Sequelize.DATE,
@@ -28,8 +32,8 @@ const Projects = db.define('projectslist', {
         tableName: 'projectslist'
     })
 
-Projects.buildProjectByName = function (name) {
-    return this.build({name});
+Projects.buildProjectByName = function (name, background) {
+    return this.build({name, background});
 }
 
 Projects.updateProjectNameByProjectId = function (id) {

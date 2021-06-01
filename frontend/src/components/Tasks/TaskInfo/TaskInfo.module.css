@@ -376,7 +376,8 @@
 
 .itemListInvitePlus {
     position: absolute;
-    /*right: 300px;*/
+    right: 800px!important;
+    /*left: 50px!important;*/
     top: 100px;
     /*top: 300px!important;*/
 }

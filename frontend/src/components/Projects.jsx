@@ -25,7 +25,7 @@ const Projects = (props) => {
             <div className={classes.wrapList}>
                 {
                     clonedArray.map((project, index) => {
-                        return <ProjectInfo userId={props.userId} removeProject={props.removeProject} key={index}
+                        return <ProjectInfo background={project.background} userId={props.userId} removeProject={props.removeProject} key={index}
                                             projectId={project.projectid} projectName={project.name}/>
                     })
                 }
