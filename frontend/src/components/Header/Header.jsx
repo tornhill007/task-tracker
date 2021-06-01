@@ -56,7 +56,7 @@ const Header = (props) => {
                     <div className={classes.wrapImg}>
                         <SvgItemProject projectId={props.match.params.projectId}/>
                     </div>
-                    <div>
+                    <div className={classes.title}>
                         Kanban board
                     </div>
                 </div>
@@ -84,7 +84,7 @@ const Header = (props) => {
                     Kanban board
                 </div>
             </div>
-            <div className={classes.itemRight}>
+            <div >
                 {props.token ? <div className={classes.containerIconName}><span onClick={() => {
                         setIsOpenUserList(true)
                     }} className={classes.wrapIconName}>{props.userName.substr(0, 1)}</span></div> :

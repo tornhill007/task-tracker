@@ -200,3 +200,54 @@ btn[disabled]{
     cursor: auto;
 
 }
+
+@media (max-width: 445px) {
+    .wrapperModal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .wrapLeftModal {
+        height: 90px;
+    }
+
+    .grid > div {
+        height: 50px!important;
+        /*width: 50px!important;*/
+        flex: 0 0 50px;
+    }
+
+    .grid {
+        width: 200px;
+    }
+
+    .modal-footer {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 338px) {
+   .wrapLeftModal {
+       width: 250px;
+       /*padding-right: 20px;*/
+   }
+    .inputModal {
+        width: 200px;
+    }
+    .cursorIcon {
+        /*padding-right: 10px!important;*/
+        /*margin-top: 5px;*/
+
+    }
+}
+
+@media (max-width: 297px) {
+    .wrapLeftModal {
+        width: 220px;
+    }
+
+    .inputModal {
+        width: 180px;
+    }
+
+}

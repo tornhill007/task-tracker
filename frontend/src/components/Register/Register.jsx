@@ -6,7 +6,9 @@ import classes from "../Login/Login.module.css";
 import {connect} from "react-redux";
 import {register} from "../../redux/reducers/authReducer";
 import {NavLink, Redirect} from "react-router-dom";
-import board from '../../assets/image/board.png'
+import board from '../../assets/image/board.png';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTimes, faHome, faUserCircle} from "@fortawesome/free-solid-svg-icons";
 
 const RegisterForm = (props) => {
     console.log(props)
@@ -55,6 +57,7 @@ const Register = (props) => {
         return <Redirect to={"/profile"}/>
     }
     return <div className={classes.wrapMain}>
+        <div title={'Home'} className={classes.exit}><NavLink to={'/'}><FontAwesomeIcon className={`${classes.marginHome} fa-lg`} icon={faHome}/></NavLink></div>
         <div className={classes.wrapper}>
             <div className={classes.wrapImg}>
                 <img className={classes.img}

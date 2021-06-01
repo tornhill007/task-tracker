@@ -27,8 +27,8 @@ import {
     leaveProject,
     removeFromProject
 } from "../redux/reducers/usersReducer";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPlus, faTimes} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faPlus, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {setAuthUserData} from "../redux/reducers/authReducer";
 import {Redirect} from "react-router-dom";
 import InviteList from "./InviteList";
@@ -351,6 +351,7 @@ class Project extends React.Component {
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="all-columns" direction="horizontal" type="column">
                         {(provided) => (
+                            <div className={classes.wrapper}>
                             <div className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
                                 {this.props.columnOrder.map((columnId, index) => {
 
@@ -410,6 +411,7 @@ class Project extends React.Component {
                                     </div>}
                                 {provided.placeholder}
 
+                            </div>
                             </div>
                         )}
                     </Droppable>

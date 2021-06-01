@@ -3,6 +3,9 @@
     justify-content: center;
     padding-top: 150px;
 }
+.exit {
+    position: absolute;
+}
 
 .wrapTitle {
     display: flex;
@@ -10,6 +13,17 @@
     color: #2c536c;
     font-weight: bold;
     font-size: 1.3em;
+}
+
+.marginHome {
+    margin-top: 5px;
+    margin-left: 5px;
+    color: gray;
+}
+
+.marginHome:hover {
+    color: black;
+    cursor: pointer;
 }
 
 .img {

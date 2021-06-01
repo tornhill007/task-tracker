@@ -10,6 +10,21 @@
 
 }
 
+@media (max-width: 781px) {
+    .itemLeftIcon {
+        margin-left: 10px!important;
+    }
+}
+
+
+@media (max-width: 433px) {
+    .title {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+    }
+}
+
 .itemLeftIcon {
     margin-left: 5px;
 }
@@ -42,7 +57,7 @@
 
 .headerProject {
     background-color: rgba(0, 0, 0, 0.32);
-    position: absolute;
+    position: fixed;
     width: 100%;
     z-index: 1;
 }
@@ -128,6 +143,17 @@
     /*float: right;*/
 }
 
+.wrapProfile {
+    background-color: #f4f5f7;
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+}
+
+/*.itemRigthTmp {*/
+/*    width: inherit;*/
+/*}*/
+
 .itemLogin {
     color: #0065ff;
     cursor: pointer;
@@ -170,6 +196,29 @@
     color: #fff;
     height: 32px;
     background-color: #00875a;
+}
+
+.wrapIconProfile {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 55px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    height: 55px;
+    background-color: #00875a;
+}
+
+.profileName {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0C3953;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
 }
 
 .wrapIconMain {
@@ -238,6 +287,12 @@
     margin-right: 5px;
     height: 32px;
     width: 32px;
+}
+
+.containerIconProfile {
+    margin-right: 5px;
+    /*height: 50px;*/
+    /*width: 50px;*/
 }
 
 .itemLeft {

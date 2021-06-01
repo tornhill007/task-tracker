@@ -4,6 +4,24 @@
 
 .container {
     display: flex;
+    margin-top: 85px;
+
+    /*overflow-x: auto;*/
+    /*height: 100vh;*/
+}
+
+.wrapper {
+
+    height: 100vh;
+    overflow-x: auto;
+
+}
+.wrapper::-webkit-scrollbar {
+    background: rgba(0,0,0,.15);
+}
+.wrapper::-webkit-scrollbar-thumb {
+    background: rgba(198, 198, 198,.30);
+    border-radius: 5px;
 }
 
 .itemAnotherColumn {
@@ -50,7 +68,7 @@
     background-color: hsla(0, 0%, 100%, .24);
     color: white;
     height: 50px;
-    width: 272px;
+    min-width: 272px;
     margin: 8px;
     border-radius: 3px;
     cursor: pointer;
@@ -60,7 +78,9 @@
     background-color: #ebecf0;
     height: 93px;
     width: 272px;
+    min-width: 272px;
     margin: 8px;
+   /*padding-right: 30px;*/
     border-radius: 3px;
     cursor: pointer;
 }
@@ -94,7 +114,7 @@
     height: 100%;
     position: fixed;
     width: 100%;
-    padding-top: 50px;
+    /*padding-top: 50px;*/
 }
 
 .inputItem {
@@ -173,7 +193,13 @@
 .wrapWrapNavbar {
     display: flex;
     justify-content: space-between;
+
+
+    position: fixed;
+    margin-top: 45px;
 }
+
+
 .itemTitle {
     text-align: center;
     border-bottom: 1px solid hsl(0, 0%, 80%);
@@ -293,6 +319,31 @@
     grid-template: 120px / 15% 15% 15% 15% 15%;
     grid-gap: 20px;
     justify-content: center;
+}
+
+@media (max-width: 750px) {
+    .wrapList {
+        grid-template: 120px / 20% 20% 20% 20%
+    }
+}
+
+@media (max-width: 540px) {
+    .wrapList {
+        grid-template: 120px / 28% 28% 28%
+    }
+}
+
+@media (max-width: 410px) {
+    .wrapList {
+        grid-template: 120px / 40% 40%
+    }
+}
+
+
+@media (max-width: 310px) {
+    .wrapList {
+        grid-template: 120px / 90%
+    }
 }
 
 .itemName {
