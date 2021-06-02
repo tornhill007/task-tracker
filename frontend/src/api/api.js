@@ -1,7 +1,7 @@
 import * as axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:5000/',
+    baseURL: 'http://192.168.1.229:5000/',
 })
 
 // const headers = {"Content-Type": "multipart/form-data"}
@@ -166,14 +166,14 @@ export const tasksAPI = {
 
 export const authAPI = {
     login(password, userName) {
-        return axios.post('http://localhost:5000/login', {
+        return axios.post('http://192.168.1.229:5000/login', {
             password,
             userName
         })
     },
 
     register(password, userName) {
-        return axios.post('http://localhost:5000/users', {
+        return axios.post('http://192.168.1.229:5000/users', {
             password,
             userName
         })
