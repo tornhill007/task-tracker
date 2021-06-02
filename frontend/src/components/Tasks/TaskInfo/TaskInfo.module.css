@@ -4,7 +4,7 @@
     width: 100%;
     opacity: 0.6;
     height: 100%;
-    top: -50px;
+    /*top: -50px;*/
     /*z-index: -10;*/
 
 }
@@ -18,17 +18,132 @@
     position: absolute;
 }
 
+
+
 .wrapper {
+    overflow-y: auto;
     border-radius: 3px;
     position: absolute;
     background-color: #f4f5f7;
     height: 90vh;
-    width: 768px;
+    max-width: 768px;
+    width: auto;
     left: 100px;
     right: 100px;
     margin: 0 auto;
     top: 50px;
     z-index: 1000;
+}
+
+@media (max-width: 970px) {
+    .wrapper {
+        left: 60px;
+        right: 60px;
+    }
+    .secondBlock {
+        flex-wrap: wrap;
+        /*justify-content: flex-start;*/
+        /*justify-content: flex-start;*/
+    }
+    .thirdBlock {
+        width: 100%!important;
+        /*display: flex;*/
+        justify-content: flex-start!important;
+        margin-left: 60px;
+        margin-bottom: 10px;
+    }
+    .secondBlockCenter {
+        width: 100%!important;
+    }
+    .cardParticipants {
+        width: 100%!important;
+    }
+    /*.secondBlockTextArea {*/
+    /*    width: 100px!important;*/
+    /*}*/
+    /*.wrapperFirstBlock {*/
+    /*    !*width: 100%!important;*!*/
+    /*    !*position: relative;*!*/
+    /*}*/
+    .firstBlockCenter {
+        width: 100%!important;
+    }
+    /*.wrapperFirstBlock {*/
+    /*    width: 100%!important;*/
+    /*}*/
+}
+
+@media (max-width: 509px) {
+    .wrapper {
+        left: 50px;
+        right: 50px;
+    }
+    .firstBlockCenter {
+        width: 290px!important;
+    }
+}
+
+@media (max-width: 489px) {
+    .wrapper {
+        left: 30px;
+        right: 30px;
+    }
+    .firstBlockCenter {
+        width: 270px!important;
+    }
+}
+
+@media (max-width: 440px) {
+    .firstBlockCenter {
+        width: 250px!important;
+    }
+}
+
+@media (max-width: 420px) {
+    .firstBlockCenter {
+        width: 220px!important;
+    }
+}
+
+@media (max-width: 390px) {
+    .firstBlockCenter {
+        width: 180px!important;
+    }
+}
+
+@media (max-width: 365px) {
+    .firstBlockCenter {
+        width: 140px!important;
+    }
+}
+
+/*@media (max-width: 406px) {*/
+/*    .wrapper {*/
+/*        left: 20px;*/
+/*        right: 20px;*/
+/*    }*/
+/*    .firstBlockCenter {*/
+/*        width: 300px!important;*/
+/*    }*/
+/*}*/
+
+@media (max-width: 320px) {
+    .wrapper {
+        left: 5px;
+        right: 5px;
+    }
+    .thirdBlock {
+        margin-left: 10px;
+        justify-content: center!important;
+    }
+    .secondBlockTextArea {
+        /*margin-left: 10px!important;*/
+        /*display: flex;*/
+        /*justify-content: flex-start!important;*/
+    }
+    .firstBlockCenter {
+        width: 160px!important;
+    }
 }
 
 .iconStyle {
@@ -369,17 +484,58 @@
 }
 
 .itemListInvite {
+    left:50%; margin-left:-260px;
     position: absolute;
-    right: 355px;
+    /*position:fixed; left:100%; margin-left:-25%*/
+    /*position: absolute;*/
+    /*right: 500px;*/
+    /*margin: 0 auto;*/
+    /*margin-left: 50px;*/
+    /*margin-right: 50px;*/
     /*top: 300px!important;*/
 }
 
 .itemListInvitePlus {
     position: absolute;
-    right: 800px!important;
+    right: 600px!important;
     /*left: 50px!important;*/
     top: 100px;
     /*top: 300px!important;*/
+}
+
+@media (max-width: 601px) {
+    .itemListInvitePlus {
+        right: 500px!important;
+    }
+}
+
+@media (max-width: 601px) {
+    .itemListInvitePlus {
+        right: 450px!important;
+    }
+}
+
+
+@media (max-width: 406px) {
+    .itemListInvitePlus {
+        right: 440px!important;
+    }
+
+}
+
+
+@media (max-width: 376px) {
+    .itemListInvitePlus {
+        right: 430px!important;
+    }
+
+}
+@media (max-width: 361px) {
+    .itemListInvitePlus {
+        margin: 0 auto;
+        /*right: 410px!important;*/
+    }
+
 }
 
 .itemNameButton{
@@ -399,10 +555,12 @@
 
 .containerIconName {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 10px;
+    margin-bottom: 10px;
     margin-right: 5px;
-    height: 32px;
-    width: 32px;
+    /*height: 32px;*/
+    /*width: 32px;*/
 }
 
 .wrapIconName {
@@ -422,6 +580,7 @@
 }
 
 .wrapIconPlus {
+    margin-top: 3px;
     color: #172b4d;
     background-color: rgba(9,30,66,.04);
 }
@@ -438,10 +597,12 @@
     text-align: left;
     margin-left: 59px;
     margin-top: 30px;
+    width: 40%;
 }
 
 .itemParticipant {
     margin-right: 3px;
+    margin-top: 3px;
 }
 
 .cardTitle {
@@ -455,6 +616,8 @@
 
 .cardDetail {
     display: flex;
+    flex-wrap: wrap;
+    /*justify-content: flex-start;*/
 }
 
 .wrapIconMarker {
@@ -470,6 +633,7 @@
 }
 
 .wrapIconMarkerPlus {
+    margin-top: 3px;
     color: #172b4d;
     background-color: rgba(9,30,66,.04);
 }

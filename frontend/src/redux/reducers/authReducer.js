@@ -47,7 +47,7 @@ export const login = (password, userName) => async (dispatch) => {
         }
     }
     catch (err) {
-        alert(err.response.data.message);
+        console.log(err);
     }
 
 };
@@ -69,7 +69,7 @@ export const register = (password, userName, repeatPassword) => async (dispatch)
         }
 
     } catch (err) {
-        alert(err.response.data.message);
+        alert(err);
     }
 
 };

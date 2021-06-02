@@ -375,7 +375,7 @@ class TaskInfo extends React.Component {
                                                  icon={faWindowMaximize}/>
                             </div>
 
-                            <div>
+                            <div className={classes.wrapperFirstBlock}>
                                 <TextareaAutosize value={this.state.text}
                                                   onBlur={() => this.onUpdateTaskName(this.props.taskInfo.taskid, this.props.taskInfo.projectid)}
                                                   onChange={this.changeText} className={classes.firstBlockCenter}

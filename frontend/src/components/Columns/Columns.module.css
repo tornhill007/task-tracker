@@ -84,6 +84,60 @@
     flex-grow: 1;
 }
 
+@media (max-height: 823px) {
+.taskList {
+    max-height: 525px;
+}
+}
+
+@media (max-height: 812px) {
+    .taskList {
+        max-height: 515px;
+    }
+}
+
+@media (max-height: 736px) {
+    .taskList {
+        max-height: 440px;
+    }
+}
+
+@media (max-height: 731px) {
+    .taskList {
+        max-height: 435px;
+    }
+}
+
+@media (max-height: 720px) {
+    .taskList {
+        max-height: 425px;
+    }
+}
+
+@media (max-height: 667px) {
+    .taskList {
+        max-height: 370px;
+    }
+}
+
+@media (max-height: 653px) {
+    .taskList {
+        max-height: 355px;
+    }
+}
+
+@media (max-height: 640px) {
+    .taskList {
+        max-height: 345px;
+    }
+}
+
+@media (max-height: 568px) {
+    .taskList {
+        max-height: 272px;
+    }
+}
+
 .itemButton {
     width: 60%;
 }

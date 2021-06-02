@@ -15,7 +15,19 @@
   background: #eae6ff;
   height: 100vh;
   /*padding-top: 75px;*/
-  padding: 75px 300px 0 300px;
+  padding: 75px 150px 0 150px;
+}
+
+@media (max-width: 680px) {
+  .Home {
+    padding: 75px 100px 0 100px;
+  }
+}
+
+@media (max-width: 483px) {
+  .Home {
+    padding: 75px 50px 0 50px;
+  }
 }
 
 .App-logo {

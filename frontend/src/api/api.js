@@ -4,6 +4,8 @@ const instance = axios.create({
     baseURL: 'http://localhost:5000/',
 })
 
+// const headers = {"Content-Type": "multipart/form-data"}
+
 instance.interceptors.request.use(
     config => {
         const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).token : '';

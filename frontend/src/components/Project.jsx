@@ -296,52 +296,9 @@ class Project extends React.Component {
         return this.props.projects.length !== 0 ? <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
             {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
                 <TaskInfo/> : ''}
-            <div className={this.props.isTaskInfo ? classes.map : ''}>
-                <div className={classes.wrapWrapNavbar}>
-                    <div className={classes.wrapNavbar}>
-                    {this.props.isOpenInputEditProject ? <div className={classes.wrapItemTitle}>
-                        <AutosizeInput onFocus={this.handleFocus} spellCheck={false} inputStyle={{
-                            border: 'none',
-                            outline: '.20rem solid #0079bf',
-                            fontSize: '18px',
-                            fontWeight: '700',
-                            margin: '0.15rem 0 2px 10px',
-                            height: '33px',
-                            padding: `0 10px 0 10px`,
-                            fontFamily: 'Arial'
-                        }} value={this.state.projectName} onChange={this.changeProjectName} name="form-field-name"
-                                       autoFocus={true} onBlur={() => {
-                            this.save(this.projectId)
-                        }}
-                        />
-                    </div> : <div onClick={() => {
-                        this.onOpenInputEditProject()
-                    }} className={classes.itemNameProject}>
-                <span
-                >
+            <div className={`${this.props.isTaskInfo ? classes.map : ''} ${classes.wrapContainer}`}>
 
-                    {this.state.projectName !== '' ? this.state.projectName : this.getProjectNameOrId().name}</span>
-                    </div>}
-                    <div className={classes.wrapUserName}>
-                    {this.props.activeUsers.map(activeUser => <div title={activeUser} className={classes.itemParticipant}><span
-                        className={classes.wrapIconName}>{activeUser.substr(0, 1)}</span>
-                    </div>)}
-                    </div>
-
-                    <div className={classes.itemNameProject} onClick={() => {
-                        this.onOpenOrCloseInviteList()
-                    }}><span>Invite</span>
-                    </div>
-                    </div>
-                    <div className={classes.wrapItemRemove}>
-                    <div className={classes.itemNameProject} onClick={() => {
-                        this.onRemoveProject()
-                    }}><span>Remove project</span>
-                    </div>
-                    </div>
-
-                </div>
-                <div className={classes.containerBlock}>
+                <div style={{top: '100px', left: '100px'}} className={classes.containerBlock}>
 
                     {this.props.IsOpenInviteList ?
                         <InviteList title={'list of possible users'} menuName={'Invite to project'}
@@ -352,6 +309,51 @@ class Project extends React.Component {
                     <Droppable droppableId="all-columns" direction="horizontal" type="column">
                         {(provided) => (
                             <div className={classes.wrapper}>
+                                <div className={classes.wrapWrapNavbar}>
+                                    <div className={classes.wrapNavbar}>
+                                        {this.props.isOpenInputEditProject ? <div className={classes.wrapItemTitle}>
+                                            <AutosizeInput onFocus={this.handleFocus} spellCheck={false} inputStyle={{
+                                                border: 'none',
+                                                outline: '.20rem solid #0079bf',
+                                                fontSize: '18px',
+                                                fontWeight: '700',
+                                                margin: '0.15rem 0 2px 10px',
+                                                height: '33px',
+                                                padding: `0 10px 0 10px`,
+                                                fontFamily: 'Arial'
+                                            }} value={this.state.projectName} onChange={this.changeProjectName} name="form-field-name"
+                                                           autoFocus={true} onBlur={() => {
+                                                this.save(this.projectId)
+                                            }}
+                                            />
+                                        </div> : <div onClick={() => {
+                                            this.onOpenInputEditProject()
+                                        }} className={classes.itemNameProject}>
+                <span
+                >
+
+                    {this.state.projectName !== '' ? this.state.projectName : this.getProjectNameOrId().name}</span>
+                                        </div>}
+                                        <div className={classes.wrapUserName}>
+                                            {this.props.activeUsers.map(activeUser => <div title={activeUser} className={classes.itemParticipant}><span
+                                                className={classes.wrapIconName}>{activeUser.substr(0, 1)}</span>
+                                            </div>)}
+                                        </div>
+
+                                        <div className={`${classes.itemProjectInvite} ${classes.itemNameProject}`} onClick={() => {
+                                            this.onOpenOrCloseInviteList()
+                                        }}><span>Invite</span>
+                                        </div>
+                                    </div>
+                                    <div className={classes.wrapItemRemove}>
+                                        <div className={classes.itemNameProject} onClick={() => {
+                                            this.onRemoveProject()
+                                        }}><span>Remove project</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div className={classes.testWrap}>
                             <div className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
                                 {this.props.columnOrder.map((columnId, index) => {
 
@@ -412,6 +414,7 @@ class Project extends React.Component {
                                 {provided.placeholder}
 
                             </div>
+                                </div>
                             </div>
                         )}
                     </Droppable>

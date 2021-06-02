@@ -30,7 +30,7 @@ const ProjectInfo = (props) => {
             pathname: `/projects/${props.projectId}`,
             aboutProps: {projectId: props.projectId},
         }} className={classes.wrapperItemProject}>
-        <div>
+        <div className={classes.wrapTitleProject}>
             <div>
                 <span className={`${classes.colorTitle} ${classes.itemName}`}>{props.projectName}</span>
             </div>

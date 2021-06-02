@@ -80,7 +80,7 @@ const Header = (props) => {
                          src={kanbanImg}
                          alt=""/>
                 </div>
-                <div>
+                <div className={classes.wrapperTitleHeader}>
                     Kanban board
                 </div>
             </div>

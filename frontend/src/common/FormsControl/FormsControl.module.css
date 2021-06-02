@@ -18,6 +18,12 @@
 
 }
 
+@media (max-width: 330px) {
+    .padding {
+        height: 30px;
+    }
+}
+
 
 /*.padding:focus {*/
 /*    transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;*/

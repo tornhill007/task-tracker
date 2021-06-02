@@ -107,6 +107,7 @@
 
 .blockItemParticipant {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .blockMargin {
