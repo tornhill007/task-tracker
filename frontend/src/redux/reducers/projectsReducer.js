@@ -6,7 +6,7 @@ const SET_IS_OPEN_INVITE_LIST = 'SET_IS_OPEN_INVITE_LIST';
 const SET_IS_OPEN_INPUT_EDIT_PROJECT = 'SET_IS_OPEN_INPUT_EDIT_PROJECT';
 
 let initialState = {
-    projects: [],
+    projects: false,
     IsOpenInviteList: false,
     isOpenInputEditProject: false
 };

@@ -15,17 +15,14 @@
     cursor: pointer;
 }
 
-.itemTitle{
+.itemTitle {
     font-weight: 600;
-}
-
-.position-icon {
-
 }
 
 .leftItem {
     width: 100%;
 }
+
 .icon {
     color: gray;
     position: absolute;
@@ -33,7 +30,6 @@
     border-radius: 3px;
     top: .1562rem;
     padding: 9px;
-
 }
 
 .icon1 {
@@ -43,7 +39,6 @@
     border-radius: 3px;
     top: .1562rem;
     padding: 9px;
-
 }
 
 .icon:hover {
@@ -70,10 +65,6 @@
 
 .itemMarker:hover {
     opacity: 0.8;
-}
-
-.itemMarkerWrap {
-
 }
 
 .itemMarkerPadding {

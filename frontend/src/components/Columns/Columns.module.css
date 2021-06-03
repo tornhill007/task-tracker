@@ -77,63 +77,96 @@
 }
 
 .taskList {
-    overflow: auto;
-    max-height: 670px;
+
+    /*display: flex;*/
+    /*width: 100%;*/
+    /*height: 90%;*/
+    /*align-items: center;*/
+    /*flex-direction: column;*/
+    /*justify-content: flex-start;*/
+
+    /*overflow: auto!important;*/
+    /*max-height: 670px;*/
+
+}
+
+.taskListTmp {
+/*display: flex;*/
+    /*flex-direction: column;*/
+    /*padding: 8px;*/
+    /*max-height: 670px;*/
+    overflow: auto!important;
     padding: 8px;
     transition: background-color 0.2s ease;
     flex-grow: 1;
+    max-height: 670px;
 }
 
-@media (max-height: 823px) {
-.taskList {
+.taskListWrap {
+
+}
+
+.wrapMenu {
+    position: relative;
+}
+
+
+@media (max-height: 881px) and (min-height: 824px){
+    .taskListTmp {
+        max-height: 610px;
+    }
+}
+
+@media (max-height: 823px) and (min-height: 812px){
+.taskListTmp {
     max-height: 525px;
 }
 }
 
 @media (max-height: 812px) {
-    .taskList {
-        max-height: 515px;
+    .taskListTmp {
+        max-height: 480px;
     }
 }
 
-@media (max-height: 736px) {
-    .taskList {
+@media (max-height: 736px) and (min-height: 720px) {
+    .taskListTmp {
         max-height: 440px;
     }
 }
 
 @media (max-height: 731px) {
-    .taskList {
+    .taskListTmp {
         max-height: 435px;
     }
 }
 
 @media (max-height: 720px) {
-    .taskList {
+    .taskListTmp {
         max-height: 425px;
     }
 }
 
 @media (max-height: 667px) {
-    .taskList {
+    .taskListTmp {
         max-height: 370px;
     }
 }
 
 @media (max-height: 653px) {
-    .taskList {
-        max-height: 355px;
+    .taskListTmp {
+        max-height: 270px;
     }
 }
 
 @media (max-height: 640px) {
-    .taskList {
+    .taskListTmp {
         max-height: 345px;
     }
 }
 
 @media (max-height: 568px) {
-    .taskList {
+    .taskListTmp {
         max-height: 272px;
     }
 }
@@ -142,16 +175,16 @@
     width: 60%;
 }
 
-.taskList::-webkit-scrollbar {
+.taskListTmp::-webkit-scrollbar {
     width: 8px;
 }
 
-.taskList::-webkit-scrollbar-track-piece {
+.taskListTmp::-webkit-scrollbar-track-piece {
     background: rgba(9,30,66,.08);
     border-radius: 5px;
 }
 
-.taskList::-webkit-scrollbar-thumb {
+.taskListTmp::-webkit-scrollbar-thumb {
     background: #cccdd6;
     border-radius: 5px;
 }

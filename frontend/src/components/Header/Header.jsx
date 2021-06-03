@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect } from 'react';
 import classes from './Header.module.css'
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
@@ -9,8 +9,32 @@ import kanbanImg from '../../assets/image/kanbanboard_120442.svg';
 import {withRouter} from 'react-router-dom';
 import SvgItemProject from "./SvgItemProject/SvgItemProject";
 
+
+function useOutsideAlerter(ref, fn) {
+    useEffect(() => {
+        /**
+         * Alert if clicked on outside of element
+         */
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                fn(false)
+            }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref]);
+}
+
+
 const Header = (props) => {
+    const wrapperRef = useRef(null);
+
     const [isOpenUserList, setIsOpenUserList] = useState(false);
+    useOutsideAlerter(wrapperRef, setIsOpenUserList);
     const onLogout = () => {
         props.setAuthUserData(null, null, null);
         window.localStorage.removeItem('user');
@@ -19,7 +43,7 @@ const Header = (props) => {
     return (
         props.token ? <header
             className={`${classes.header} ${props.match.params.projectId ? classes.headerProject : ''} ${props.isTaskInfo && classes.map}`}>
-            {isOpenUserList && <div className={classes.userMenuWrap}>
+            {isOpenUserList && <div ref={wrapperRef} className={classes.userMenuWrap}>
                 <div className={classes.borderItemTitle}>
                     <div><span>Account</span></div>
                     <div onClick={() => {

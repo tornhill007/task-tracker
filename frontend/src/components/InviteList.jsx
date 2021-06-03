@@ -10,6 +10,34 @@ import MarkersList from "./Tasks/TaskInfo/MarkersList";
 
 class InviteList extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+    }
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            // alert('You clicked outside of me!');
+            this.props.columnMenu ? this.onOpenColumnMenu() : this.props.taskMenu ? this.props.onCloseTaskMenu() :
+                this.onOpenOrCloseInviteList()
+        }
+    }
+
+
     checkActiveUsers = (activeUser) => {
         let index = this.props.activeUsers.indexOf(activeUser);
         return index !== -1;
@@ -37,7 +65,7 @@ class InviteList extends React.Component {
 
     render() {
         return (
-            <div className={classes.listWrap}>
+            <div ref={this.setWrapperRef} className={`${this.props.wrapMenu && classes.listWrapMenu} ${classes.listWrap}`}>
                 <div className={classes.wrapperItem}>
                     <div className={classes.itemTitle}>
                         <div className={classes.closeItem}>{this.props.menuName || this.props.nameRef}</div>

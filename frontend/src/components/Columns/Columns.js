@@ -24,6 +24,9 @@ export default class Column extends React.Component {
         this.changeTaskText = this.changeTaskText.bind(this);
         this.onOpenColumnMenu = this.onOpenColumnMenu.bind(this);
         this.onRemoveColumn = this.onRemoveColumn.bind(this);
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.testRef = this.testRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
     }
 
     inputRef = React.createRef();
@@ -121,14 +124,38 @@ export default class Column extends React.Component {
         this.setState({
             isScroll: hasVerScroll
         })
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
+    testRef(node) {
+        this.testRef = node;
+    }
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            if(!this.state.textNewTask || this.state.textNewTask === '') {
+                this.onOpenInput();
+            }
+            this.onAddNewTask(this.props.column.columnId, this.props.projectId, this.onCalculateIndex(this.props.allTasks))
+        }
     }
 
     render() {
-
+console.log("123", this.state.isScroll)
         return (
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided) => (
                     <div {...provided.draggableProps} ref={provided.innerRef} className={classes.container}>
+                       <div ref={this.state.isTaskInput ? this.setWrapperRef : this.testRef}>
                         {this.state.isInput ? <div className={classes.headerWrapper}>
                                 <div><input className={classes.itemTextAreaTitle} onFocus={this.handleFocus}
                                             onChange={this.changeText}
@@ -147,14 +174,15 @@ export default class Column extends React.Component {
                                 </div>
                             </div>
                         }
-                        {this.state.isOpenColumnMenu ? <InviteList menuName={"Column Actions"} onRemoveColumn={this.onRemoveColumn} columnId={this.props.column.columnId} onOpenColumnMenu={this.onOpenColumnMenu} columnMenu={true} projectId={this.props.projectId}/>  : ''}
+                        {this.state.isOpenColumnMenu ? <div className={classes.wrapMenu}><InviteList wrapMenu={true} menuName={"Column Actions"} onRemoveColumn={this.onRemoveColumn} columnId={this.props.column.columnId} onOpenColumnMenu={this.onOpenColumnMenu} columnMenu={true} projectId={this.props.projectId}/></div>  : ''}
                         <Droppable droppableId={this.props.column.id} type="task">
                             {(provided, snapshot) => (
-                                <div id={'test' + this.props.column.id} className={classes.taskList}
+                                <div  className={classes.taskList}
                                      ref={provided.innerRef}
                                      {...provided.droppableProps}
                                      isDraggingOver={snapshot.isDraggingOver}
                                 >
+                                    <div id={'test' + this.props.column.id} className={classes.taskListTmp}>
                                     {
                                         this.props.tasks.length === 0 ? '' : this.props.tasks[0] === undefined ? '' : this.props.tasks.map((task, index) => {
                                             return <Tasks
@@ -165,6 +193,9 @@ export default class Column extends React.Component {
                                                 projectId={this.props.projectId} key={task.id} task={task}
                                                 index={index}/>
                                         })}
+
+
+
                                     {}
                                     {provided.placeholder}
                                     {this.state.isTaskInput ? <div className={classes.containerTask}
@@ -177,6 +208,7 @@ export default class Column extends React.Component {
                                             </div>
                                         </div>
                                     </div> : ''}
+                                    </div>
                                 </div>
                             )}
                         </Droppable>
@@ -199,6 +231,7 @@ export default class Column extends React.Component {
                                     </div>
                                 </div>}
                         </div>
+                       </div>
                     </div>
                 )}
             </Draggable>

@@ -4,9 +4,6 @@
     width: 100%;
     opacity: 0.6;
     height: 100%;
-    /*top: -50px;*/
-    /*z-index: -10;*/
-
 }
 
 .listWrap {
@@ -17,8 +14,6 @@
     overflow: scroll;
     position: absolute;
 }
-
-
 
 .wrapper {
     overflow-y: auto;
@@ -40,37 +35,30 @@
         left: 60px;
         right: 60px;
     }
+
     .secondBlock {
         flex-wrap: wrap;
-        /*justify-content: flex-start;*/
-        /*justify-content: flex-start;*/
     }
+
     .thirdBlock {
-        width: 100%!important;
-        /*display: flex;*/
-        justify-content: flex-start!important;
+        width: 100% !important;
+        justify-content: flex-start !important;
         margin-left: 60px;
         margin-bottom: 10px;
     }
+
     .secondBlockCenter {
-        width: 100%!important;
+        width: 100% !important;
     }
+
     .cardParticipants {
-        width: 100%!important;
+        width: 100% !important;
     }
-    /*.secondBlockTextArea {*/
-    /*    width: 100px!important;*/
-    /*}*/
-    /*.wrapperFirstBlock {*/
-    /*    !*width: 100%!important;*!*/
-    /*    !*position: relative;*!*/
-    /*}*/
+
     .firstBlockCenter {
-        width: 100%!important;
+        width: 100% !important;
     }
-    /*.wrapperFirstBlock {*/
-    /*    width: 100%!important;*/
-    /*}*/
+
 }
 
 @media (max-width: 509px) {
@@ -78,8 +66,9 @@
         left: 50px;
         right: 50px;
     }
+
     .firstBlockCenter {
-        width: 290px!important;
+        width: 290px !important;
     }
 }
 
@@ -88,61 +77,49 @@
         left: 30px;
         right: 30px;
     }
+
     .firstBlockCenter {
-        width: 270px!important;
+        width: 270px !important;
     }
 }
 
 @media (max-width: 440px) {
     .firstBlockCenter {
-        width: 250px!important;
+        width: 250px !important;
     }
 }
 
 @media (max-width: 420px) {
     .firstBlockCenter {
-        width: 220px!important;
+        width: 220px !important;
     }
 }
 
 @media (max-width: 390px) {
     .firstBlockCenter {
-        width: 180px!important;
+        width: 180px !important;
     }
 }
 
 @media (max-width: 365px) {
     .firstBlockCenter {
-        width: 140px!important;
+        width: 140px !important;
     }
 }
-
-/*@media (max-width: 406px) {*/
-/*    .wrapper {*/
-/*        left: 20px;*/
-/*        right: 20px;*/
-/*    }*/
-/*    .firstBlockCenter {*/
-/*        width: 300px!important;*/
-/*    }*/
-/*}*/
 
 @media (max-width: 320px) {
     .wrapper {
         left: 5px;
         right: 5px;
     }
+
     .thirdBlock {
         margin-left: 10px;
-        justify-content: center!important;
+        justify-content: center !important;
     }
-    .secondBlockTextArea {
-        /*margin-left: 10px!important;*/
-        /*display: flex;*/
-        /*justify-content: flex-start!important;*/
-    }
+
     .firstBlockCenter {
-        width: 160px!important;
+        width: 160px !important;
     }
 }
 
@@ -172,8 +149,6 @@
 .firstBlock {
     display: flex;
     justify-content: space-between;
-    /*margin: 15px;*/
-    /*padding: 10px;*/
 }
 
 .firstBlockLeft {
@@ -181,7 +156,6 @@
     margin-left: 20px;
     display: flex;
     align-items: center;
-    /*margin: 20px 0 20px 20px;*/
 }
 
 .secondBlockLeft {
@@ -191,21 +165,13 @@
 }
 
 .firstBlockRight {
-    /*color: #42526e;*/
-    /*padding: 20px 15px 0 15px;*/
-    /*margin: 5px;*/
-    /*display: flex;*/
     position: absolute;
     right: 5px;
     top: 5px;
-    /*align-items: center;*/
-    /*border-radius: 50%;*/
 }
 
 .borderIcon {
-    /*color: black;*/
     padding: 12px;
-    /*position: absolute;*/
     border-radius: 50%;
 }
 
@@ -230,12 +196,6 @@
     font-size: 14px;
 }
 
-/*.firstBlockRight:hover {*/
-/*    background-color: rgba(9,30,66,.08);*/
-/*    color: #42526e;*/
-/*    cursor: pointer;*/
-/*}*/
-
 .firstBlockCenter {
     width: 620px;
     height: 33px;
@@ -251,10 +211,7 @@
 }
 
 .firstBlockCenter:focus {
-    /*box-shadow: inset 0 0 0 2px #0079bf;*/
     outline: #0079bf auto 3px;
-    /*outline: none;*/
-
     background-color: #fff;
 }
 
@@ -280,16 +237,6 @@
     margin-left: 10px;
 }
 
-
-/*.secondBlockCenter:active {*/
-/*    cursor: pointer!important;*/
-/*    color: #0079bf!important;*/
-/*    background-color: #e4f0f6!important;*/
-/*    box-shadow: none!important;*/
-/*    border: none!important;*/
-/*    outline: none!important;*/
-/*}*/
-
 .secondBlockCenter:focus {
     outline: #0079bf auto 3px;
     background-color: #fff;
@@ -298,7 +245,6 @@
 }
 
 .itemBlockName {
-    /*padding: 10px 0;*/
     display: flex;
     align-items: center;
     margin-left: 10px;
@@ -311,22 +257,10 @@
     word-break: break-all;
 }
 
-
-
-/*.secondBlockCenter:active:not(:focus)  {*/
-/*    cursor: inherit!important;*/
-/*    color: #0079bf!important;*/
-/*    background-color: #e4f0f6!important;*/
-/*    box-shadow: none!important;*/
-/*    border: none!important;*/
-/*    outline: none!important;*/
-/*}*/
-
 .itemDesc {
     font-size: 18px;
     font-weight: 700;
     color: #172b4d;
-    /*margin-top: 10px;*/
     margin-left: 21px;
 }
 
@@ -334,43 +268,33 @@
     font-size: 15px;
     font-weight: 400;
     color: #172b4d;
-
     margin-left: 10px;
     cursor: pointer;
     padding: 10px 12px;
-    background-color: rgba(9,30,66,.04);
+    background-color: rgba(9, 30, 66, .04);
     border-radius: 3px;
 }
 
 .itemButtonChange:active {
-        color: #0079bf;
-        background-color: #e4f0f6;
-        box-shadow: none;
-        border: none;
-        outline: none;
+    color: #0079bf;
+    background-color: #e4f0f6;
+    box-shadow: none;
+    border: none;
+    outline: none;
 }
 
-/*.textareaBlock {*/
-/*    width: 100%;*/
-/*}*/
-
 .itemButtonChange:hover {
-    background-color: rgba(9,30,66,.08);
+    background-color: rgba(9, 30, 66, .08);
     box-shadow: none;
     border: none;
 }
 
 .secondBlockTextArea {
-    /*display: flex;*/
     margin-left: 30px;
     margin-top: 20px;
-    /*width: 300px;*/
-
-    /*justify-content: center;*/
 }
 
 .secondBlockCenter {
-    /*width: 2;*/
     width: 450px;
     border-radius: 3px;
     margin-left: 10px;
@@ -386,10 +310,7 @@
 
 .secondBlockCenter:focus {
     cursor: inherit;
-
 }
-
-
 
 .secondBlockCenter:focus::placeholder {
     color: inherit;
@@ -401,25 +322,17 @@
     border: none;
 }
 
-
 .secondBlockCenter:focus:hover {
     background-color: white;
 }
 
 .secondBlock {
-    /*width: 550px;*/
     display: flex;
 }
 
-/*.itemActiveColumnUnderline:focus {*/
-/*    outline: #0079bf auto 3px;*/
-/*}*/
-
 .itemCreateColumnWrap {
     margin-left: 3px;
-
     display: flex;
-    /*cursor: pointer;*/
     align-items: center;
     justify-content: flex-start;
 }
@@ -433,7 +346,6 @@
     color: #fff;
     padding: 7px 10px;
     font-size: 1rem;
-    /*font-weight: 200;*/
 }
 
 .itemInput:hover {
@@ -441,30 +353,27 @@
     background-color: #026aa7;
 }
 
-
 .itemLeftColumn {
     margin-left: 0;
     width: 10%;
     cursor: pointer;
     color: #42526e;
-    /*color: white;*/
 }
+
 .itemLeftColumn:hover {
     color: #172b4d;
 }
 
 .thirdBlock {
     width: 30%;
- display: flex;
+    display: flex;
     justify-content: flex-end;
     margin-right: 20px;
-    /*text-align: right;*/
 }
 
 .thirdItemWrap {
     width: 200px;
     text-align: left;
-    /*text-align: left;*/
 }
 
 .itemList {
@@ -473,72 +382,60 @@
     font-weight: 400;
     color: #172b4d;
     padding: 10px 12px;
-    background-color: rgba(9,30,66,.04);
+    background-color: rgba(9, 30, 66, .04);
     border-radius: 3px;
 }
 
 .itemList:hover {
     color: #101e36;
     cursor: pointer;
-    background-color: rgba(9,30,66,.08);
+    background-color: rgba(9, 30, 66, .08);
 }
 
 .itemListInvite {
-    left:50%; margin-left:-260px;
+    left: 50%;
+    margin-left: -260px;
     position: absolute;
-    /*position:fixed; left:100%; margin-left:-25%*/
-    /*position: absolute;*/
-    /*right: 500px;*/
-    /*margin: 0 auto;*/
-    /*margin-left: 50px;*/
-    /*margin-right: 50px;*/
-    /*top: 300px!important;*/
 }
 
 .itemListInvitePlus {
     position: absolute;
-    right: 600px!important;
-    /*left: 50px!important;*/
+    right: 600px !important;
     top: 100px;
-    /*top: 300px!important;*/
 }
 
 @media (max-width: 601px) {
     .itemListInvitePlus {
-        right: 500px!important;
+        right: 500px !important;
     }
 }
 
 @media (max-width: 601px) {
     .itemListInvitePlus {
-        right: 450px!important;
+        right: 450px !important;
     }
 }
-
 
 @media (max-width: 406px) {
     .itemListInvitePlus {
-        right: 440px!important;
+        right: 440px !important;
     }
-
 }
-
 
 @media (max-width: 376px) {
     .itemListInvitePlus {
-        right: 430px!important;
+        right: 430px !important;
     }
 
 }
+
 @media (max-width: 361px) {
     .itemListInvitePlus {
         margin: 0 auto;
-        /*right: 410px!important;*/
     }
-
 }
 
-.itemNameButton{
+.itemNameButton {
     margin-left: 10px;
 }
 
@@ -559,8 +456,6 @@
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: 5px;
-    /*height: 32px;*/
-    /*width: 32px;*/
 }
 
 .wrapIconName {
@@ -582,11 +477,11 @@
 .wrapIconPlus {
     margin-top: 3px;
     color: #172b4d;
-    background-color: rgba(9,30,66,.04);
+    background-color: rgba(9, 30, 66, .04);
 }
 
 .wrapIconPlus:hover {
-    background-color: rgba(9,30,66,.08);
+    background-color: rgba(9, 30, 66, .08);
     box-shadow: none;
     border: none;
 }
@@ -617,7 +512,6 @@
 .cardDetail {
     display: flex;
     flex-wrap: wrap;
-    /*justify-content: flex-start;*/
 }
 
 .wrapIconMarker {
@@ -635,11 +529,11 @@
 .wrapIconMarkerPlus {
     margin-top: 3px;
     color: #172b4d;
-    background-color: rgba(9,30,66,.04);
+    background-color: rgba(9, 30, 66, .04);
 }
 
 .wrapIconMarkerPlus:hover {
-    background-color: rgba(9,30,66,.08);
+    background-color: rgba(9, 30, 66, .08);
     box-shadow: none;
     border: none;
 }

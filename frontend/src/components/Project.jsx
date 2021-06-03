@@ -49,7 +49,32 @@ class Project extends React.Component {
 
         this.changeText = this.changeText.bind(this);
         this.changeProjectName = this.changeProjectName.bind(this);
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+        // this.setOffsetTopRef = this.setOffsetTopRef.bind(this);
+
+        // this.offsetTopRef = React.createRef();
     }
+
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
+    // setOffsetTopRef(node) {
+    //     this.offsetTopRef = node;
+    // }
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+                this.openFormForNewColumn()
+        }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+
 
     newRef = React.createRef();
     handleFocus = (event) => event.target.select();
@@ -82,6 +107,9 @@ class Project extends React.Component {
     createNewColumn(projectListId) {
         const {text} = this.state;
         let position;
+        if(!text || text === '') {
+            return;
+        }
         if (this.props.columnsOrder.length === 0) {
             position = 1;
         } else {
@@ -99,6 +127,7 @@ class Project extends React.Component {
     projectId = this.props.match.params.projectId;
 
     componentDidMount() {
+
 
         this.props.getParticipantsOnTask(this.props.match.params.projectId, this.props.userId);
 
@@ -286,25 +315,23 @@ class Project extends React.Component {
         //     activeUsers.push(user);
         // })
         console.log('activeUsers', this.props.activeUsers)
+        console.log('this.props.projects', this.props.projects)
+if(this.props.projects) {
+    let res = this.props.projects.find(project => project.projectid == this.projectId);
+    console.log("res", res)
+    if (!res) {
+        return <Redirect to={'/projects'}/>
+    }
+}
 
-        let res = this.props.projects.find(project => project.projectid == this.projectId);
-        if (!res && this.props.projects.length !== 0) {
-            return <Redirect to={'/projects'}/>
-        }
         console.log("background", this.projectId)
         console.log("background", this.props.projects)
-        return this.props.projects.length !== 0 ? <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
+        return this.props.projects && this.props.projects.length !== 0 ? <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
             {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
                 <TaskInfo/> : ''}
             <div className={`${this.props.isTaskInfo ? classes.map : ''} ${classes.wrapContainer}`}>
 
-                <div style={{top: '100px', left: '100px'}} className={classes.containerBlock}>
 
-                    {this.props.IsOpenInviteList ?
-                        <InviteList title={'list of possible users'} menuName={'Invite to project'}
-                                    projectId={this.projectId} userName={this.props.userName}
-                                    users={this.props.users}/> : ''}
-                </div>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="all-columns" direction="horizontal" type="column">
                         {(provided) => (
@@ -334,18 +361,34 @@ class Project extends React.Component {
 
                     {this.state.projectName !== '' ? this.state.projectName : this.getProjectNameOrId().name}</span>
                                         </div>}
+
                                         <div className={classes.wrapUserName}>
                                             {this.props.activeUsers.map(activeUser => <div title={activeUser} className={classes.itemParticipant}><span
                                                 className={classes.wrapIconName}>{activeUser.substr(0, 1)}</span>
                                             </div>)}
                                         </div>
 
+
                                         <div className={`${classes.itemProjectInvite} ${classes.itemNameProject}`} onClick={() => {
                                             this.onOpenOrCloseInviteList()
                                         }}><span>Invite</span>
+
+                                        </div>
+                                        <div  className={classes.containerBlock}>
+
+                                            {this.props.IsOpenInviteList ?
+                                                <InviteList title={'list of possible users'} menuName={'Invite to project'}
+                                                            projectId={this.projectId} userName={this.props.userName}
+                                                            users={this.props.users}/> : ''}
                                         </div>
                                     </div>
+
                                     <div className={classes.wrapItemRemove}>
+                                        <div className={classes.itemNameProject} onClick={() => {
+                                            this.onLeaveProject()
+                                        }}>
+                                           <span>Leave the project</span>
+                                        </div>
                                         <div className={classes.itemNameProject} onClick={() => {
                                             this.onRemoveProject()
                                         }}><span>Remove project</span>
@@ -353,8 +396,7 @@ class Project extends React.Component {
                                     </div>
 
                                 </div>
-                                <div className={classes.testWrap}>
-                            <div className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
+                            <div id='container' className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
                                 {this.props.columnOrder.map((columnId, index) => {
 
                                     const column = this.props.columns[columnId];
@@ -378,12 +420,13 @@ class Project extends React.Component {
                                                     changeIsInput={this.props.changeIsInput} key={column.id}
                                                     column={column} tasks={tasks} index={index}/>;
                                 })}
-                                {this.props.isOpenFormNewColumn ? <div className={` ${classes.itemCreateColumnInput}`}>
+                                {this.props.isOpenFormNewColumn ? <div ref={this.setWrapperRef} className={` ${classes.itemCreateColumnInput}`}>
                                         <div>
                                             <input ref={this.newRef} onChange={this.changeText} value={this.state.text}
                                                    autoFocus={true} className={classes.itemInputTitle}
                                                    placeholder={"Enter title of column"} type="text"/>
                                         </div>
+
                                         <div className={classes.itemCreateColumnWrap}>
                                             <input onClick={() => {
                                                 this.createNewColumn(this.getProjectNameOrId().projectid)
@@ -414,7 +457,7 @@ class Project extends React.Component {
                                 {provided.placeholder}
 
                             </div>
-                                </div>
+
                             </div>
                         )}
                     </Droppable>

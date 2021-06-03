@@ -7,13 +7,16 @@ import {sortByCreatedDate} from "../utils/sort";
 const Projects = (props) => {
 
     let clonedArray = JSON.parse(JSON.stringify(props.projects))
-    sortByCreatedDate(clonedArray);
+    if(clonedArray) {
+        sortByCreatedDate(clonedArray);
+    }
+
 
     const addNewProject = (title, buttonName) => {
         props.openModal(<EditModalContainer title={title} parameters={{buttonName}}/>);
     };
 
-    return <div>
+    return <div className={classes.containerMain}>
         <div className={classes.wrapIcon}>
             <div className={classes.icon}>
                 P
@@ -24,7 +27,7 @@ const Projects = (props) => {
         <div className={classes.mainContainer}>
             <div className={classes.wrapList}>
                 {
-                    clonedArray.map((project, index) => {
+                    clonedArray && clonedArray.map((project, index) => {
                         return <ProjectInfo background={project.background} userId={props.userId} removeProject={props.removeProject} key={index}
                                             projectId={project.projectid} projectName={project.name}/>
                     })

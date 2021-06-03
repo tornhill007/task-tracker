@@ -1,34 +1,31 @@
+@media (max-width: 361px) {
+    .listWrap {
+        width: 240px;
+    }
+}
+
+
 .wrap {
     border: 1px solid red;
 }
 
 .container {
     display: flex;
-    /*margin-top: 85px;*/
-
-    /*overflow-x: auto;*/
-    /*height: 100vh;*/
+    float: left;
 }
 
 .wrapper {
-    /*max-height: 50vh !important;*/
-height: calc(100vh);
-    /*height: calc(100vh);*/
+    height: calc(100vh);
     overflow-x: auto;
-
 }
+
 .wrapper::-webkit-scrollbar {
-    background: rgba(0,0,0,.15);
+    background: rgba(0, 0, 0, .15);
 }
+
 .wrapper::-webkit-scrollbar-thumb {
-    background: rgba(198, 198, 198,.30);
+    background: rgba(198, 198, 198, .30);
     border-radius: 5px;
-}
-
-
-
-.testWrap {
-    /*height: 100vh;*/
 }
 
 .itemAnotherColumn {
@@ -87,7 +84,6 @@ height: calc(100vh);
     width: 272px;
     min-width: 272px;
     margin: 8px;
-   /*padding-right: 30px;*/
     border-radius: 3px;
     cursor: pointer;
 }
@@ -98,12 +94,10 @@ height: calc(100vh);
     height: 30px;
 }
 
-
 .itemInputTitle {
     padding: 5px 8px;
     outline: #0079bf auto 3px;
 }
-
 
 .itemCreateColumn:hover {
     background-color: hsla(0, 0%, 100%, .32)
@@ -113,20 +107,13 @@ height: calc(100vh);
     background-color: #ebecf0;
 }
 
-
 .mainWrap {
-    /*background: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2133x1600/0f3b61d73a4028608dfa43344ad0302a/photo-1620839954053-e446ef13fa2e.jpg");*/
     background-position: 50%;
     background-size: cover;
     height: 100%;
     position: fixed;
     width: 100%;
-    /*padding-top: 50px;*/
 }
-
-.inputItem {
-}
-
 
 .wrapItemTitle {
     border-radius: 3px;
@@ -175,18 +162,15 @@ height: calc(100vh);
     position: absolute;
 }
 
-@media (max-width: 361px) {
-    .listWrap {
-        width: 240px;
-    }
+.listWrapMenu {
+    margin-top: 0;
+    margin-left: 0;
 }
 
 .containerBlock {
     display: flex;
     justify-content: center;
-    position: absolute;
-    left: 305px;
-    top: 50px;
+    position: relative;
 }
 
 .itemName {
@@ -197,72 +181,29 @@ height: calc(100vh);
 }
 
 .colorTitle {
-    color: #fff!important;
+    color: #fff !important;
 }
 
 .wrapItemRemove {
-    /*display: flex;*/
-    /*text-align: right;*/
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*width: 1000px;*/
+    display: flex;
+    flex-wrap: wrap;
     margin-right: 8px;
 }
+
 .wrapWrapNavbar {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    /*position: fixed;*/
     margin-top: 45px;
 }
 
-@media (max-width: 587px) {
-    .wrapItemRemove {
-        /*width: 168px;*/
-        /*margin-top: 8px;*/
-    }
-
-
-
-    .container {
-        /*margin-top: 127px;*/
-    }
-
+.wrapWrapNavbar {
+    flex-wrap: wrap;
 }
 
-@media (max-width: 400px) {
-    .wrapItemRemove {
-        /*margin-top: 8px;*/
-    }
-
-    /*.itemNameProject {*/
-    /*    margin-bottom: 5px;*/
-    /*}*/
-
-    .container {
-        /*margin-top: 172px;*/
-    }
-
-    .itemProjectInvite {
-        /*margin-top: 8px;*/
-    }
-
+.wrapNavbar {
+    flex-wrap: wrap;
 }
-    .wrapWrapNavbar {
-        flex-wrap: wrap;
-    }
-
-    .wrapNavbar {
-        flex-wrap: wrap;
-    }
-
-
-    .wrapUserName {
-
-    }
-
-
-
 
 .itemTitle {
     text-align: center;
@@ -362,8 +303,7 @@ height: calc(100vh);
     word-break: break-all;
     overflow-y: hidden;
     opacity: 0.95;
-    /*background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x320/50cc3dcbc521f726b1b44812059acc97/photo-1515847049296-a281d6401047.jpg");*/
-    background-size: cover!important;
+    background-size: cover !important;
 }
 
 .wrapperItemProject:hover {
@@ -407,7 +347,6 @@ height: calc(100vh);
     }
 }
 
-
 @media (max-width: 310px) {
     .wrapList {
         grid-template: 120px / 90%
@@ -420,7 +359,6 @@ height: calc(100vh);
 }
 
 .itemName {
-
     margin: 0 10px 0 10px;
     display: flex;
     justify-content: space-between;
@@ -473,9 +411,6 @@ height: calc(100vh);
 .wrapIconName {
     display: flex;
     cursor: pointer;
-
-    /*box-shadow: red;*/
-
     justify-content: center;
     align-items: center;
     border-radius: 100%;

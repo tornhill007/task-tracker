@@ -24,7 +24,8 @@ class EditModal extends React.Component {
             },
             backgrounds: backgrounds
         };
-
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
         this.changeText = this.changeText.bind(this);
     }
 
@@ -79,12 +80,29 @@ class EditModal extends React.Component {
         })
     }
 
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.close();
+        }
+    }
+
     render() {
 
         return (
-            <div className={'mainWrap'}>
-                <div className='containerModal'>
-                    <div className={'wrapperModal'}>
+            <div  className={'mainWrap'}>
+                <div ref={this.setWrapperRef} className='containerModal'>
+                    <div  className={'wrapperModal'}>
                         <div
                             style={{background: `url(${this.state.selectedBackground.background})`}}
                             className={'wrapLeftModal'}>
