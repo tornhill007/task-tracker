@@ -11,13 +11,8 @@ class MarkersList extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             isHoveredMarker: [{isHover: false},{isHover: false},{isHover: false},{isHover: false}],
-            // isHoveredMarkerImportant: false,
-            // isHoveredMarkerNotImportant: false,
-            // isHoveredMarkerBug: false,
-
         }
     }
 
@@ -34,18 +29,15 @@ class MarkersList extends React.Component {
     }
 
     onAddNewMarker(newMarker, markers) {
-
         if (markers) {
             markers.push(newMarker);
         } else {
             markers = [newMarker];
         }
-
         this.props.addNewMarker(markers, this.props.taskInfo.projectid, this.props.taskInfo.taskid);
     }
 
     onRemoveMarker(newMarker, markers) {
-
         let index = markers.indexOf(newMarker);
         if (index !== -1) {
             markers.splice(index, 1);
@@ -55,11 +47,9 @@ class MarkersList extends React.Component {
 
 
     render() {
-        console.log("[123454]", this.props.activeUsers);
         return (
             <div className={classes.itemWrap}>
                 {markers.map((marker,index) => {
-                    // console.log(user)
                     return <div onMouseOver={() => {
                         let newObj = Object.assign({}, this.state.isHoveredMarker);
                         newObj[index].isHover = true
@@ -77,17 +67,12 @@ class MarkersList extends React.Component {
                     }} className={`${classes.itemNameMarker} ${classes.itemName}`}>
                         <div
                             className={`${classes.itemGroupLeftMarkers} ${classes.itemGroupLeft}`}>
-                            {/*<div className={classes.containerIconName}><span*/}
-                            {/*    className={classes.wrapIconName}>KK</span>*/}
-                            {/*</div>*/}
                             <div>{marker.name}</div>
                         </div>
                         <div>
-
                             {this.checkMarkerInList(this.props.tasks[this.props.taskInfo.id].markers, marker.name) ?
                                 <FontAwesomeIcon icon={faCheck}/> : ''}
                         </div>
-
                     </div>
                 })
                 }

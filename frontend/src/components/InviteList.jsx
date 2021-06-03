@@ -31,12 +31,10 @@ class InviteList extends React.Component {
 
     handleClickOutside(event) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            // alert('You clicked outside of me!');
             this.props.columnMenu ? this.onOpenColumnMenu() : this.props.taskMenu ? this.props.onCloseTaskMenu() :
                 this.onOpenOrCloseInviteList()
         }
     }
-
 
     checkActiveUsers = (activeUser) => {
         let index = this.props.activeUsers.indexOf(activeUser);
@@ -90,8 +88,8 @@ class InviteList extends React.Component {
                             }}>Remove column
                             </div>
                         </div> : <div className={classes.itemWrap}>
-                            {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map(user =>
-                                <div
+                            {this.props.users.filter(activeUser => activeUser.username !== this.props.userName).map((user,index) =>
+                                <div key={index}
                                     onClick={() => {
                                         !this.checkActiveUsers(user.username) ? this.onAddToProject(user.userid) : this.onRemoveFromProject(user.userid)
                                     }}

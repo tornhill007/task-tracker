@@ -29,8 +29,6 @@ export default class Column extends React.Component {
         this.handleClickOutside = this.handleClickOutside.bind(this);
     }
 
-    inputRef = React.createRef();
-
     handleFocus = (event) => event.target.select();
 
     changeText(event) {
@@ -150,7 +148,6 @@ export default class Column extends React.Component {
     }
 
     render() {
-console.log("123", this.state.isScroll)
         return (
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided) => (

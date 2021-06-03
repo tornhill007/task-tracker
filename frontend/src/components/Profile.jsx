@@ -7,7 +7,6 @@ const Profile = (props) => {
     if (!props.token) {
         return <Redirect to='/login'/>
     } else return <div className="App">
-        {/*<div>My Profile</div>*/}
         <div className={classes.wrapProfile}>
             <div title={props.userName} className={classes.containerIconProfile}><span
                 className={classes.wrapIconProfile}>{props.userName.substr(0, 1)}</span></div>

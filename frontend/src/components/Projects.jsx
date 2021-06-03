@@ -11,7 +11,6 @@ const Projects = (props) => {
         sortByCreatedDate(clonedArray);
     }
 
-
     const addNewProject = (title, buttonName) => {
         props.openModal(<EditModalContainer title={title} parameters={{buttonName}}/>);
     };

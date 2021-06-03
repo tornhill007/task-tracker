@@ -37,7 +37,6 @@ import backgrounds from "../common/backgrounds/backgrounds";
 
 class Project extends React.Component {
 
-
     constructor(props) {
         super(props);
 
@@ -51,22 +50,16 @@ class Project extends React.Component {
         this.changeProjectName = this.changeProjectName.bind(this);
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
-        // this.setOffsetTopRef = this.setOffsetTopRef.bind(this);
-
-        // this.offsetTopRef = React.createRef();
     }
 
     setWrapperRef(node) {
         this.wrapperRef = node;
     }
 
-    // setOffsetTopRef(node) {
-    //     this.offsetTopRef = node;
-    // }
 
     handleClickOutside(event) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-                this.openFormForNewColumn()
+            this.openFormForNewColumn()
         }
     }
 
@@ -74,20 +67,17 @@ class Project extends React.Component {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
+    // newRef = React.createRef();
 
-
-    newRef = React.createRef();
     handleFocus = (event) => event.target.select();
 
     save(id) {
         const {projectName} = this.state;
         this.props.editProject(id, projectName, this.props.userId);
         this.onOpenInputEditProject();
-
     }
 
     getBackground = () => {
-        console.log("qwe", this.props.projects);
         let background = this.props.projects.find(item => item.projectid == this.projectId).background;
         return this.state.backgrounds.find(item => item.title === background).background;
     }
@@ -107,7 +97,7 @@ class Project extends React.Component {
     createNewColumn(projectListId) {
         const {text} = this.state;
         let position;
-        if(!text || text === '') {
+        if (!text || text === '') {
             return;
         }
         if (this.props.columnsOrder.length === 0) {
@@ -116,9 +106,7 @@ class Project extends React.Component {
             position = this.props.columns[this.props.columnsOrder[this.props.columnsOrder.length - 1]].position + 1;
         }
         this.props.createNewColumn(text, projectListId, position);
-
     }
-
 
     getProjects = async (userId, userName, token) => {
         this.props.getAllProjects(userId, userName, token);
@@ -148,8 +136,6 @@ class Project extends React.Component {
         this.props.getAllUsers(this.projectId);
         let projectId = this.props.match.params.projectId;
         this.props.getColumns(projectId);
-
-
     }
 
     getProjectNameOrId() {
@@ -284,7 +270,6 @@ class Project extends React.Component {
         }
         this.props.onDragEnd(result);
         this.props.updateTasksPosAndColumnId(tmpTasksArr, projectId);
-
     };
 
     onOpenOrCloseInviteList = () => {
@@ -308,162 +293,161 @@ class Project extends React.Component {
     }
 
     render() {
+        if (this.props.projects) {
+            let res = this.props.projects.find(project => project.projectid == this.projectId);
+            if (!res) {
+                return <Redirect to={'/projects'}/>
+            }
+        }
 
-        // let activeUsers = [];
-        // this.props.activeUsers.forEach(activeUser => {
-        //     let user = this.props.users.find(user => user.username === activeUser);
-        //     activeUsers.push(user);
-        // })
-        console.log('activeUsers', this.props.activeUsers)
-        console.log('this.props.projects', this.props.projects)
-if(this.props.projects) {
-    let res = this.props.projects.find(project => project.projectid == this.projectId);
-    console.log("res", res)
-    if (!res) {
-        return <Redirect to={'/projects'}/>
-    }
-}
-
-        console.log("background", this.projectId)
-        console.log("background", this.props.projects)
-        return this.props.projects && this.props.projects.length !== 0 ? <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
-            {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
-                <TaskInfo/> : ''}
-            <div className={`${this.props.isTaskInfo ? classes.map : ''} ${classes.wrapContainer}`}>
+        return this.props.projects && this.props.projects.length !== 0 ?
+            <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
+                {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
+                    <TaskInfo/> : ''}
+                <div className={`${this.props.isTaskInfo ? classes.map : ''} ${classes.wrapContainer}`}>
 
 
-                <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                        {(provided) => (
-                            <div className={classes.wrapper}>
-                                <div className={classes.wrapWrapNavbar}>
-                                    <div className={classes.wrapNavbar}>
-                                        {this.props.isOpenInputEditProject ? <div className={classes.wrapItemTitle}>
-                                            <AutosizeInput onFocus={this.handleFocus} spellCheck={false} inputStyle={{
-                                                border: 'none',
-                                                outline: '.20rem solid #0079bf',
-                                                fontSize: '18px',
-                                                fontWeight: '700',
-                                                margin: '0.15rem 0 2px 10px',
-                                                height: '33px',
-                                                padding: `0 10px 0 10px`,
-                                                fontFamily: 'Arial'
-                                            }} value={this.state.projectName} onChange={this.changeProjectName} name="form-field-name"
-                                                           autoFocus={true} onBlur={() => {
-                                                this.save(this.projectId)
-                                            }}
-                                            />
-                                        </div> : <div onClick={() => {
-                                            this.onOpenInputEditProject()
-                                        }} className={classes.itemNameProject}>
+                    <DragDropContext onDragEnd={this.onDragEnd}>
+                        <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                            {(provided) => (
+                                <div className={classes.wrapper}>
+                                    <div className={classes.wrapWrapNavbar}>
+                                        <div className={classes.wrapNavbar}>
+                                            {this.props.isOpenInputEditProject ? <div className={classes.wrapItemTitle}>
+                                                <AutosizeInput onFocus={this.handleFocus} spellCheck={false}
+                                                               inputStyle={{
+                                                                   border: 'none',
+                                                                   outline: '.20rem solid #0079bf',
+                                                                   fontSize: '18px',
+                                                                   fontWeight: '700',
+                                                                   margin: '0.15rem 0 2px 10px',
+                                                                   height: '33px',
+                                                                   padding: `0 10px 0 10px`,
+                                                                   fontFamily: 'Arial'
+                                                               }} value={this.state.projectName}
+                                                               onChange={this.changeProjectName} name="form-field-name"
+                                                               autoFocus={true} onBlur={() => {
+                                                    this.save(this.projectId)
+                                                }}
+                                                />
+                                            </div> : <div onClick={() => {
+                                                this.onOpenInputEditProject()
+                                            }} className={classes.itemNameProject}>
                 <span
                 >
 
                     {this.state.projectName !== '' ? this.state.projectName : this.getProjectNameOrId().name}</span>
-                                        </div>}
+                                            </div>}
 
-                                        <div className={classes.wrapUserName}>
-                                            {this.props.activeUsers.map(activeUser => <div title={activeUser} className={classes.itemParticipant}><span
-                                                className={classes.wrapIconName}>{activeUser.substr(0, 1)}</span>
-                                            </div>)}
+                                            <div className={classes.wrapUserName}>
+                                                {this.props.activeUsers.map((activeUser, index) => <div key={index} title={activeUser}
+                                                                                               className={classes.itemParticipant}><span
+                                                    className={classes.wrapIconName}>{activeUser.substr(0, 1)}</span>
+                                                </div>)}
+                                            </div>
+
+
+                                            <div className={`${classes.itemProjectInvite} ${classes.itemNameProject}`}
+                                                 onClick={() => {
+                                                     this.onOpenOrCloseInviteList()
+                                                 }}><span>Invite</span>
+
+                                            </div>
+                                            <div className={classes.containerBlock}>
+
+                                                {this.props.IsOpenInviteList ?
+                                                    <InviteList title={'list of possible users'}
+                                                                menuName={'Invite to project'}
+                                                                projectId={this.projectId}
+                                                                userName={this.props.userName}
+                                                                users={this.props.users}/> : ''}
+                                            </div>
                                         </div>
 
-
-                                        <div className={`${classes.itemProjectInvite} ${classes.itemNameProject}`} onClick={() => {
-                                            this.onOpenOrCloseInviteList()
-                                        }}><span>Invite</span>
-
+                                        <div className={classes.wrapItemRemove}>
+                                            <div className={classes.itemNameProject} onClick={() => {
+                                                this.onLeaveProject()
+                                            }}>
+                                                <span>Leave the project</span>
+                                            </div>
+                                            <div className={classes.itemNameProject} onClick={() => {
+                                                this.onRemoveProject()
+                                            }}><span>Remove project</span>
+                                            </div>
                                         </div>
-                                        <div  className={classes.containerBlock}>
 
-                                            {this.props.IsOpenInviteList ?
-                                                <InviteList title={'list of possible users'} menuName={'Invite to project'}
-                                                            projectId={this.projectId} userName={this.props.userName}
-                                                            users={this.props.users}/> : ''}
-                                        </div>
                                     </div>
+                                    <div id='container' className={classes.container} {...provided.droppableProps}
+                                         ref={provided.innerRef}>
+                                        {this.props.columnOrder.map((columnId, index) => {
 
-                                    <div className={classes.wrapItemRemove}>
-                                        <div className={classes.itemNameProject} onClick={() => {
-                                            this.onLeaveProject()
-                                        }}>
-                                           <span>Leave the project</span>
-                                        </div>
-                                        <div className={classes.itemNameProject} onClick={() => {
-                                            this.onRemoveProject()
-                                        }}><span>Remove project</span>
-                                        </div>
+                                            const column = this.props.columns[columnId];
+
+                                            let res = column.taskIds.filter(task => {
+                                                return this.props.tasks[task] === undefined ? false : true;
+                                            })
+
+                                            const tasks = res.map(
+                                                taskId => {
+                                                    return this.props.tasks[taskId]
+                                                },
+                                            );
+                                            return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo}
+                                                            addNewTask={this.props.addNewTask}
+                                                            setTaskInfo={this.props.setTaskInfo}
+                                                            onRemoveColumn={this.props.onRemoveColumn}
+                                                            projectId={this.props.match.params.projectId}
+                                                            onUpdateColumn={this.props.onUpdateColumn}
+                                                            isInput={this.props.isInput}
+                                                            changeIsInput={this.props.changeIsInput} key={column.id}
+                                                            column={column} tasks={tasks} index={index}/>;
+                                        })}
+                                        {this.props.isOpenFormNewColumn ? <div ref={this.setWrapperRef}
+                                                                               className={` ${classes.itemCreateColumnInput}`}>
+                                                <div>
+                                                    <input onChange={this.changeText}
+                                                           value={this.state.text}
+                                                           autoFocus={true} className={classes.itemInputTitle}
+                                                           placeholder={"Enter title of column"} type="text"/>
+                                                </div>
+
+                                                <div className={classes.itemCreateColumnWrap}>
+                                                    <input onClick={() => {
+                                                        this.createNewColumn(this.getProjectNameOrId().projectid)
+                                                    }} className={classes.itemInput} value={"add column"} type={'button'}/>
+
+
+                                                    <div onClick={() => this.openFormForNewColumn()}
+                                                         className={classes.itemLeftColumn}>
+                                                        <FontAwesomeIcon className={`fa-2x`}
+                                                                         icon={faTimes}/>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            :
+                                            <div onClick={() => {
+                                                this.openFormForNewColumn()
+                                            }} className={classes.itemCreateColumn}>
+
+                                                <div className={`${classes.itemLeftIcon} ${classes.itemLeftColumn}`}>
+                                                    <FontAwesomeIcon className={`fa-xs`}
+                                                                     icon={faPlus}/>
+                                                </div>
+                                                <div>
+                                                    add another column
+                                                </div>
+                                            </div>}
+                                        {provided.placeholder}
+
                                     </div>
 
                                 </div>
-                            <div id='container' className={classes.container} {...provided.droppableProps} ref={provided.innerRef}>
-                                {this.props.columnOrder.map((columnId, index) => {
-
-                                    const column = this.props.columns[columnId];
-
-                                    let res = column.taskIds.filter(task => {
-                                        return this.props.tasks[task] === undefined ? false : true;
-                                    })
-
-                                    const tasks = res.map(
-                                        taskId => {
-                                            return this.props.tasks[taskId]
-                                        },
-                                    );
-                                    return <Columns allTasks={this.props.tasks} taskInfo={this.props.taskInfo}
-                                                    addNewTask={this.props.addNewTask}
-                                                    setTaskInfo={this.props.setTaskInfo}
-                                                    onRemoveColumn={this.props.onRemoveColumn}
-                                                    projectId={this.props.match.params.projectId}
-                                                    onUpdateColumn={this.props.onUpdateColumn}
-                                                    isInput={this.props.isInput}
-                                                    changeIsInput={this.props.changeIsInput} key={column.id}
-                                                    column={column} tasks={tasks} index={index}/>;
-                                })}
-                                {this.props.isOpenFormNewColumn ? <div ref={this.setWrapperRef} className={` ${classes.itemCreateColumnInput}`}>
-                                        <div>
-                                            <input ref={this.newRef} onChange={this.changeText} value={this.state.text}
-                                                   autoFocus={true} className={classes.itemInputTitle}
-                                                   placeholder={"Enter title of column"} type="text"/>
-                                        </div>
-
-                                        <div className={classes.itemCreateColumnWrap}>
-                                            <input onClick={() => {
-                                                this.createNewColumn(this.getProjectNameOrId().projectid)
-                                            }} className={classes.itemInput} value={"add column"} type={'button'}/>
-
-
-                                            <div onClick={() => this.openFormForNewColumn()}
-                                                 className={classes.itemLeftColumn}>
-                                                <FontAwesomeIcon className={`fa-2x`}
-                                                                 icon={faTimes}/>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    :
-                                    <div onClick={() => {
-                                        this.openFormForNewColumn()
-                                    }} className={classes.itemCreateColumn}>
-
-                                        <div className={`${classes.itemLeftIcon} ${classes.itemLeftColumn}`}>
-                                            <FontAwesomeIcon className={`fa-xs`}
-                                                             icon={faPlus}/>
-                                        </div>
-                                        <div>
-                                            add another column
-                                        </div>
-                                    </div>}
-                                {provided.placeholder}
-
-                            </div>
-
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            </div>
-        </div> : ''
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </div>
+            </div> : ''
 
 
     }

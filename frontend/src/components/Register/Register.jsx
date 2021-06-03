@@ -11,7 +11,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTimes, faHome, faUserCircle} from "@fortawesome/free-solid-svg-icons";
 
 const RegisterForm = (props) => {
-    console.log(props)
     return <div className={classes.container}>
         <div className={classes.wrap}>
             <div>
@@ -48,9 +47,7 @@ const RegisterForm = (props) => {
 const RegisterReduxForm = reduxForm({form: 'register'})(RegisterForm)
 
 const Register = (props) => {
-    console.log(props)
     const onSubmit = async (formData) => {
-        console.log(formData);
         props.register(formData.password, formData.userName, formData.repeatPassword);
     }
     if (props.userData.token) {

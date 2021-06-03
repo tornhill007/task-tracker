@@ -17,27 +17,15 @@ class Task extends React.Component {
     }
 
     checkCurrentUser = () => {
-
-        // console.log()
         let tmp = this.props.participantsOnTask.find(item => item.taskid === this.props.taskId);
-if(!tmp) {
-    return false;
-}
-
-return tmp.newUsers.filter(item => item.username == this.props.userName).length !== 0;
-
-        console.log("aaa",tmp)
-        // if(!tmp) {
-        //     return false;
-        // }
-        // let result = tmp.newUsers.filter(item => item.username === this.props.userName)
+        if (!tmp) {
+            return false;
+        }
+        return tmp.newUsers.filter(item => item.username == this.props.userName).length !== 0;
     }
 
     render() {
-        // this.checkCurrentUser()
-        console.log(this.props.task);
         let tmp = this.props.participantsOnTask.find(item => item.taskid === this.props.taskId);
-        console.log(tmp)
         this.checkCurrentUser(this.props.userName)
         let activeUsers = [];
         this.props.activeUsers.forEach(activeUser => {

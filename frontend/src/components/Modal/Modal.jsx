@@ -4,12 +4,10 @@ import './style.css'
 class Modal extends React.Component {
     constructor(props) {
         super(props);
-
     }
 
     render() {
         const {isOpen, content} = this.props.columnsPage;
-        console.log("content", content);
         if (!isOpen) return null;
 
         return (

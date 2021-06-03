@@ -23,16 +23,13 @@ class ProjectsContainer extends React.Component {
         if (JSON.parse(localStorage.getItem('user'))) {
             let user = JSON.parse(localStorage.getItem('user'));
             if (user.timestamp > Date.now() - 3600000) {
-                console.log(user.userId, user.userName, user.token)
                 this.props.setAuthUserData(user.userId, user.userName, user.token)
                 this.getProjects(user.userId, user.userName, user.token);
             } else {
                 window.localStorage.removeItem('user');
-
                 this.props.setAuthUserData(null, null, null)
             }
         }
-
     }
 
     render() {

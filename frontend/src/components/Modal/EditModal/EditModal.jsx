@@ -42,8 +42,6 @@ class EditModal extends React.Component {
     }
 
     createProject() {
-
-        console.log("IMG", this.state.selectedBackground.title)
         const {text} = this.state;
         if(!text) {
             return
@@ -112,7 +110,6 @@ class EditModal extends React.Component {
                                        cols="40"/>
                                 <FontAwesomeIcon onClick={() => this.close()} className={`cursorIcon fa-cm`}
                                                  icon={faTimes}/>
-                                {/*<button type="button" className="btn btn-secondary" onClick={() => this.close()}>Close</button>*/}
                             </div>
                             <div className="teamTitle">
                                 <span>Me-Team</span>
@@ -134,11 +131,6 @@ class EditModal extends React.Component {
                         </div>
                     </div>
                 </div>
-
-                {/*<div className="modal-body">*/}
-
-                {/*</div>*/}
-
             </div>
         )
     }
