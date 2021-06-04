@@ -2,9 +2,10 @@ import React from 'react';
 import {Route} from 'react-router-dom';
 import HeaderContainer from "../components/Header/HeaderContainer";
 import Navbar from "../components/Navbar/Navbar";
+import classes from '../components/Projects.module.css'
 
 const DashboardLayout = ({children}) => (
-    <div>
+    <div >
         <HeaderContainer/>
         {children}
     </div>

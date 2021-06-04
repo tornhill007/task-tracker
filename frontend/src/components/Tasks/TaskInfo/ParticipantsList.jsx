@@ -38,8 +38,8 @@ class ParticipantsList extends React.Component {
     render() {
         return (
             <div  className={classes.itemWrap}>
-                {this.props.activeParticipants.map(user => {
-                    return <div onClick={() => {
+                {this.props.activeParticipants.map((user,index) => {
+                    return <div key={index} onClick={() => {
                         !this.checkParticipantInList(user.username) ? this.onAddNewParticipant(user.username, this.props.tasks[this.props.taskInfo.id].users, user.userid) : this.removeParticipant(user.userid)
                     }} className={classes.itemName}>
                         <div

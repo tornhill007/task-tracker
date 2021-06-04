@@ -30,12 +30,83 @@
     border-radius: 3px;
     top: .1562rem;
     padding: 9px;
+    z-index: 10000;
 }
+
+.wrapperEditor {
+    /*margin-right: 4px;*/
+    position: relative;
+    /*height: 100vh;?*/
+    /*background-color: red;*/
+    /*width: 24px;*/
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+    /*position: fixed;*/
+    /*width: 100vh;*/
+    /*height: 100vh;*/
+    /*background: rgba(0,0,0,0.1);*/
+}
+
+.editorItemRight {
+    /*float: left;*/
+    display: flex;
+}
+
+.itemInputEdit {
+    margin: 15px 0!important;
+}
+
+.itemInput {
+    margin: 6px;
+    background-color: #0079bf;
+    box-shadow: none;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    padding: 7px 10px;
+    font-size: 1rem;
+}
+
+.itemInput:hover {
+    cursor: pointer;
+    background-color: #026aa7;
+}
+
+.firstBlockCenter {
+    /*width: 100%;*/
+    min-height: 100px;
+    border: none;
+    border-radius: 3px;
+    resize: none;
+    padding: 10px;
+    /*height: 33px;*/
+    /*font-size: 20px;*/
+    /*padding: 6px 8px;*/
+    /*border: none;*/
+    /*background-color: #f4f5f7;*/
+    /*resize: none;*/
+    /*border-radius: 3px;*/
+    /*font-weight: 700;*/
+    /*color: #172b4d;*/
+    /*margin-right: 20px;*/
+}
+
+.firstBlockCenter:focus {
+    outline: none;
+
+    background-color: #fff;
+}
+
+
 
 .icon1 {
     color: gray;
     position: absolute;
     left: 215px;
+    z-index: 100000;
     border-radius: 3px;
     top: .1562rem;
     padding: 9px;

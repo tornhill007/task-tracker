@@ -293,6 +293,7 @@ class Project extends React.Component {
     }
 
     render() {
+
         if (this.props.projects) {
             let res = this.props.projects.find(project => project.projectid == this.projectId);
             if (!res) {
@@ -301,9 +302,11 @@ class Project extends React.Component {
         }
 
         return this.props.projects && this.props.projects.length !== 0 ?
-            <div style={{backgroundImage: `url(${this.getBackground()})`}} className={classes.mainWrap}>
+            <div className={`${this.props.isOpenQuickEditor && classes.mainWrapDisabled}`}>
+            <div style={{backgroundImage: `url(${this.getBackground()})`}} className={`${classes.mainWrap} `}>
                 {this.props.taskInfo && this.props.isTaskInfo && this.props.tasks[this.props.taskInfo.id] ?
                     <TaskInfo/> : ''}
+
                 <div className={`${this.props.isTaskInfo ? classes.map : ''} ${classes.wrapContainer}`}>
 
 
@@ -447,7 +450,7 @@ class Project extends React.Component {
                         </Droppable>
                     </DragDropContext>
                 </div>
-            </div> : ''
+            </div> </div>: ''
 
 
     }
@@ -469,7 +472,7 @@ const mapStateToProps = (state) => ({
     userId: state.auth.userId,
     isOpenFormNewColumn: state.columnsPage.isOpenFormNewColumn,
     isOpenInputEditProject: state.projectsPage.isOpenInputEditProject,
-
+    isOpenQuickEditor: state.columnsPage.isOpenQuickEditor,
 })
 
 let AuthRedirectComponent = withAuthRedirect(Project);

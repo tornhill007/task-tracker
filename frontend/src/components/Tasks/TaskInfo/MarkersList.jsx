@@ -50,7 +50,7 @@ class MarkersList extends React.Component {
         return (
             <div className={classes.itemWrap}>
                 {markers.map((marker,index) => {
-                    return <div onMouseOver={() => {
+                    return <div key={index} onMouseOver={() => {
                         let newObj = Object.assign({}, this.state.isHoveredMarker);
                         newObj[index].isHover = true
                         this.setState({

@@ -116,7 +116,7 @@ class EditModal extends React.Component {
                             </div>
                         </div>
                         <div className={'grid'}>
-                            {this.state.backgrounds.map(background => <div onClick={() => {
+                            {this.state.backgrounds.map((background, index) => <div key={index} onClick={() => {
                                 this.changeBackground(background)
                             }} className={'imgPosition'}
                                                                            style={{background: `url(${background.background})`}}>{background.title === this.state.selectedBackground.title &&

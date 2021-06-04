@@ -25,8 +25,12 @@ export default class Column extends React.Component {
         this.onOpenColumnMenu = this.onOpenColumnMenu.bind(this);
         this.onRemoveColumn = this.onRemoveColumn.bind(this);
         this.setWrapperRef = this.setWrapperRef.bind(this);
-        this.testRef = this.testRef.bind(this);
+        this.setTestRef = this.setTestRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
+
+        // this.wrapperRef = React.createRef()
+        // this.testRef = React.createRef()
+
     }
 
     handleFocus = (event) => event.target.select();
@@ -134,7 +138,7 @@ export default class Column extends React.Component {
         this.wrapperRef = node;
     }
 
-    testRef(node) {
+    setTestRef(node) {
         this.testRef = node;
     }
 
@@ -152,7 +156,7 @@ export default class Column extends React.Component {
             <Draggable draggableId={this.props.column.id} index={this.props.index}>
                 {(provided) => (
                     <div {...provided.draggableProps} ref={provided.innerRef} className={classes.container}>
-                       <div ref={this.state.isTaskInput ? this.setWrapperRef : this.testRef}>
+                       <div ref={this.state.isTaskInput ? this.setWrapperRef : this.setTestRef}>
                         {this.state.isInput ? <div className={classes.headerWrapper}>
                                 <div><input className={classes.itemTextAreaTitle} onFocus={this.handleFocus}
                                             onChange={this.changeText}

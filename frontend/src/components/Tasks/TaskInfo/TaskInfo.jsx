@@ -47,9 +47,9 @@ class TaskInfo extends React.Component {
             rectLeft: false,
             isInput: false,
             isTextArea: false,
-            text: this.props.tasks[this.props.taskInfo.id].content,
-            textForDescription: this.props.tasks[this.props.taskInfo.id].description,
-            textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description,
+            text: this.props.tasks[this.props.taskInfo.id].content || '',
+            textForDescription: this.props.tasks[this.props.taskInfo.id].description || '',
+            textForDescriptionTmp: this.props.tasks[this.props.taskInfo.id].description || '',
             isButton: false,
             isOpenTaskMenu: false,
             isOpenTaskMenuLeft: false
@@ -290,7 +290,7 @@ class TaskInfo extends React.Component {
                                 <span className={classes.cardTitle}>Participants</span>
                             </div>
                             <div className={classes.containerIconName}>
-                                {this.props.participantOnTask.map(participant => <div
+                                {this.props.participantOnTask.map((participant, index) => <div key={index}
                                     className={classes.itemParticipant}><span
                                     className={classes.wrapIconName}>{participant.username.substr(0, 1)}</span>
                                 </div>)}
@@ -308,7 +308,7 @@ class TaskInfo extends React.Component {
                             </div>
                             <div className={classes.containerIconName}>
                                 {this.props.tasks[this.props.taskInfo.id].markers.map((marker, index) => {
-                                    return <div className={classes.itemParticipant}><span
+                                    return <div key={index} className={classes.itemParticipant}><span
                                         style={{backgroundColor: markers.find(item => item.name === marker).style}}
                                         className={classes.wrapIconMarker}>{marker.substr(0, 1)}</span>
                                     </div>

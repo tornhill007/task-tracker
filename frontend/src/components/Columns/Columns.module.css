@@ -87,15 +87,21 @@
 
     /*overflow: auto!important;*/
     /*max-height: 670px;*/
-
+    /*overflow-y: scroll;*/
+    /*position: relative;*/
+    /*overflow-y: auto!important;*/
+    /*overflow-x: auto;*/
+    overflow-y: auto!important;
 }
 
 .taskListTmp {
 /*display: flex;*/
+
     /*flex-direction: column;*/
     /*padding: 8px;*/
     /*max-height: 670px;*/
-    overflow: auto!important;
+    /*overflow: auto!important;*/
+    /*position: relative;*/
     padding: 8px;
     transition: background-color 0.2s ease;
     flex-grow: 1;
@@ -175,16 +181,16 @@
     width: 60%;
 }
 
-.taskListTmp::-webkit-scrollbar {
+.taskList::-webkit-scrollbar {
     width: 8px;
 }
 
-.taskListTmp::-webkit-scrollbar-track-piece {
+.taskList::-webkit-scrollbar-track-piece {
     background: rgba(9,30,66,.08);
     border-radius: 5px;
 }
 
-.taskListTmp::-webkit-scrollbar-thumb {
+.taskList::-webkit-scrollbar-thumb {
     background: #cccdd6;
     border-radius: 5px;
 }

@@ -14,6 +14,7 @@ const SET_TASK_INFO = 'SET_TASK_INFO';
 const CLOSE_TASK_INFO = 'CLOSE_TASK_INFO';
 const OPEN_FORM_FOR_NEW_COLUMN = 'OPEN_FORM_FOR_NEW_COLUMN';
 const CHANGE_TEXT_FOR_DESCRIPTION_TMP = 'CHANGE_TEXT_FOR_DESCRIPTION_TMP';
+const SET_IS_OPEN_QUICK_EDITOR = 'SET_IS_OPEN_QUICK_EDITOR';
 
 let initialState = {
     isOpenFormNewColumn: false,
@@ -25,7 +26,8 @@ let initialState = {
     tasks: {},
     columns: {},
     columnOrder: [],
-    textForDescriptionTmp: []
+    textForDescriptionTmp: [],
+    isOpenQuickEditor: false
 };
 
 const columnsReducer = (state = initialState, action) => {
@@ -40,6 +42,11 @@ const columnsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isOpenFormNewColumn: !state.isOpenFormNewColumn,
+            };
+            case SET_IS_OPEN_QUICK_EDITOR:
+            return {
+                ...state,
+                isOpenQuickEditor: action.isOpenQuickEditor
             };
         case CHANGE_TEXT_FOR_DESCRIPTION_TMP:
             return {
@@ -222,6 +229,7 @@ export const changeIsInput = () => ({type: CHANGE_IS_INPUT});
 export const setTaskInfo = (taskInfo) => ({type: SET_TASK_INFO, taskInfo});
 export const closeTaskInfo = () => ({type: CLOSE_TASK_INFO});
 export const changeTextForDescription = (textForDescriptionTmp) => ({type: CHANGE_TEXT_FOR_DESCRIPTION_TMP, textForDescriptionTmp});
+export const setIsOpenQuickEditor = (isOpenQuickEditor) => ({type: SET_IS_OPEN_QUICK_EDITOR, isOpenQuickEditor});
 
 
 export const getColumns = (projectId) => async (dispatch) => {
