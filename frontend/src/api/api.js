@@ -46,7 +46,6 @@ export const usersApi = {
             }
         });
     }
-
 }
 
 export const projectsApi = {
@@ -63,11 +62,7 @@ export const projectsApi = {
         })
     },
     removeProject(projectId, userId) {
-        return instance.delete(`projects/${projectId}`, {
-            params: {
-                userId
-            }
-        })
+        return instance.delete(`projects/${projectId}`)
     },
     getAllProjects(userId) {
         return instance.get(`projects/`, {

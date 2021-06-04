@@ -59,4 +59,19 @@ Projects.getAllProjectsUsers = function (userid) {
     );
 }
 
+Projects.getAllProjectsUsers = function (userid) {
+    return this.findAll({
+            include: [{
+                model: Users,
+                as: 'users',
+                required: true,
+                where: {
+                    userid
+                }
+            }
+            ]
+        }
+    );
+}
+
 module.exports = Projects;

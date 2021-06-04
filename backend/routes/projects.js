@@ -9,10 +9,28 @@ const keys = require('../config/keys');
 
 const {removingProject} = require('../common/removingProject')
 
-router.use('/projects', passport.authenticate('jwt', {session: false}), async function (req, res, next) {
-    const user = await Users.findUserByUserId(req.query.userId ? req.query.userId : req.body.userId);
+router.use('/projects/:projectId?', passport.authenticate('jwt', {session: false}), async function (req, res, next) {
+    // const user = await Users.findUserByUserId(req.query.userId ? req.query.userId : req.body.userId);
     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
-    if(decoded.userId !== user.userid) {
+    if (!req.params.projectId) {
+        next();
+        return;
+    }
+    const project = await Projects.findOne({
+        where: {
+            projectid: req.params.projectId
+        },
+        include: [{
+            model: Users,
+            as: 'users',
+            require: true,
+            where: {
+                userid: decoded.userId
+            }
+        }]
+    })
+
+    if (!project) {
         res.status(401).json({
             message: "Unauthorized"
         })
@@ -27,16 +45,15 @@ router.use('/projects', passport.authenticate('jwt', {session: false}), async fu
 
 router.get("/projects", catchWrap(async (req, res) => {
     // let {userId} = req.query;
-    let userId = req.query.userId
-
+    // let userId = req.query.userId
+    let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
     const results = await Projects.findAll({
-
             include: [{
                 model: Users,
                 as: 'users',
                 required: true,
                 where: {
-                    userid: +userId
+                    userid: decoded.userId
                 }
             }
             ]
@@ -49,11 +66,13 @@ router.get("/projects", catchWrap(async (req, res) => {
 //create project
 
 router.post("/projects", catchWrap(async (req, res) => {
-    const {name, userId, background} = req.body;
+    const {name, background} = req.body;
+    let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
+
     const newProject = Projects.buildProjectByName(name, background)
     await newProject.save();
 
-    const user = await Users.getUserByUserId(userId)
+    const user = await Users.getUserByUserId(decoded.userId)
 
     await newProject.addUser(user);
 
@@ -62,10 +81,10 @@ router.post("/projects", catchWrap(async (req, res) => {
 
 //update project
 
-router.put("/projects/:id", catchWrap(async (req, res) => {
-    const {id} = req.params;
+router.put("/projects/:projectId", catchWrap(async (req, res) => {
+    const {projectId} = req.params;
     const {name} = req.body;
-    const updateProject = await Projects.updateProjectNameByProjectId(id);
+    const updateProject = await Projects.updateProjectNameByProjectId(projectId);
     updateProject.name = name;
     await updateProject.save();
     res.json("Project updated");
@@ -73,10 +92,10 @@ router.put("/projects/:id", catchWrap(async (req, res) => {
 
 //delete project
 
-router.delete("/projects/:id", catchWrap(async (req, res) => {
-    const {id} = req.params;
-
-    await removingProject({id});
+router.delete("/projects/:projectId", catchWrap(async (req, res) => {
+    const {projectId} = req.params;
+    // let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
+    await removingProject({projectId});
     res.json("Project deleted");
 
 }))

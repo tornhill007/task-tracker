@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const keys = require('../config/keys');
 const Tasks = require('../models/Tasks');
 const Users = require('../models/Users');
+const Projects = require('../models/Projects');
 
 
 const catchWrap = require("../common/wrapper");
@@ -19,9 +20,24 @@ router.use('/tasks/:projectId', passport.authenticate('jwt', {session: false}), 
         return;
     }
 
-    user = await Users.getUserProject(req.params.projectId, decoded.userId);
+    const project = await Projects.findOne({
+        where: {
+            projectid: req.params.projectId
+        },
+        include: [{
+            model: Users,
+            as: 'users',
+            required: true,
+            where: {
+                userid: decoded.userId
+            }
+        }
+        ]
+    })
 
-    if (!user) {
+    // user = await Users.getUserProject(req.params.projectId, decoded.userId);
+
+    if (!project) {
         res.status(401).json({
             message: "Unauthorized"
         })

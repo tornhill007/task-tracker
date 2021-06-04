@@ -8,12 +8,12 @@ const UsersProjects = require('../models/UsersProjects');
 module.exports = {
     removingProject: async (params) => {
 
-        const {id} = params;
+        const {projectId} = params;
 
         // const removeUsersProjects = await UsersProjects.destroyUsersProjectsByProjectId(id);
 
-        const project = await Projects.getProjectByProjectId(id);
-        const users = await Users.getAllUsersProjects(id);
+        const project = await Projects.getProjectByProjectId(projectId);
+        const users = await Users.getAllUsersProjects(projectId);
         let result = await project.removeUsers(users);
 
 
@@ -23,21 +23,21 @@ module.exports = {
                 as: 'newTasks',
                 required: true,
                 where: {
-                    projectid: id,
+                    projectid: projectId,
                 },
             }
             ]
         })
 
-        const tasks = await Tasks.getTasksBuyProjectId(id);
+        const tasks = await Tasks.getTasksBuyProjectId(projectId);
 
         for(let key of usersTasks) {
             await key.removeNewTasks(tasks);
         }
-        const deletedTasks = await Tasks.destroyTasksByProjectId(id);
-        const deletedColumns = await Columns.destroyColumnsByProjectId(id);
+        const deletedTasks = await Tasks.destroyTasksByProjectId(projectId);
+        const deletedColumns = await Columns.destroyColumnsByProjectId(projectId);
 
-        const deletedProject = await Projects.getProjectByProjectId(id);
+        const deletedProject = await Projects.getProjectByProjectId(projectId);
         await deletedProject.destroy();
 
 

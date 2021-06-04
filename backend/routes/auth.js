@@ -7,10 +7,9 @@ const express = require("express");
 const router = express.Router();
 const pool = require('../db');
 
-
 const Users = require('../models/Users');
 
-const catchWrap = require("../common/wrapper")
+const catchWrap = require("../common/wrapper");
 
 router.post("/login", catchWrap(async (req, res) => {
     const {password, userName} = req.body;
