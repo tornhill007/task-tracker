@@ -65,9 +65,6 @@ Users.belongsToMany(Tasks, {
     otherKey: 'taskid'
 });
 
-
-
-
 Tasks.getTasksBuyProjectId = function (projectid) {
     return this.findAll({
         // include: ['Users'],
@@ -105,22 +102,5 @@ Tasks.buildNewTask = function (taskname, position, description, users, markers, 
         projectid
     });
 }
-
-
-// Tasks.associate = (models) => {
-//     Tasks.belongsToMany(models.users, {
-//         through: models.userstask,
-//         foreignKey: "taskid"
-//     });
-// }
-
-
-// Users.belongsToMany(Tasks, {
-//     through: UsersTask,
-//     as: 'test2',
-//     foreignKey: 'userid',
-//     otherKey: 'taskid'
-// });
-
 
 module.exports = Tasks;

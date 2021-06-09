@@ -111,7 +111,7 @@ export const getAllUsers = (projectId, isRemoveProject) => async (dispatch) => {
 
 export const addNewParticipant = (projectId, taskId, userId) => async (dispatch) => {
     try {
-        let response = await tasksAPI.addNewParticipant(taskId, userId);
+        let response = await tasksAPI.addNewParticipant(taskId, userId, projectId);
         if (response.statusText === 'OK') {
             dispatch(getColumns(projectId));
             dispatch(getParticipantOnTask(projectId, taskId, userId));
@@ -152,7 +152,7 @@ export const getParticipantsOnTask = (projectId, userId) => async (dispatch) => 
 
 export const removeParticipant = (projectId, taskId, userId) => async (dispatch) => {
     try {
-        let response = await tasksAPI.removeParticipant(taskId, userId);
+        let response = await tasksAPI.removeParticipant(taskId, userId, projectId);
         if (response.statusText === 'OK') {
             dispatch(getColumns(projectId));
             dispatch(getParticipantOnTask(projectId, taskId, userId));

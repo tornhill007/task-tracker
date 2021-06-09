@@ -26,16 +26,4 @@ const UsersTasks = db.define('userstask', {
         tableName: 'userstask'
     })
 
-
-
-
-
-// UsersTask.hasOne(Tasks, {
-//     foreignKey: {
-//         name: 'userid'
-//     }
-// });
-//
-// Tasks.belongsTo(UsersTask);
-
 module.exports = UsersTasks;

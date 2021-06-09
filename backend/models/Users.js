@@ -27,9 +27,6 @@ const Users = db.define('users', {
 
     })
 
-
-
-
 Users.findUsersByUserName = function (username) {
     return this.findAll({where: {username}});
 }
@@ -98,7 +95,6 @@ Users.getAllUsersProjects = function (projectid) {
     });
 }
 
-
 Users.getUsersTasksByColumnId = function (columnid) {
     return this.findAll({
         include: [{
@@ -113,7 +109,6 @@ Users.getUsersTasksByColumnId = function (columnid) {
     });
 }
 
-
 Users.getUserByTasksProjectId = function (projectid) {
     return this.findAll({
         include: [{
@@ -127,7 +122,6 @@ Users.getUserByTasksProjectId = function (projectid) {
 
     });
 }
-
 
 // Users.getUsersTasksByTaskId = function (taskid) {
 //     return this.findAll({
@@ -158,17 +152,6 @@ Users.getUserByTasksProjectId = function (projectid) {
 //     );
 // }
 
-//
-//
-
-// Users.associate = (models) => {
-//     Users.belongsToMany(models.tasks, {
-//         through: models.userstask,
-//         foreignKey: "userid"
-//     });
-// }
-
-
 Users.belongsToMany(Projects, {
     through: UsersProjects,
     as: 'projects',
@@ -182,25 +165,5 @@ Projects.belongsToMany(Users, {
     foreignKey: 'projectid',
     otherKey: 'userid'
 });
-
-
-
-// Users.associate = (models) => {
-//     Users.belongsTo(models.tasks, {foreignKey: 'userid', as: 'afdsfdsf', otherKey: 'taskid'});
-// };
-//
-// Users.belongsToMany(Tasks, {
-//     through: UsersTask,
-//     as: 'taskss',
-//     foreignKey: 'userid',
-//     otherKey: 'taskid'
-// });
-//
-
-
-// db.sync({force:true}).then(()=>{
-//
-//     console.log("Tables have been created");
-// }).catch(err=>console.log(err));
 
 module.exports = Users;

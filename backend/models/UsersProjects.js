@@ -3,7 +3,6 @@ const db = require('../config/database');
 const Projects = require('./Projects');
 const Users = require('./Users');
 
-
 const UsersProjects = db.define('usersprojects', {
         id: {
             type: DataTypes.UUID,
@@ -33,12 +32,8 @@ UsersProjects.destroyUsersProjectsByProjectId = function (projectid) {
     return this.destroy({where: { projectid }});
 }
 
-
-
 UsersProjects.getAllUsersProjectsByProjectId = function (projectid) {
     return this.findAll({where: { projectid }});
 }
-
-
 
 module.exports = UsersProjects;

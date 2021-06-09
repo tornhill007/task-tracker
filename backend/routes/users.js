@@ -9,33 +9,28 @@ const Users = require('../models/Users');
 //################registration
 const catchWrap = require("../common/wrapper");
 
-router.use('/users/active', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
-    let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
-    let user;
-
-    user = await Users.getUserProject(req.query.projectId, decoded.userId)
-
-    if (!user) {
-        res.status(401).json({
-            message: "Unauthorized"
-        })
-        return;
-    }
-    next();
-
-});
+// router.use('/users/active', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
+//     let decoded = jwt.verify(req.headers.authorization.split(' ')[1], keys.jwt);
+//     let user;
+//
+//     user = await Users.getUserProject(req.query.projectId, decoded.userId)
+//
+//     if (!user) {
+//         res.status(401).json({
+//             message: "Unauthorized"
+//         })
+//         return;
+//     }
+//     next();
+//
+// });
 
 router.get("/users", catchWrap(async (req, res) => {
     const users = await Users.findAll();
     res.json(users);
 }))
 
-router.get("/users/active", catchWrap(async (req, res) => {
-    let projectId = req.query.projectId
-    const results = await Users.getAllUsersProjects(projectId)
 
-    res.json(results);
-}))
 
 router.post("/users", catchWrap(async (req, res) => {
     const {password, userName} = req.body;

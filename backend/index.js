@@ -28,13 +28,16 @@ sequelize.authenticate().then(() => {
 app.use(cors());
 // app.use(auth);
 app.use(express.json());
-app.use(tasks);
-app.use(columns);
-app.use(projects);
 app.use(auth);
 app.use(users);
+app.use(passport.authenticate('jwt', {session: false}));
+
+app.use(projects);
+// app.use(tasks);
+app.use(columns);
 app.use(usersprojects);
 app.use(userstasks);
+
 
 
 app.use(passport.initialize());

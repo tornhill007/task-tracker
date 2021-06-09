@@ -293,7 +293,7 @@ class Project extends React.Component {
     }
 
     render() {
-
+console.log(this.props.columnOrder)
         if (this.props.projects) {
             let res = this.props.projects.find(project => project.projectid == this.projectId);
             if (!res) {

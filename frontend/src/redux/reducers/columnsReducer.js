@@ -263,7 +263,7 @@ export const addNewTask = (taskName, columnId, projectId, position) => async (di
 
 export const onUpdateColumnsPosition = (newColumns, projectId) => async (dispatch) => {
     try {
-        let response = await columnsApi.updateColumnsPosition(newColumns)
+        let response = await columnsApi.updateColumnsPosition(newColumns, projectId)
         dispatch(getColumns(projectId));
     } catch (e) {
         console.log(e)

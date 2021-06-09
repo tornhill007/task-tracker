@@ -1,7 +1,6 @@
 const {Sequelize, DataTypes} = require('sequelize');
 const db = require('../config/database');
 
-
 const Column = db.define('kanbancolumns', {
         columnid: {
             type: DataTypes.UUID,

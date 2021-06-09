@@ -3,7 +3,6 @@ const db = require('../config/database');
 const UsersProjects = require('./UsersProjects')
 const Users = require('./Users');
 
-
 const Projects = db.define('projectslist', {
         projectid: {
             type: DataTypes.UUID,
@@ -46,6 +45,24 @@ Projects.getProjectByProjectId = function (projectid) {
 
 Projects.getAllProjectsUsers = function (userid) {
     return this.findAll({
+            include: [{
+                model: Users,
+                as: 'users',
+                required: true,
+                where: {
+                    userid
+                }
+            }
+            ]
+        }
+    );
+}
+
+Projects.getProjectUser = function (projectid, userid) {
+    return this.findOne({
+            where: {
+                projectid
+            },
             include: [{
                 model: Users,
                 as: 'users',

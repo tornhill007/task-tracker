@@ -1,3 +1,108 @@
+//################  projects list  ###
+
+
+//GET
+
+/projects
+
+//POST
+
+/projects
+
+//PUT
+
+/projects/:projectId
+
+//DELETE
+
+/projects/:projectId
+
+//############################  COLUMNS  ##
+
+
+//GET
+
+/columns/:projectId
+
+//POST
+
+/columns/:projectId
+
+//PUT
+
+/columns/position
+
+/columns/:columnId
+
+//DELETE
+
+/columns/:columnId
+
+
+//################# tasks ########
+
+//POST
+
+/tasks/:projectId
+
+//PUT
+
+/tasks/:projectId/:taskId
+
+/tasks/position/:projectId
+
+//DELETE
+
+/tasks/:projectId/:taskId
+
+
+//########## USERS #####3
+
+//GET
+
+/users
+
+/users/active
+
+//POST
+
+/users
+
+
+//############# AUTH ######
+
+//POST
+
+/login
+
+
+//############### USERS/PROJECTS ############33
+
+//POST
+
+/users/projects/active
+
+//DELETE
+
+/users/projects/active
+
+//#################### USERS/TASKS ################
+
+//GET
+
+/tasks/:projectId/:userId
+
+/task/user/:taskId/:userId
+
+// POST
+
+/task/user
+
+//DELETE
+
+/task/user/:taskId/:userId
+
+
 import * as axios from "axios";
 import {baseUrl} from '../common/config/config';
 
@@ -28,23 +133,19 @@ export const usersApi = {
     },
     addToProject(userid, projectid) {
         console.log("userid, projectid", userid, projectid)
-        return instance.post(`projects/${projectid}/users/projects/active`, {
-            userid, projectid
+        return instance.post(`projects/${projectid}/users/active`, {
+            userid
         });
     },
     removeFromProject(userid, projectid) {
-        return instance.delete(`projects/${projectid}/users/projects/active`, {
+        return instance.delete(`projects/${projectid}/users/active`, {
             params: {
-                userid, projectid
+                userid
             }
         });
     },
     getActiveUsers(projectId) {
-        return instance.get(`projects/${projectId}/users/active`, {
-            params: {
-                projectId
-            }
-        });
+        return instance.get(`projects/${projectId}/all/users/active`);
     }
 }
 
@@ -74,12 +175,12 @@ export const projectsApi = {
 };
 
 export const columnsApi = {
-    removeColumn(columnId, projectId) {
-        return instance.delete(`/projects/${projectId}/${columnId}/columns`)
+    removeColumn(id) {
+        return instance.delete(`columns/${id}`)
     },
 
-    updateColumn(columnId, name, projectId) {
-        return instance.put(`/projects/${projectId}/${columnId}/columns`, {
+    updateColumn(id, name) {
+        return instance.put(`columns/${id}`, {
             name
         })
     },
@@ -91,12 +192,12 @@ export const columnsApi = {
     },
 
     getColumns(projectId) {
-        return instance.get(`projects/${projectId}/columns/`);
+        return instance.get(`projects/${projectId}/columns`);
     },
 
     updateColumnsPosition(newColumns, projectId) {
         console.log("firstId, lastId, firstPosition, lastPosition", newColumns)
-        return instance.put(`/projects/${projectId}/columns/position`, {
+        return instance.put(`projects/${projectId}/columns/position`, {
             newColumns
         })
     }
@@ -104,7 +205,7 @@ export const columnsApi = {
 
 export const tasksAPI = {
     updateTaskName(taskname, projectid, taskid) {
-        return instance.put(`/projects/${projectid}/tasks/${taskid}`, {
+        return instance.put(`projects/${projectid}/update/tasks/${taskid}`, {
             taskname
         })
     },
@@ -117,15 +218,14 @@ export const tasksAPI = {
             tasksArr
         })
     },
-
     updateTaskDescription(description, projectId, taskId) {
-        return instance.put(`/projects/${projectId}/tasks/${taskId}`, {
+        return instance.put(`projects/${projectId}/update/tasks/${taskId}`, {
             description
         })
     },
 
     getTasksUsers(projectId, userId) {
-        return instance.get(`/projects/${projectId}/tasks/users/${userId}`)
+        return instance.get(`projects/${projectId}/tasks/users/${userId}`)
     },
 
     getAllTasks(projectId) {
@@ -138,24 +238,26 @@ export const tasksAPI = {
         });
     },
 
-    addNewParticipant(taskId, userId, projectId) {
+    addNewParticipant(taskId, userId) {
         console.log("userId, taskId", userId, taskId);
-        return instance.post(`/projects/${projectId}/task/user/${taskId}/${userId}`)
+        return instance.post(`/task/user`, {
+            userId, taskId
+        })
     },
 
-    removeParticipant(taskId, userId, projectId) {
+    removeParticipant(taskId, userId) {
         console.log("userId, projectId, taskId", userId, taskId);
-        return instance.delete(`/projects/${projectId}/task/user/${taskId}/${userId}`)
+        return instance.delete(`/task/user/${taskId}/${userId}`)
     },
 
     addNewMarker(markers, projectId, taskId) {
-        return instance.put(`/projects/${projectId}/tasks/${taskId}`, {
+        return instance.put(`projects/${projectId}/update/tasks/${taskId}`, {
             markers
         })
     },
 
     removeTask(taskId, projectId) {
-        return instance.delete(`/projects/${projectId}/tasks/${taskId}`)
+        return instance.delete(`projects/${projectId}/tasks/${taskId}`)
     }
 }
 
